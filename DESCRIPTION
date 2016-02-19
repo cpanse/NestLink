@@ -1,11 +1,15 @@
 Package: NestLink
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1
+Title: NestLink ... What the Package Does (Title Case)
+Version: 0.99.0
 Date: 2015-10-29
 Depends: R (>= 3.0.0), protViz, specL (>= 1.3.2), gplots
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
+Author: Christian Panse
+Maintainer: Who to complain to <cp@fgcz.ethz.ch>
 Description: More about what it does (maybe more than one line)
-License: What license is it under?
+License: GPL
 LazyData: TRUE
+VignetteBuilder: knitr
+Suggests: BiocStyle, knitr
+NeedsCompilation: no
+biocViews: MassSpectrometryData

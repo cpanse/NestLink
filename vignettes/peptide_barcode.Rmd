@@ -16,13 +16,20 @@ output:
 ---
 
 ## Reqired R packages
+
 [specL](http://dx.doi.org/10.1093/bioinformatics/btv105)
+
 ```{r}
+library(NestLink)
 if (packageVersion('specL') < '1.3.2')
 {
   message("specL package version should be 1.3.2 or higher")
+  ## try http:// if https:// URLs are not supported
+  source("https://bioconductor.org/biocLite.R")
+  biocLite("specL")
 }
-library(NestLink)
+
+# browseVignettes("specL")
 ```
 
 ## Input

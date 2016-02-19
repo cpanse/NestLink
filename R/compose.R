@@ -15,9 +15,8 @@
 
 
 #' compose a peptide with a defined AA sequence
-#' @param 
 #' @param pool AA distributen.
-#' @param cTerm
+#' @param cTerm c-Terms
 #' @return a AA sequence
 #' @export 
 compose_GPGx8cTerm <- 
@@ -31,9 +30,8 @@ compose_GPGx8cTerm <-
   }
 
 #' compose a peptide with a defined AA sequence
-#' @param 
 #' @param pool AA distributen.
-#' @param cTerm
+#' @param pool AA distributen.
 #' @return a AA sequence
 #' @export 
 compose_GPx10R <- function(aa_pool1, aa_pool2){ 
