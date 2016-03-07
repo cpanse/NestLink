@@ -1,23 +1,34 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{NestLink peptide barcode}
--->
-
-
 ---
 title: "peptide_barcode (p1875)"
 author: "Bernd Roschitzki & Christian Panse"
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
+bibliography:
+  - ./NestLink.bib
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{NestLink - compute peptide barcode}
 output:
-  slidy_presentation:
-    keep_md: yes
-  ioslides_presentation: default
-  beamer_presentation: default
+  html_document:
+    theme: united	
+    toc: true
 ---
+
+<!--
+%\VignetteIndexEntry{NestLink peptide barcode}
+%\VignetteEngine{knitr::rmarkdown}
+-->
+
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+## Introduction
 
 ## Reqired R packages
 
-[specL](http://dx.doi.org/10.1093/bioinformatics/btv105)
+- [specL](http://dx.doi.org/10.1093/bioinformatics/btv105) [see also @pmid25712692]
 
 ```{r}
 library(NestLink)
@@ -48,9 +59,10 @@ aa_pool_3_8 <- c(rep('A', 5), rep('S', 4), rep('T', 5), rep('N', 2), rep('Q', 2)
                  rep('G', 12), rep('P', 28))
 
 ```
----
+
 
 ## TEST
+
 ```{r}
 table(aa_pool_x8)
 length(aa_pool_x8)
@@ -59,21 +71,22 @@ length(aa_pool_1_2_9_10)
 table(aa_pool_3_8)
 length(aa_pool_3_8)
 ```
----
 
-## Compose a GPGXXXXXXXX(VR|VSR|VFGIR|VSGER) peptide
+## Compose Peptides
+
+### GPGXXXXXXXX(VR|VSR|VFGIR|VSGER) peptide
 ```{r}
 
 replicate(10, compose_GPGx8cTerm(pool=aa_pool_x8))
 ```
----
 
-## Compose a GPYYXXXXXXYYR peptide
+
+### GPYYXXXXXXYYR peptide
 ```{r}  
 
 compose_GPx10R(aa_pool_1_2_9_10, aa_pool_3_8)
 ```
----
+
 
 ## Generate peptides
 ```{r}
@@ -86,9 +99,10 @@ peptides.GPx10R <- replicate(sample.size, compose_GPx10R(aa_pool_1_2_9_10, aa_po
 #write.table(peptides.GPGx8cTerm, file='/tmp/pp.txt')
 
 ```
----
 
-## Compute peptide mass
+## Peptide mass
+### Compute peptide mass
+
 ```{r}
 (smp.peptide <- compose_GPGx8cTerm(aa_pool_x8))
 parentIonMass(smp.peptide)
@@ -98,9 +112,10 @@ pim.GPx10R <- unlist(lapply(peptides.GPx10R, function(x){parentIonMass(x)}))
 pim.iRT <-  unlist(lapply(as.character(iRTpeptides$peptide), function(x){parentIonMass(x)}))
 
 ```
----
 
-## Draw parent ion mass histogram
+
+### Draw parent ion mass histogram
+
 ```{r}
 (pim.min <- min(pim.GPGx8cTerm, pim.GPx10R))
 (pim.max <- max(pim.GPGx8cTerm, pim.GPx10R))
@@ -114,23 +129,21 @@ hist(pim.GPx10R, breaks=pim.breaks,
 abline(v=pim.iRT, col='grey')
 legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),  fill=c('#1111AAAA', '#11AA1133', 'grey'))
 ``` 
----
 
+## Hydrophobicity
 ## Compute hydrophobicity value
 
-the specL::ssrc model is an implementation of [Krokhin, O. V. et al.](http://www.ncbi.nlm.nih.gov/pubmed/15238601)
-```{r}
-# just apply ssrc to a real world LC-MS run
+the specL::ssrc model is an implementation of  [@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601)
+
+just apply ssrc to a real world LC-MS run
+```{r fig.retina=3}
 ssrc <- unlist(lapply(peptideStd, function(x){specL:::ssrc(x$peptideSequence)}))
 rt <- unlist(lapply(peptideStd, function(x){x$rt}))
 plot(ssrc, rt); abline(ssrc.lm <- lm(rt ~ ssrc), col='red'); 
 legend("topleft", paste("spearman", round(cor(ssrc, rt, method='spearman'),2)))
 ```
 
---- 
-
-## Compute hydrophobicity value (cont)
-```{r}
+```{r fig.width=5, fig.height=5}
 hydrophobicity <- function(x){unlist(lapply(x, specL::ssrc))}
 hyd.GPGx8cTerm <- hydrophobicity(peptides.GPGx8cTerm)
 hyd.GPx10R <- hydrophobicity(peptides.GPx10R)
@@ -140,11 +153,11 @@ hyd.iRT <- hydrophobicity(as.character(iRTpeptides$peptide))
 (hyd.max <- max(hyd.GPGx8cTerm, hyd.GPx10R))
 hyd.breaks <- seq(round(hyd.min - 1) , round(hyd.max + 1) , length=75)
 ```
----
 
-## Draw hydrophobicity histogram 
 
-```{r}
+### Draw hydrophobicity histogram 
+
+```{r fig.retina=3}
 hist(hyd.GPGx8cTerm, breaks = hyd.breaks, probability = TRUE, 
      col='#1111AAAA', xlab='hydrophobicity', 
      ylim=c(0, 0.06),
@@ -153,15 +166,16 @@ hist(hyd.GPx10R, breaks = hyd.breaks, probability = TRUE, add=TRUE, col='#11AA11
   abline(v=hyd.iRT, col='grey')
 legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),  fill=c('#1111AAAA', '#11AA1133', 'grey'))
 ```
----
 
-## QC of composed peptides
-Input 
+## Quality Control (QC)
+### QC of composed peptides
+#### Input 
+
 ```{r}
 round(table(aa_pool_x8)/length(aa_pool_x8), 2)
-
 ```
-Output
+
+#### Output
 ```{r}
 peptide2aa <- function(seq, from=4, to=4+8){
   unlist(lapply(seq, function(x){strsplit(substr(x, from, to), '')}))
@@ -169,14 +183,13 @@ peptide2aa <- function(seq, from=4, to=4+8){
 peptides.GPGx8cTerm.aa <- peptide2aa(peptides.GPGx8cTerm)
 round(table(peptides.GPGx8cTerm.aa)/length(peptides.GPGx8cTerm.aa), 2)
 ```
+
 ```{r}
 peptides.GPx10R.aa <- peptide2aa(peptides.GPx10R, from=3, to=12)
 round(table(peptides.GPx10R.aa)/length(peptides.GPx10R.aa), 2)
 ```
 
----
-
-## Count GP patterns
+### Count GP patterns
 ```{r}
 sample.size 
 
@@ -185,10 +198,11 @@ length(grep('^GP(.*)GP(.*)R$', peptides.GPGx8cTerm))
 length(grep('^GP(.*)GP(.*)R$', peptides.GPx10R))
 ```
 
----
 
-## Compute AA frequency table
+### Compute AA frequency table
+
 count the peptides having the same AA composition
+
 ```{r}
 sample.size 
 
@@ -199,16 +213,17 @@ table(table(unlist(lapply(peptides.GPx10R,
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
 ```
 
----
 
-
-```{r}
+```{r fig.width=10, fig.height=10, fig.retina=3}
 par(mfrow=c(2, 2))
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPGx8cTerm, main='GPGx8cTerm')
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPx10R, main='GPx10R')
 ```
 
-# Session information
+## Session information
+
 ```{r}
 sessionInfo()
 ```
+
+## References
