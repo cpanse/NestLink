@@ -4,5 +4,9 @@
 import(gplots)
 import(specL)
 
+
+importFrom("grDevices", "heat.colors")
+importFrom("graphics", "abline", "axis", "legend", "points")
+  
 export(compose_GPGx8cTerm)
 export(compose_GPx10R)
