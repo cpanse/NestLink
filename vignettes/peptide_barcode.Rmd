@@ -2,8 +2,7 @@
 title: "peptide_barcode (p1875)"
 author: "Bernd Roschitzki & Christian Panse"
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
-bibliography:
-  - ./NestLink.bib
+
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{NestLink - compute peptide barcode}
@@ -28,7 +27,8 @@ output:
 
 ## Reqired R packages
 
-- [specL](http://dx.doi.org/10.1093/bioinformatics/btv105) [see also @pmid25712692]
+- [specL](http://dx.doi.org/10.1093/bioinformatics/btv105) 
+<!-- [see also @pmid25712692] -->
 
 ```{r}
 library(NestLink)
@@ -133,7 +133,8 @@ legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),  fill=c('#1111AAAA', '#11AA1
 ## Hydrophobicity
 ## Compute hydrophobicity value
 
-the specL::ssrc model is an implementation of  [@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601)
+the specL::ssrc model is an implementation of  
+<!-- [@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601) -->
 
 just apply ssrc to a real world LC-MS run
 ```{r fig.retina=3}
