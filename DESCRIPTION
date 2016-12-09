@@ -1,15 +1,15 @@
 Package: NestLink
 Type: Package
 Title: NestLink ... What the Package Does (Title Case)
-Version: 0.99.0
-Date: 2015-10-29
-Depends: R (>= 3.2.2), specL (>= 1.3.2), gplots
-Author: Christian Panse
+Version: 0.99.1
+Date: 2016-12-09
+Depends: R (>= 3.2.2), specL (>= 1.3.2), gplots, ShortRead, Biostrings
+Author: Christian Panse, Lennart Opitz
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
 Description: More about what it does (maybe more than one line)
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: BiocStyle, knitr, testthat
+Suggests: BiocStyle, knitr, testthat, ezRun
 NeedsCompilation: no
 biocViews: MassSpectrometryData
