@@ -9,7 +9,7 @@ runNGSAnalysis = function(file, param){
   cat(paste0('Read file ', basename(file)))
   myReads = getReadsFromFastq(file)
   cat('...done \n')
-  if(param[['nReads']]>0){
+  if(param[['nReads']]>0 & length(myReads) > param[['nReads']]){
     myReads = myReads[1:param[['nReads']]]
   }
   stats = c(RawReads=length(myReads))
@@ -64,9 +64,9 @@ runNGSAnalysis = function(file, param){
   bigTable = data.frame(ID=names(mySeqAS[['seqAS_FC']]),Flycode=sapply(mySeqAS[['seqAS_FC']],toString),
                         NanoBody=sapply(mySeqAS[['seqAS_NB']],toString),stringsAsFactors = F)
   cat('...done \n')
-  #Filter out Flycodes with Freq < 4
+  #Filter out Flycodes with Freq < minFreq
   cat(paste0('Filter for FlyCode-Freq: ', basename(file)))
-  mySeqAS_CS = filterForMinFlycodeFrequency(mySeqAS = mySeqAS, minFreq = 4, file = file, knownFC = '')
+  mySeqAS_CS = filterForMinFlycodeFrequency(mySeqAS = mySeqAS, minFreq = param[['FCminFreq']], file = file, knownFC = '')
   
   uniqFCReads = sapply(mySeqAS_CS[['seqAS_FC']],toString)
   stats = c(stats,uniqFC=length(mySeqAS_CS[['seqAS_FC']]))
