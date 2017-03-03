@@ -49,7 +49,7 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
                       nbins = c(n.hyd, n.pim),
                       col=cm)
   
-  points(hyd.iRT, pim.iRT, col='cyan')
+  #points(hyd.iRT, pim.iRT, col='cyan')
   legend("topleft", paste("#cells:", n.pim, " x ", n.hyd))
   legend("bottomright", "iRT peptides", col='cyan', pch='o')
   h_counts <- as.numeric(h$counts)

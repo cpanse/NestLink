@@ -3,7 +3,7 @@ Type: Package
 Title: NestLink ... What the Package Does (Title Case)
 Version: 0.99.0
 Date: 2015-10-29
-Depends: R (>= 3.2.2), specL (>= 1.3.2), gplots
+Depends: R (>= 3.2.2), specL (>= 1.3.2), gplots, bibliospec
 Author: Christian Panse
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
 Description: More about what it does (maybe more than one line)
