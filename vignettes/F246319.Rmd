@@ -1,0 +1,50 @@
+---
+title: "F"
+author: "Christian Panse"
+date: "`r doc_date()`"
+package: "`r pkg_ver('BiocStyle')`"
+abstract: >
+  Instructions on enabling _Bioconductor_ style 
+  in your _R_ markdown vignettes.
+vignette: >
+  %\VignetteIndexEntry{Bioconductor style for PDF documents}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output: 
+  BiocStyle::pdf_document
+---
+
+# load
+
+```{r}
+library(specL)
+```
+
+```{r}
+load(url('http://fgcz-ms.uzh.ch/~cpanse/p1875/F246319.RData'))
+```
+
+
+# LC-MS map
+
+```{r fig.retina=3}
+idx <- which(unlist(lapply(F246319, function(x){grepl("NB_", x$proteinInformation) && x$mascotScore > 30})))
+
+score <- sapply(F246319[idx], function(x){x$mascotScore})
+hyd <- sapply(F246319[idx], function(x){ssrc(x$peptideSequence)})
+rt <- sapply(F246319[idx], function(x){x$rtinseconds})
+peptide <- sapply(F246319[idx], function(x){as.character(x$peptideSequence)})
+smoothScatter(hyd ~ rt)
+abline(lm(hyd ~ rt), col='red')
+cor(hyd , rt)
+
+```
+
+
+```{r}
+freq <- table(strsplit(paste(peptide, collapse=''), ''))
+
+100 * freq / max(freq)
+
+round(100 * freq / max(freq))
+```
