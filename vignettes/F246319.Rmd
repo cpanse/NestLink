@@ -1,17 +1,15 @@
 ---
-title: "F"
+title: "F246319 prediction and reality"
 author: "Christian Panse"
-date: "`r doc_date()`"
-package: "`r pkg_ver('BiocStyle')`"
-abstract: >
-  Instructions on enabling _Bioconductor_ style 
-  in your _R_ markdown vignettes.
+date: "2017-03-04"
+
 vignette: >
-  %\VignetteIndexEntry{Bioconductor style for PDF documents}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-output: 
-  BiocStyle::pdf_document
+  %\VignetteIndexEntry{NestLink - F246319}
+output:
+  html_document:
+    theme: united	
+    toc: true
 ---
 
 # load
@@ -25,7 +23,7 @@ load(url('http://fgcz-ms.uzh.ch/~cpanse/p1875/F246319.RData'))
 ```
 
 
-# LC-MS map
+# RT versus SSRC
 
 ```{r fig.retina=3}
 idx <- which(unlist(lapply(F246319, function(x){grepl("NB_", x$proteinInformation) && x$mascotScore > 30})))
