@@ -55,3 +55,26 @@ cTerm <- c('WR','WLTVR','WQEGGR','WQSR','WLR')
 cTerm.freq <- sapply(cTerm , function(x){sum(grepl(paste(x, "$",sep=''), peptide))})
 round(100 * cTerm.freq / sum(cTerm.freq))
 ```
+
+
+# AA
+
+```{r}
+cTerm <- c('WR$','WLTVR$','WQEGGR$','WQSR$','WLR$')
+
+regexpattern <- paste(c("^GS", cTerm), collapse = '|')
+peptide.f <- gsub(regexpattern, "", peptide)
+
+freq <- table(strsplit(paste(peptide.f, collapse=''), ''))
+
+round(100 * freq / sum(freq))
+
+
+# in-silico
+aa_pool_x8 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 0), rep('Q', 0), rep('D', 12), 
+              rep('E', 12), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
+              rep('G', 8), rep('P', 12))
+table(aa_pool_x8)
+
+table(sapply(peptide.f , nchar))
+```
