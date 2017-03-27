@@ -54,4 +54,5 @@ round(100 * freq / max(freq))
 cTerm <- c('WR','WLTVR','WQEGGR','WQSR','WLR')
 cTerm.freq <- sapply(cTerm , function(x){sum(grepl(paste(x, "$",sep=''), peptide))})
 round(100 * cTerm.freq / sum(cTerm.freq))
+
 ```
