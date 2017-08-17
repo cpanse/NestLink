@@ -54,6 +54,7 @@ round(100 * freq / max(freq))
 cTerm <- c('WR','WLTVR','WQEGGR','WQSR','WLR')
 cTerm.freq <- sapply(cTerm , function(x){sum(grepl(paste(x, "$",sep=''), peptide))})
 round(100 * cTerm.freq / sum(cTerm.freq))
+
 ```
 
 
@@ -77,4 +78,19 @@ aa_pool_x8 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 0), rep('Q', 0
 table(aa_pool_x8)
 
 table(sapply(peptide.f , nchar))
+
+```
+
+# peptide mass versus retention time
+
+```{r fig.retina=3}
+plot(parentIonMass(peptide) ~ rt, col=rgb(0.1,0.1,0.1,0.1), pch=16)
+```
+
+# ssrc predicted hydrophobicity value verus rt
+
+```{r fig.retina=3}
+plot(sapply(peptide, ssrc) ~ rt, col=rgb(0.1,0.1,0.1,0.1), pch=16,
+     xlab = 'measured rt [in sec]',
+     ylab = 'ssrc predicted hydrophobicity value')
 ```
