@@ -1,0 +1,63 @@
+---
+title: "p1875 db10 fasta NB versus FC"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(protViz)
+library(ggplot2)
+```
+
+## process NBs
+
+```{r}
+NB <- read.table("~/data/NB.tryptic", col.names = "peptide")
+NB$peptide <- (as.character(NB$peptide))
+NB$pim <- parentIonMass(NB$peptide)
+NB <- NB[nchar(NB$peptide) >2, ]
+NB$ssrc <- sapply(NB$peptide, ssrc)
+```
+
+## process FCs
+
+```{r}
+FC <- read.table("~/data/FC.tryptic", col.names = "peptide")
+FC$peptide <- (as.character(FC$peptide))
+FC$pim <- parentIonMass(FC$peptide)
+FC <- FC[nchar(FC$peptide) >2, ]
+FC$ssrc <- sapply(FC$peptide, ssrc)
+```
+
+```{r}
+nrow(NB)
+nrow(FC)
+```
+
+## plot
+```{r}
+plot(NB$ssrc, NB$pim, pch=16, col=rgb(0.1,0.1,0.1,alpha = 0.1), main="NB")
+
+plot(FC$ssrc, FC$pim, pch=16, col=rgb(0.1,0.1,0.1,alpha = 0.01), main="FC")
+
+```
+
+
+## 2d hist
+
+```{r}
+p <- ggplot(NB, aes(ssrc, pim)) 
+p <- p + stat_bin2d(bins = 100)
+p
+```
+
+```{r}
+p <- ggplot(FC, aes(ssrc, pim)) 
+p <- p + stat_bin2d(bins = 100)
+p
+```
+
+
