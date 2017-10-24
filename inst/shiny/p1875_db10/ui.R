@@ -22,16 +22,25 @@ shinyUI(fluidPage(
                    "Number of bins:",
                    min = 1,
                    max = 250,
-                   value = 50)
+                   value = 50),
+       
+       sliderInput("pimrange", "parent ion mass - range:",
+                   min = 0, max = 6000, value = c(0, 6000)),
+       
+       sliderInput("ssrcrange", "ssrc - range:",
+                   min = 0, max = 70, value = c(0, 70))
+       
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
       list(
-       plotOutput("hist2dNB"),
-       plotOutput("hist2dFC"),
-       plotOutput("histPim"),
-       plotOutput("histSsrc"))
+        plotOutput("histPim"),
+        plotOutput("histSsrc")
+  #     plotOutput("hist2dNB"),
+  #     plotOutput("hist2dFC")
+      
+       )
     )
   )
 ))
