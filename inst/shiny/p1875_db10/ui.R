@@ -34,13 +34,24 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
+      tabsetPanel(
+        tabPanel("histogram",
       list(
         plotOutput("histPim"),
         plotOutput("histSsrc")
   #     plotOutput("hist2dNB"),
   #     plotOutput("hist2dFC")
       
-       )
-    )
+       )),
+  tabPanel("2Dhistogram",
+           list(plotOutput("hist2dNB"), plotOutput("hist2dFC"))
+  ),
+  tabPanel("FlyCode table",
+           DT::dataTableOutput("FlyCodeTable")
   )
+  )
+    )
+  ),HTML("<hr>source: <a href='https://github.com/cpanse/NestLink'>NestLink</a>"),
+  HTML("cite: <a href='https://CRAN.R-project.org/package=protViz'>https://CRAN.R-project.org/package=protViz</a>")
+  
 ))

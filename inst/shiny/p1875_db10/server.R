@@ -10,6 +10,7 @@
 library(shiny)
 library(protViz)
 library(ggplot2)
+library(DT)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
@@ -87,9 +88,6 @@ shinyServer(function(input, output, session) {
    
    ggplot(getDat(), aes(x=pim, fill=cond)) +
      geom_histogram(bins=input$bins, alpha=.5, position="identity")
-   
-  
-
  })
  output$histSsrc <- renderPlot({
    progress <- shiny::Progress$new(session = session, min = 0, max = 1)
@@ -98,8 +96,13 @@ shinyServer(function(input, output, session) {
    
    ggplot(getDat(), aes(x=ssrc, fill=cond)) +
      geom_histogram(bins=input$bins, alpha=.5, position="identity")
-   
-   
-   
  })
+ 
+ output$FlyCodeTable <- DT::renderDataTable(DT::datatable({
+  
+     getFC()
+  
+   
+ }))
+ 
 })
