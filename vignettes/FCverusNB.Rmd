@@ -15,7 +15,7 @@ library(ggplot2)
 ## process NBs
 
 ```{r}
-NB <- read.table("~/data/NB.tryptic", col.names = "peptide")
+NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"), col.names = "peptide")
 NB$peptide <- (as.character(NB$peptide))
 NB$pim <- parentIonMass(NB$peptide)
 NB <- NB[nchar(NB$peptide) >2, ]
@@ -25,7 +25,7 @@ NB$ssrc <- sapply(NB$peptide, ssrc)
 ## process FCs
 
 ```{r}
-FC <- read.table("~/data/FC.tryptic", col.names = "peptide")
+FC <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"), col.names = "peptide")
 FC$peptide <- (as.character(FC$peptide))
 FC$pim <- parentIonMass(FC$peptide)
 FC <- FC[nchar(FC$peptide) >2, ]
