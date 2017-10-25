@@ -10,9 +10,11 @@
 library(shiny)
 library(protViz)
 library(ggplot2)
-library(DT)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
+  
+  
+ 
   
   loadNB <- reactive({
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
@@ -33,7 +35,20 @@ shinyServer(function(input, output, session) {
     filter <- input$pimrange[1] < NB$pim & NB$pim < input$pimrange[2] & input$ssrcrange[1] < NB$ssrc & NB$ssrc < input$ssrcrange[2]
     
     NB[filter,]
- 
+  })
+  
+  getUniqueNB <- reactive({
+    uNB <- getNB()
+    uNB$cond <- 'uNB'
+    uNB <- unique(uNB)
+    uNB
+  })
+  
+  getUniqueFC <- reactive({
+    uFC <- getFC()
+    uFC$cond <- 'uFC'
+    uFC <- unique(uFC)
+    uFC
   })
   
   loadFC <- reactive({
@@ -68,7 +83,10 @@ shinyServer(function(input, output, session) {
   })
   
   getDat <- reactive({
-    rbind(getNB(), getFC())
+    
+    rr <- rbind(getUniqueNB(), getFC())
+    rr <- rbind(rr, getNB())
+    rbind(rr, getUniqueFC())
   })
   
  output$hist2dFC <- renderPlot({
@@ -97,12 +115,4 @@ shinyServer(function(input, output, session) {
    ggplot(getDat(), aes(x=ssrc, fill=cond)) +
      geom_histogram(bins=input$bins, alpha=.5, position="identity")
  })
- 
- output$FlyCodeTable <- DT::renderDataTable(DT::datatable({
-  
-     getFC()
-  
-   
- }))
- 
 })
