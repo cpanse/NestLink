@@ -83,10 +83,28 @@ shinyServer(function(input, output, session) {
   })
   
   getDat <- reactive({
+    print(input$plotFC)
+    print(input$plotuFC)
+    print(input$plotNB)
+    print(input$plotuNB)
+    # rr <- data.frame(colnames = c("peptide", "cond",   "pim",     "ssrc") )
+   #rr <- rbind(getUniqueNB(), getFC())
+    rr <- getFC()
+    if (input$plotFC == FALSE){
+      rr <- rr[FALSE, ]
+          }
+    if (input$plotuFC){
+      rr <- rbind(rr, getUniqueFC())
+    }
     
-    rr <- rbind(getUniqueNB(), getFC())
-    rr <- rbind(rr, getNB())
-    rbind(rr, getUniqueFC())
+      if (input$plotNB){
+      rr <- rbind(rr, getNB())
+    }
+    if (input$plotuNB){
+      rr <- rbind(rr, getUniqueNB())
+    }
+    print(names(rr))
+    rr
   })
   
  output$hist2dFC <- renderPlot({
@@ -105,7 +123,7 @@ shinyServer(function(input, output, session) {
    on.exit(progress$close())
    
    ggplot(getDat(), aes(x=pim, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=.5, position="identity")
+     geom_histogram(bins=input$bins, alpha=.3, position="identity")
  })
  output$histSsrc <- renderPlot({
    progress <- shiny::Progress$new(session = session, min = 0, max = 1)
@@ -113,6 +131,6 @@ shinyServer(function(input, output, session) {
    on.exit(progress$close())
    
    ggplot(getDat(), aes(x=ssrc, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=.5, position="identity")
+     geom_histogram(bins=input$bins, alpha=.3, position="identity")
  })
 })

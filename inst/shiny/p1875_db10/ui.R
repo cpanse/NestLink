@@ -28,8 +28,11 @@ shinyUI(fluidPage(
                    min = 0, max = 6000, value = c(0, 6000)),
        
        sliderInput("ssrcrange", "ssrc - range:",
-                   min = 0, max = 70, value = c(0, 70))
-       
+                   min = 0, max = 70, value = c(0, 70)),
+       checkboxInput("plotFC", "Plot FlyCode", TRUE),
+       checkboxInput("plotuFC", "Plot Unique FlyCode", TRUE),
+       checkboxInput("plotNB", "Plot Nano Body", TRUE),
+       checkboxInput("plotuNB", "Plot Unique Nano Body", TRUE)
     ),
     
     # Show a plot of the generated distribution
