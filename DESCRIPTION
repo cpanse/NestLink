@@ -10,7 +10,8 @@ Depends: R (>= 3.2.2),
   ggplot2,
   protViz (>= 0.2.37), 
   shiny,
-  ShortRead
+  ShortRead,
+  specL
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
 Description: provides solutions for deriving to proteins of interest. 
   The peptides are engineered to contain only a subset of amino acids of pre-defined composition. 
@@ -20,6 +21,6 @@ Description: provides solutions for deriving to proteins of interest.
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: BiocStyle, knitr, testthat, ezRun, specL
+Suggests: BiocStyle, knitr, testthat, ezRun
 NeedsCompilation: no
 biocViews: MassSpectrometryData

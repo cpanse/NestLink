@@ -32,6 +32,7 @@ output:
 
 ```{r}
 library(NestLink)
+
 if (packageVersion('specL') < '1.3.2')
 {
   message("specL package version should be 1.3.2 or higher")
@@ -138,7 +139,7 @@ the specL::ssrc model is an implementation of
 
 just apply ssrc to a real world LC-MS run
 ```{r fig.retina=3}
-ssrc <- unlist(lapply(peptideStd, function(x){specL:::ssrc(x$peptideSequence)}))
+ssrc <- sapply(peptideStd, function(x){ssrc(x$peptideSequence)})
 rt <- unlist(lapply(peptideStd, function(x){x$rt}))
 plot(ssrc, rt); abline(ssrc.lm <- lm(rt ~ ssrc), col='red'); 
 legend("topleft", paste("spearman", round(cor(ssrc, rt, method='spearman'),2)))
