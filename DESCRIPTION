@@ -2,13 +2,24 @@ Package: NestLink
 Type: Package
 Title: NestLink
 Author: Christian Panse, Lennart Opitz
-Version: 0.99.6
-Depends: R (>= 3.2.2), specL (>= 1.3.2), gplots, ShortRead, Biostrings, DT, protViz, ggplot2
+Version: 0.99.7
+Depends: R (>= 3.2.2),
+  Biostrings,
+  DT, 
+  gplots, 
+  ggplot2,
+  protViz (>= 0.2.37), 
+  shiny,
+  ShortRead
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
-Description: More about what it does (maybe more than one line)
+Description: provides solutions for deriving to proteins of interest. 
+  The peptides are engineered to contain only a subset of amino acids of pre-defined composition. 
+  Individual peptides should differ from each other in mass, sequence and hydrophobicity, 
+  so that large mixtures of such peptide can be efficiently separated by reversed phase 
+  chromatography and unambiguously detected by mass spectrometry due to their mass and sequence.
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: BiocStyle, knitr, testthat, ezRun
+Suggests: BiocStyle, knitr, testthat, ezRun, specL
 NeedsCompilation: no
 biocViews: MassSpectrometryData

@@ -29,6 +29,10 @@ shinyUI(fluidPage(
        
        sliderInput("ssrcrange", "ssrc - range:",
                    min = 0, max = 70, value = c(0, 70)),
+       
+       sliderInput("alpha", "alpha blending:",
+                   min = 0, max = 1, value = 0.3),
+       HTML('<hr>Histogram only filters:'),
        checkboxInput("plotFC", "Plot FlyCode", TRUE),
        checkboxInput("plotuFC", "Plot Unique FlyCode", TRUE),
        checkboxInput("plotNB", "Plot Nano Body", TRUE),

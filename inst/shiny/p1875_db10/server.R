@@ -123,7 +123,7 @@ shinyServer(function(input, output, session) {
    on.exit(progress$close())
    
    ggplot(getDat(), aes(x=pim, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=.3, position="identity")
+     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity")
  })
  output$histSsrc <- renderPlot({
    progress <- shiny::Progress$new(session = session, min = 0, max = 1)
@@ -131,6 +131,6 @@ shinyServer(function(input, output, session) {
    on.exit(progress$close())
    
    ggplot(getDat(), aes(x=ssrc, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=.3, position="identity")
+     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity")
  })
 })
