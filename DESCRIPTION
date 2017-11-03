@@ -2,7 +2,7 @@ Package: NestLink
 Type: Package
 Title: NestLink
 Author: Christian Panse, Lennart Opitz
-Version: 0.99.7
+Version: 0.99.8
 Depends: R (>= 3.2.2),
   Biostrings,
   DT, 

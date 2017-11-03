@@ -18,6 +18,9 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
+      textInput("FCPattern", "FC pattern", 
+                value = "^GS[ASTNQDEVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR)$", 
+                width = NULL, placeholder = NULL),
        sliderInput("bins",
                    "Number of bins:",
                    min = 1,

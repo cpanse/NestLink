@@ -57,12 +57,16 @@ shinyServer(function(input, output, session) {
     on.exit(progress$close())
     
     FC <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"), col.names = "peptide")
-    FC$cond <- "FC"
     FC$peptide <- (as.character(FC$peptide))
+    idx <- grep (input$FCPattern, FC$peptide)
+   
+    FC$cond <- "FC"
+    # FC$peptide <- (as.character(FC$peptide))
     FC$pim <- parentIonMass(FC$peptide)
     FC <- FC[nchar(FC$peptide) >2, ]
     FC$ssrc <- sapply(FC$peptide, ssrc)
-    FC
+    FC[idx,]
+    #FC
 })
     
   getFC <- reactive({
@@ -132,5 +136,9 @@ shinyServer(function(input, output, session) {
    
    ggplot(getDat(), aes(x=ssrc, fill=cond)) +
      geom_histogram(bins=input$bins, alpha=input$alpha, position="identity")
+ })
+ 
+ output$FlyCodeTable<- DT::renderDataTable({
+   getFC()
  })
 })
