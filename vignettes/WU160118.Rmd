@@ -5,7 +5,7 @@ date: '2017-11-02, 2017-11-03, 2017-11-04'
 
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{NestLink - compute peptide barcode}
+  %\VignetteIndexEntry{NestLink - p1875 db10 / WU160118 -	postprocessing / summary}
 output:
   html_document:
     theme: united	
@@ -98,14 +98,67 @@ aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1
 FC.pep_seq.freq <- table(unlist(strsplit(substr(FC$peptide, 3, 9), "")))
 FC.freq <- round(FC.pep_seq.freq / sum(FC.pep_seq.freq) * 100)
 
+
+FC.pep_seq.freq.post <- table(unlist((substr(FC$peptide, 10, 100))))
+FC.freq.post <- round(FC.pep_seq.freq.post / sum(FC.pep_seq.freq.post) * 100)
+
+
 WU160118.pep_seq.freq <- table(unlist(strsplit(substr(WU160118.pep_seq, 3, 9), "")))
 WU160118.freq <- round(WU160118.pep_seq.freq / sum(WU160118.pep_seq.freq) *100)
+
+
+WU160118.pep_seq.freq.post <- table(unlist(substr(WU160118.pep_seq, 10, 100)))
+WU160118.freq.post <- round(WU160118.pep_seq.freq.post / sum(WU160118.pep_seq.freq.post) *100)
 ```
 
 ```{r}
 table(aa_pool_x7)
 FC.freq
 WU160118.freq
+```
+
+
+```{r}
+AAfreq1 <- data.frame(aa = table(aa_pool_x7))
+names(AAfreq1) <- c('AA', 'freq')
+AAfreq1$cond <- 'aa_pool_x7'
+
+AAfreq2 <- data.frame(aa=FC.freq)
+names(AAfreq2) <- c('AA', 'freq')
+AAfreq2$cond <- "db10.fasta"
+
+AAfreq3 <- data.frame(aa=WU160118.freq)
+names(AAfreq3) <- c('AA', 'freq')
+AAfreq3$cond <- "WU160118"
+
+AAfreq <- do.call('rbind', list(AAfreq1, AAfreq2, AAfreq3))
+```
+
+```{r}
+
+AAfreq2.post <- data.frame(aa=FC.freq.post)
+names(AAfreq2.post) <- c('AA', 'freq')
+AAfreq2.post$cond <- "db10.fasta"
+
+AAfreq3.post <- data.frame(aa=WU160118.freq.post)
+names(AAfreq3.post) <- c('AA', 'freq')
+AAfreq3.post$cond <- "WU160118"
+
+AAfreq.post <- do.call('rbind', list(AAfreq2.post, AAfreq3.post))
+
+```
+
+```{r fig.retina=3}
+ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) + 
+  geom_bar(stat="identity", position="dodge") + 
+  labs(title = "amino acid frequency plot")
+```
+
+
+```{r fig.retina=3}
+ggplot(data=AAfreq.post, aes(x=AA, y=freq, fill=cond)) + 
+  geom_bar(stat="identity", position="dodge") + 
+  labs(title = "postfix frequency plot")
 ```
 
 ## ssrc calc

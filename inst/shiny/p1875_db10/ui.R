@@ -48,7 +48,8 @@ shinyUI(fluidPage(
         tabPanel("histogram",
       list(
         plotOutput("histPim"),
-        plotOutput("histSsrc")
+        plotOutput("histSsrc"),
+        uiOutput("overview")
   #     plotOutput("hist2dNB"),
   #     plotOutput("hist2dFC")
       

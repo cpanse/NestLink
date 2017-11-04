@@ -27,6 +27,7 @@ shinyServer(function(input, output, session) {
     NB$pim <- parentIonMass(NB$peptide)
     NB <- NB[nchar(NB$peptide) >2, ]
     NB$ssrc <- sapply(NB$peptide, ssrc)
+    NB$peptideLength <- nchar(as.character(NB$peptide))
     NB
     })
   
@@ -61,10 +62,13 @@ shinyServer(function(input, output, session) {
     idx <- grep (input$FCPattern, FC$peptide)
    
     FC$cond <- "FC"
+    #FC$peptideLength <- nchar(as.character(FC$peptide))
+    #FC$peptideLength <- nchar(FC$peptide)
     # FC$peptide <- (as.character(FC$peptide))
     FC$pim <- parentIonMass(FC$peptide)
     FC <- FC[nchar(FC$peptide) >2, ]
     FC$ssrc <- sapply(FC$peptide, ssrc)
+    FC$peptideLength <- nchar(as.character(FC$peptide))
     FC[idx,]
     #FC
 })
@@ -140,5 +144,10 @@ shinyServer(function(input, output, session) {
  
  output$FlyCodeTable<- DT::renderDataTable({
    getFC()
+ })
+ 
+ output$overview <- renderPrint({
+   plot(table(unlist(strsplit(substr(FC$peptide, 3, 9), ""))))
+   #capture.output(table(nchar(as.character(getFC()$peptide))))
  })
 })

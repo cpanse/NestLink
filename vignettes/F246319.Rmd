@@ -5,7 +5,7 @@ date: "2017-10-30"
 
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{NestLink - F246319}
+  %\VignetteIndexEntry{NestLink - F255744 prediction and reality}
 output:
   html_document:
     theme: united	
@@ -15,28 +15,34 @@ output:
 
 # RT versus SSRC
 
-```{r fig.retina=3}
+```{r fig.retina=3, fig.height=16}
 
-load(url("http://fgcz-ms.uzh.ch/~cpanse/p1875/F255744.RData"))
 
 library(protViz)
 # install.package('protViz')
 
-.ssrc.mascot <- function(x, scores=c(10,20,40,50)){
-  x<-as.data.frame.mascot(x)
+.ssrc.mascot <- function(x, scores = c(10, 20, 40, 50)){
+ 
   lapply(scores, function(scorecutoff){
     xx <- x[x$pep_score > scorecutoff  & !is.na(x$pep_score), ]
     xx.ssrc <- sapply(as.character(xx$pep_seq), ssrc)
     xx.lm <- lm(xx.ssrc ~ xx$RTINSECONDS)
     plot(xx.ssrc ~ xx$RTINSECONDS,
          pch=16, col=rgb(0.1,0.1,0.1,alpha = 0.1),
-         sub=paste("mascot score cutoff :", scorecutoff, "r.squared: ",
-round(summary(xx.lm)$r.squared,2)))
+         sub=paste("mascot score cutoff :", scorecutoff, 
+                   "r.squared: ",round(summary(xx.lm)$r.squared,2), 
+                   "spearman:", round(cor(xx.ssrc, xx$RTINSECONDS, method = "spearman"),2)))
     abline(xx.lm, col='cornflowerblue')
     summary(xx.lm)
   })
 }
-par(mfrow=c(2,2))
+
+# load(url("http://fgcz-ms.uzh.ch/~cpanse/p1875/F255744.RData"))
+#F255744 <- as.data.frame.mascot(F255744)
+
+load(system.file("extdata/F255744.RData", package = "NestLink"))
+
+par(mfrow=c(4,1))
 .ssrc.mascot(F255744)
 
 #cor(hyd , rt)
