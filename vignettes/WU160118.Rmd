@@ -1,13 +1,24 @@
 ---
-title: "p1875 post"
-output: github_document
+title: "p1875 db10 / WU160118 -	postprocessing / summary"
+author: "Bernd Roschitzki & Christian Panse"
+date: '2017-11-02, 2017-11-03, 2017-11-04'
+
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{NestLink - compute peptide barcode}
+output:
+  html_document:
+    theme: united	
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# input Workunit : 160118 - mascot2RData
+# Charge state frequency
+## load workunit(WU): 160118 - mascot2RData bfabric application
+
 ```{r}
 # load("~/Downloads/444589.RData")
 # S <- do.call('rbind', lapply(list(F255737, F255744, F255747, F255749, F255751,
@@ -15,16 +26,17 @@ knitr::opts_chunk$set(echo = TRUE)
 #                           as.data.frame.mascot))
 
 load(system.file("extdata/WU160118.RData", package = "NestLink"))
-
+PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR)$"
 S <- WU160118
-idx <- grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR)$", S$pep_seq)
+idx <- grepl(PATTERN, S$pep_seq)
 ```
 
 
 ```{r}
 library(ggplot2)
 library(protViz)
-SS<-S[idx & S$pep_score > 25,]
+SS <- S[idx & S$pep_score > 25,]
+WU160118.pep_seq <- SS$pep_seq
 SS$chargeInt <- as.integer(substr(SS$query_charge, 0,1))
 table(SS$chargeInt)
 
@@ -38,8 +50,72 @@ ggplot(SS, aes(x=moverz * SS$chargeInt, fill = factor(query_charge), colour = fa
     theme_light()
 ```
 
+# Compare real and in-silico flycodes
+
+read the flycodes from p1875 db10 fasta file
+
+```{r}
+FC <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"), col.names = "peptide")
+FC$peptide <- (as.character(FC$peptide))
+idx <- grep (PATTERN, FC$peptide)
+
+FC$cond <- "FC"
+FC$pim <- parentIonMass(FC$peptide)
+FC <- FC[nchar(FC$peptide) >2, ]
+FC$ssrc <- sapply(FC$peptide, ssrc)
+FC$peptideLength <- nchar(as.character(FC$peptide))
+FC <- FC[idx,]
+head(FC)    
+```
+
+## AA design frequency
+
+```
+A 	18.0
+S 	6.0
+T 	12.0
+N 	1.0
+Q 	1.0
+D 	11.0
+E 	11.0
+V 	12.0
+L 	2.0
+F 	1.0
+Y 	4.0
+W 	1.0
+G 	8.0
+P 	12.0
+```
+
+```{r}
+aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1), rep('D', 11), 
+              rep('E', 11), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
+              rep('G', 8), rep('P', 12))
+
+```
+
+```{r}
+FC.pep_seq.freq <- table(unlist(strsplit(substr(FC$peptide, 3, 9), "")))
+FC.freq <- round(FC.pep_seq.freq / sum(FC.pep_seq.freq) * 100)
+
+WU160118.pep_seq.freq <- table(unlist(strsplit(substr(WU160118.pep_seq, 3, 9), "")))
+WU160118.freq <- round(WU160118.pep_seq.freq / sum(WU160118.pep_seq.freq) *100)
+```
+
+```{r}
+table(aa_pool_x7)
+FC.freq
+WU160118.freq
+```
+
+## ssrc calc
+
 ```{r fig.}
-plot(rt <- SS$RTINSECONDS, hy <- sapply(as.character(SS$pep_seq), ssrc), pch=16, col=rgb(0.3, 0.3, 0.3, 0.1))
+plot(rt <- SS$RTINSECONDS, 
+     hy <- sapply(as.character(SS$pep_seq), ssrc), 
+     pch=16, col=rgb(0.3, 0.3, 0.3, 0.1))
 cor(rt, hy, method = 'spearman')
 abline(lm(hy ~ rt))
 ```
+
+ 
