@@ -1,7 +1,8 @@
-
+#R
 
 
 #' compose a peptide with a defined AA sequence
+#' @author Christian Panse 
 #' @param pool AA distributen.
 #' @param cTerm c-Terms
 #' @return a AA sequence
@@ -17,6 +18,7 @@ compose_GPGx8cTerm <-
   }
 
 #' compose a peptide with a defined AA sequence
+#' @author Christian Panse 
 #' @param pool AA distributen.
 #' @param pool AA distributen.
 #' @return a AA sequence
@@ -29,6 +31,7 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 }
 
 #' plot a LC-MS map
+#' @author Christian Panse 
 #' @param peptides
 #' @return gplots::hist2d 
 #' 
