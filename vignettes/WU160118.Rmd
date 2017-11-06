@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #                           as.data.frame.mascot))
 
 load(system.file("extdata/WU160118.RData", package = "NestLink"))
-PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR)$"
+PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 S <- WU160118
 idx <- grepl(PATTERN, S$pep_seq)
 ```
@@ -41,12 +41,12 @@ SS$chargeInt <- as.integer(substr(SS$query_charge, 0,1))
 table(SS$chargeInt)
 
 ggplot(SS, aes(x=moverz * SS$chargeInt, fill = factor(query_charge), colour = factor(query_charge))) +
-    geom_histogram(binwidth= 10, alpha=.3, position="identity")+
-    labs(title = "Precursor mass to charge frequency plot ")+
-    labs(subtitle = "Plotting frequency of precursor masses for each charge state")+
-    labs(x = "Precursor mass [neutral mass]", y = "Frequency [counts]")+
-    labs(fill="Charge State", colour = "Charge State")+
-    scale_x_continuous(breaks = scales::pretty_breaks(8))+
+    geom_histogram(binwidth= 10, alpha=.3, position="identity") +
+    labs(title = "Precursor mass to charge frequency plot ") +
+    labs(subtitle = "Plotting frequency of precursor masses for each charge state") +
+    labs(x = "Precursor mass [neutral mass]", y = "Frequency [counts]") +
+    labs(fill="Charge State", colour = "Charge State") +
+    scale_x_continuous(breaks = scales::pretty_breaks(8)) +
     theme_light()
 ```
 
@@ -92,6 +92,8 @@ aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1
               rep('E', 11), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
               rep('G', 8), rep('P', 12))
 
+aa_pool_x7.post <- c(rep('WR', 20), rep('WLTVR'), rep('WQEGGR', 20), rep('WLR', 20), rep('WQSR', 20))
+
 ```
 
 ```{r}
@@ -135,6 +137,9 @@ AAfreq <- do.call('rbind', list(AAfreq1, AAfreq2, AAfreq3))
 ```
 
 ```{r}
+AAfreq1.post <- data.frame(aa=table(aa_pool_x7.post))
+names(AAfreq1.post) <- c('AA', 'freq')
+AAfreq1.post$cond <- "aa_pool_x7"
 
 AAfreq2.post <- data.frame(aa=FC.freq.post)
 names(AAfreq2.post) <- c('AA', 'freq')
@@ -144,21 +149,23 @@ AAfreq3.post <- data.frame(aa=WU160118.freq.post)
 names(AAfreq3.post) <- c('AA', 'freq')
 AAfreq3.post$cond <- "WU160118"
 
-AAfreq.post <- do.call('rbind', list(AAfreq2.post, AAfreq3.post))
+AAfreq.post <- do.call('rbind', list(AAfreq1.post, AAfreq2.post, AAfreq3.post))
 
 ```
 
 ```{r fig.retina=3}
 ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
-  labs(title = "amino acid frequency plot")
+  labs(title = "amino acid frequency plot") +
+  theme_light()
 ```
 
 
 ```{r fig.retina=3}
 ggplot(data=AAfreq.post, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
-  labs(title = "postfix frequency plot")
+  labs(title = "postfix frequency plot") +
+  theme_light()
 ```
 
 ## ssrc calc
