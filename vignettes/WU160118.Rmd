@@ -40,7 +40,8 @@ WU160118.pep_seq <- SS$pep_seq
 SS$chargeInt <- as.integer(substr(SS$query_charge, 0,1))
 table(SS$chargeInt)
 
-ggplot(SS, aes(x=moverz * SS$chargeInt, fill = factor(query_charge), colour = factor(query_charge))) +
+ggplot(SS, aes(x = moverz * chargeInt, fill = (query_charge), colour = (query_charge))) +
+    #facet_wrap(~ substr(pep_seq, 10, 100)) +
     geom_histogram(binwidth= 10, alpha=.3, position="identity") +
     labs(title = "Precursor mass to charge frequency plot ") +
     labs(subtitle = "Plotting frequency of precursor masses for each charge state") +
@@ -48,6 +49,35 @@ ggplot(SS, aes(x=moverz * SS$chargeInt, fill = factor(query_charge), colour = fa
     labs(fill="Charge State", colour = "Charge State") +
     scale_x_continuous(breaks = scales::pretty_breaks(8)) +
     theme_light()
+```
+
+```{r}
+SS$postfix <- substr(SS$pep_seq, 10, 100)
+
+ggplot(SS, aes(x = moverz * chargeInt, fill = postfix, colour = postfix)) +
+    geom_histogram(binwidth= 10, alpha=.2, position="identity") +
+    #facet_wrap(~ substr(pep_seq, 10, 100)) +
+   theme_light()
+```
+
+```{r}
+ggplot(SS, aes(x = moverz * chargeInt, fill = postfix)) +
+    geom_histogram(binwidth= 10, alpha=.9, position="identity") +
+    facet_wrap(~ substr(pep_seq, 10, 100)) +
+   theme_light()
+```
+
+```{r}
+ggplot(SS, aes(x = pep_score, fill = factor(query_charge), colour = factor(query_charge))) +
+    geom_histogram(binwidth= 2, alpha=.5, position="identity") +
+    facet_wrap(~ substr(pep_seq, 10, 100)) +
+   theme_light()
+#    labs(title = "Precursor mass to charge frequency plot ") +
+#    labs(subtitle = "Plotting frequency of precursor masses for each charge state") +
+#    labs(x = "Precursor mass [neutral mass]", y = "Frequency [counts]") +
+#    labs(fill="Charge State", colour = "Charge State") +
+#    scale_x_continuous(breaks = scales::pretty_breaks(8)) +
+    
 ```
 
 # Compare real and in-silico flycodes
