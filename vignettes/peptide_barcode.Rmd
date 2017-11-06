@@ -1,11 +1,11 @@
 ---
-title: "peptide_barcode (p1875)"
+title: "Derive peptide (fly|bar)codes (p1875)"
 author: "Bernd Roschitzki & Christian Panse"
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
 
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{NestLink - compute peptide barcode}
+  %\VignetteIndexEntry{NestLink - derive peptide (fly|bar)code}
 output:
   html_document:
     theme: united	
