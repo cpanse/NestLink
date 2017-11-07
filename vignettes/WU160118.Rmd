@@ -1,7 +1,7 @@
 ---
 title: "p1875 db10 / WU160118 -	postprocessing / summary"
 author: "Bernd Roschitzki & Christian Panse"
-date: '2017-11-02, 2017-11-03, 2017-11-04'
+date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06'
 
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -68,7 +68,7 @@ ggplot(SS, aes(x = moverz * chargeInt, fill = postfix)) +
 ```
 
 ```{r}
-ggplot(SS, aes(x = pep_score, fill = factor(query_charge), colour = factor(query_charge))) +
+ggplot(SS, aes(x = pep_score, fill = query_charge, colour = query_charge)) +
     geom_histogram(binwidth= 2, alpha=.5, position="identity") +
     facet_wrap(~ substr(pep_seq, 10, 100)) +
    theme_light()
