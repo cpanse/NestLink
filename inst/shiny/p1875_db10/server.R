@@ -10,12 +10,8 @@
 library(shiny)
 library(protViz)
 library(ggplot2)
-# Define server logic required to draw a histogram
+
 shinyServer(function(input, output, session) {
-  
-  
- 
-  
   loadNB <- reactive({
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
     progress$set(message = "load NBs ...")
@@ -65,15 +61,11 @@ shinyServer(function(input, output, session) {
     idx <- grep (input$FCPattern, FC$peptide)
    
     FC$cond <- "FC"
-    #FC$peptideLength <- nchar(as.character(FC$peptide))
-    #FC$peptideLength <- nchar(FC$peptide)
-    # FC$peptide <- (as.character(FC$peptide))
     FC$pim <- parentIonMass(FC$peptide)
     FC <- FC[nchar(FC$peptide) >2, ]
     FC$ssrc <- sapply(FC$peptide, ssrc)
     FC$peptideLength <- nchar(as.character(FC$peptide))
     FC[idx,]
-    #FC
 })
     
   getFC <- reactive({
@@ -89,18 +81,16 @@ shinyServer(function(input, output, session) {
     
   ggplot(getNB(), aes(ssrc, pim)) +
     theme_light() +
-    stat_bin2d(bins = input$bins) +  labs(title = "NanoBody 2D histogram", subtitle = "using AA sequence in description line of p1875 db10 FASTA") +
-    labs(x = "hydrophobicity based on Sequence Specific Retention Calculator", y= "patent ion mass")
+    stat_bin2d(bins = input$bins) +  
+    labs(title = "NanoBody 2D histogram", 
+         subtitle = "using AA sequence in description line of p1875 db10 FASTA") +
+    labs(x = "hydrophobicity based on Sequence Specific Retention Calculator", 
+         y= "patent ion mass")
   
   })
   
   getDat <- reactive({
-    print(input$plotFC)
-    print(input$plotuFC)
-    print(input$plotNB)
-    print(input$plotuNB)
-    # rr <- data.frame(colnames = c("peptide", "cond",   "pim",     "ssrc") )
-   #rr <- rbind(getUniqueNB(), getFC())
+
     rr <- getFC()
     if (input$plotFC == FALSE){
       rr <- rr[FALSE, ]
@@ -129,7 +119,8 @@ shinyServer(function(input, output, session) {
     stat_bin2d(bins = input$bins) + 
     labs(title = "FlyCodes 2D histogram", 
          subtitle = paste("using tryptic digested AA sequence of applied regex pattern filter", input$FCPattern, ".")) +
-    labs(x = "hydrophobicity based on Sequence Specific Retention Calculator", y= "patent ion mass")
+    labs(x = "hydrophobicity based on Sequence Specific Retention Calculator", 
+         y= "patent ion mass")
  
   })
  
@@ -143,19 +134,18 @@ shinyServer(function(input, output, session) {
      labs(x = "parent ion mass") +
      theme_light() 
      
-   
    if (input$ggplot_facet_wrap){
      p <- p + facet_wrap(~ cond)
    }
-    
-    return (p)
+  p
  })
+ 
  output$histSsrc <- renderPlot({
    progress <- shiny::Progress$new(session = session, min = 0, max = 1)
    progress$set(message = "render ssrc histogram ...")
    on.exit(progress$close())
    
-   p<- ggplot(getDat(), aes(x=ssrc, fill=cond)) +
+   p <- ggplot(getDat(), aes(x=ssrc, fill=cond)) +
      geom_histogram(bins=input$bins, alpha=input$alpha, position="identity") +
      labs(x = "hydrophobicity based on Sequence Specific Retention Calculator") +
      theme_light() 
@@ -164,7 +154,7 @@ shinyServer(function(input, output, session) {
      p <- p + facet_wrap(~ cond)
    }
    
-   return (p)
+   p
  })
  
  output$FlyCodeTable<- DT::renderDataTable({
@@ -173,7 +163,6 @@ shinyServer(function(input, output, session) {
  
  output$overview <- renderPrint({
    plot(table(unlist(strsplit(substr(getFC()$peptide, 3, 9), ""))))
-   #capture.output(table(nchar(as.character(getFC()$peptide))))
  })
  
  # Downloadable csv of selected dataset ----
@@ -185,6 +174,7 @@ shinyServer(function(input, output, session) {
      write.csv(getFC(), file, row.names = FALSE)
    }
  )
+ 
  output$sessionInfo <- renderPrint({
    capture.output(sessionInfo())
  })
