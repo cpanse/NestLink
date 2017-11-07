@@ -19,7 +19,7 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       textInput("FCPattern", "FC pattern", 
-                value = "^GS[ASTNQDEVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR)$", 
+                value = "^GS[ASTNQDEVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$", 
                 width = NULL, placeholder = NULL),
        sliderInput("bins",
                    "Number of bins:",
@@ -32,14 +32,17 @@ shinyUI(fluidPage(
        
        sliderInput("ssrcrange", "ssrc - range:",
                    min = 0, max = 70, value = c(0, 70)),
-       
+      checkboxInput("ggplot_facet_wrap", "facet_wrap", FALSE), 
        sliderInput("alpha", "alpha blending:",
                    min = 0, max = 1, value = 0.3),
        HTML('<hr>Histogram only filters:'),
-       checkboxInput("plotFC", "Plot FlyCode", TRUE),
-       checkboxInput("plotuFC", "Plot Unique FlyCode", TRUE),
-       checkboxInput("plotNB", "Plot Nano Body", TRUE),
-       checkboxInput("plotuNB", "Plot Unique Nano Body", TRUE)
+       checkboxInput("plotFC", "Plot FC", TRUE),
+       checkboxInput("plotuFC", "Plot Unique FC", TRUE),
+       checkboxInput("plotNB", "Plot NB", TRUE),
+       checkboxInput("plotuNB", "Plot Unique NB", TRUE),
+      HTML("<hr>"),
+      # Button
+      downloadButton("downloadFC", "Download FCs")
     ),
     
     # Show a plot of the generated distribution
@@ -57,9 +60,11 @@ shinyUI(fluidPage(
   tabPanel("2Dhistogram",
            list(plotOutput("hist2dNB"), plotOutput("hist2dFC"))
   ),
+  
   tabPanel("FlyCode table",
            DT::dataTableOutput("FlyCodeTable")
-  )
+  ),
+  tabPanel("sessionInfo", verbatimTextOutput("sessionInfo"))
   )
     )
   ),HTML("<hr>source: <a href='https://github.com/cpanse/NestLink'>NestLink</a>"),
