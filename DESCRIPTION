@@ -1,8 +1,12 @@
 Package: NestLink
 Type: Package
 Title: NestLink
-Author: Christian Panse, Lennart Opitz
-Version: 0.99.9
+Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
+        comment = c(ORCID = "0000-0003-1975-3064")),
+        person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.uzh.ch", role = "ctb"),
+        person("Bernd", "Roschitzki", role = "ctb"))
+Author: Christian Panse, Lennart Opitz, Bernd Roschitzki
+Version: 0.99.10
 Depends: R (>= 3.2.2),
   Biostrings,
   DT, 
@@ -24,3 +28,4 @@ VignetteBuilder: knitr
 Suggests: knitr, testthat
 NeedsCompilation: no
 biocViews: MassSpectrometryData
+RoxygenNote: 6.0.1
