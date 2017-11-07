@@ -53,9 +53,6 @@ shinyUI(fluidPage(
         plotOutput("histPim"),
         plotOutput("histSsrc"),
         uiOutput("overview")
-  #     plotOutput("hist2dNB"),
-  #     plotOutput("hist2dFC")
-      
        )),
   tabPanel("2Dhistogram",
            list(plotOutput("hist2dNB"), plotOutput("hist2dFC"))
