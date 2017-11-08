@@ -1,83 +1,115 @@
 ---
-title: "p1875 db10 / WU160118 -	postprocessing / summary"
-author: "Bernd Roschitzki & Christian Panse"
-date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06'
-
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{NestLink - p1875 db10 / WU160118 -	postprocessing / summary}
+title: "p1875 db10 / WU160118 R444589 -	postprocessing / summary"
+author: 
+- name: Christian Panse
+  affiliation: FGCZ
+  email: cp@fgcz.ethz.ch
+- name: Bernd Roschitzki
+  affiliation: FGCZ
+package: NestLink
 output:
-  html_document:
-    theme: united	
-    toc: true
+  BiocStyle::html_document2
+abstract: |
+  Description of your vignette
+vignette: |
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{NestLink - p1875 db10 / WU160118 -	postprocessing / summary}
+date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06, 2017-11-08'
 ---
+
+
+  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Charge state frequency
-## load workunit(WU): 160118 - mascot2RData bfabric application
+# Download data from http://fgcz-bfabric.uzh.ch
+
+- Go through from http://fgcz-bfabric.uzh.ch
+- search for workunit id 160118
+- Download the resource with id 444589
+- The following code snippet is only extracting the meta data (no MS2)
+
+```{r eval=FALSE}
+load("~/Downloads/444589.RData")
+library(protViz)
+WU160118 <- do.call('rbind', lapply(list("F255737", "F255744", "F255747", 
+  "F255749", "F255751", "F255760", "F255761", "F255762"), 
+  function(datfilename){
+      df <- as.data.frame.mascot(get(datfilename))
+      df$datfilename <- datfilename
+      df
+    }
+  ))
+save(WU160118, file = "../inst/extdata/WU160118.RData", 
+     compress = TRUE, compression_level = 9)   
+```
+
+# Load requiered R packages
 
 ```{r}
-# load("~/Downloads/444589.RData")
-# S <- do.call('rbind', lapply(list(F255737, F255744, F255747, F255749, F255751,
-#                                F255760, F255761, F255762), 
-#                           as.data.frame.mascot))
+library(NestLink)
+```
 
+# Charge state frequency
+
+## Load workunit(WU): 160118 - mascot2RData bfabric application
+
+```{r}
 load(system.file("extdata/WU160118.RData", package = "NestLink"))
+WU <- WU160118
+```
+
+## Filtering
+```{r}
 PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
-S <- WU160118
-idx <- grepl(PATTERN, S$pep_seq)
+idx <- grepl(PATTERN, WU$pep_seq)
+WU <- WU[idx & WU$pep_score > 25,]
 ```
 
 
-```{r}
-library(ggplot2)
-library(protViz)
-SS <- S[idx & S$pep_score > 25,]
-WU160118.pep_seq <- SS$pep_seq
-SS$chargeInt <- as.integer(substr(SS$query_charge, 0,1))
-table(SS$chargeInt)
+```{r fig.retina=3, fig.height=8}
+# WU.pep_seq <- WU$pep_seq # TODO remove?
+WU$chargeInt <- as.integer(substr(WU$query_charge, 0, 1))
+table(WU$chargeInt)
 
-ggplot(SS, aes(x = moverz * chargeInt, fill = (query_charge), colour = (query_charge))) +
-    #facet_wrap(~ substr(pep_seq, 10, 100)) +
+ggplot(WU, aes(x = moverz * chargeInt, fill = (query_charge), colour = (query_charge))) +
+    facet_wrap(~ datfilename, ncol = 2) +
     geom_histogram(binwidth= 10, alpha=.3, position="identity") +
-    labs(title = "Precursor mass to charge frequency plot ") +
-    labs(subtitle = "Plotting frequency of precursor masses for each charge state") +
-    labs(x = "Precursor mass [neutral mass]", y = "Frequency [counts]") +
-    labs(fill="Charge State", colour = "Charge State") +
+    labs(title = "Precursor mass to charge frequency plot",
+      subtitle = "Plotting frequency of precursor masses for each charge state",
+      x = "Precursor mass [neutral mass]", 
+      y = "Frequency [counts]",
+      fill = "Charge State",
+      colour = "Charge State") +
     scale_x_continuous(breaks = scales::pretty_breaks(8)) +
     theme_light()
 ```
 
 ```{r}
-SS$postfix <- substr(SS$pep_seq, 10, 100)
+WU$sufix <- substr(WU$pep_seq, 10, 100)
 
-ggplot(SS, aes(x = moverz * chargeInt, fill = postfix, colour = postfix)) +
+ggplot(WU, aes(x = moverz * chargeInt, fill = sufix, colour = sufix)) +
     geom_histogram(binwidth= 10, alpha=.2, position="identity") +
     #facet_wrap(~ substr(pep_seq, 10, 100)) +
    theme_light()
 ```
 
 ```{r}
-ggplot(SS, aes(x = moverz * chargeInt, fill = postfix)) +
+ggplot(WU, aes(x = moverz * chargeInt, fill = sufix)) +
     geom_histogram(binwidth= 10, alpha=.9, position="identity") +
     facet_wrap(~ substr(pep_seq, 10, 100)) +
    theme_light()
 ```
 
 ```{r}
-ggplot(SS, aes(x = pep_score, fill = query_charge, colour = query_charge)) +
+ggplot(WU, aes(x = pep_score, fill = query_charge, colour = query_charge)) +
     geom_histogram(binwidth= 2, alpha=.5, position="identity") +
     facet_wrap(~ substr(pep_seq, 10, 100)) +
    theme_light()
-#    labs(title = "Precursor mass to charge frequency plot ") +
-#    labs(subtitle = "Plotting frequency of precursor masses for each charge state") +
-#    labs(x = "Precursor mass [neutral mass]", y = "Frequency [counts]") +
-#    labs(fill="Charge State", colour = "Charge State") +
-#    scale_x_continuous(breaks = scales::pretty_breaks(8)) +
-    
 ```
 
 # Compare real and in-silico flycodes
@@ -135,18 +167,18 @@ FC.pep_seq.freq.post <- table(unlist((substr(FC$peptide, 10, 100))))
 FC.freq.post <- round(FC.pep_seq.freq.post / sum(FC.pep_seq.freq.post) * 100)
 
 
-WU160118.pep_seq.freq <- table(unlist(strsplit(substr(WU160118.pep_seq, 3, 9), "")))
-WU160118.freq <- round(WU160118.pep_seq.freq / sum(WU160118.pep_seq.freq) *100)
+WU.pep_seq.freq <- table(unlist(strsplit(substr(WU$pep_seq, 3, 9), "")))
+WU.freq <- round(WU.pep_seq.freq / sum(WU.pep_seq.freq) * 100)
 
 
-WU160118.pep_seq.freq.post <- table(unlist(substr(WU160118.pep_seq, 10, 100)))
-WU160118.freq.post <- round(WU160118.pep_seq.freq.post / sum(WU160118.pep_seq.freq.post) *100)
+WU.pep_seq.freq.post <- table(unlist(substr(WU$pep_seq, 10, 100)))
+WU.freq.post <- round(WU.pep_seq.freq.post / sum(WU.pep_seq.freq.post) *100)
 ```
 
 ```{r}
 table(aa_pool_x7)
 FC.freq
-WU160118.freq
+WU.freq
 ```
 
 
@@ -159,9 +191,9 @@ AAfreq2 <- data.frame(aa=FC.freq)
 names(AAfreq2) <- c('AA', 'freq')
 AAfreq2$cond <- "db10.fasta"
 
-AAfreq3 <- data.frame(aa=WU160118.freq)
+AAfreq3 <- data.frame(aa=WU.freq)
 names(AAfreq3) <- c('AA', 'freq')
-AAfreq3$cond <- "WU160118"
+AAfreq3$cond <- "WU"
 
 AAfreq <- do.call('rbind', list(AAfreq1, AAfreq2, AAfreq3))
 ```
@@ -175,9 +207,9 @@ AAfreq2.post <- data.frame(aa=FC.freq.post)
 names(AAfreq2.post) <- c('AA', 'freq')
 AAfreq2.post$cond <- "db10.fasta"
 
-AAfreq3.post <- data.frame(aa=WU160118.freq.post)
+AAfreq3.post <- data.frame(aa=WU.freq.post)
 names(AAfreq3.post) <- c('AA', 'freq')
-AAfreq3.post$cond <- "WU160118"
+AAfreq3.post$cond <- "WU"
 
 AAfreq.post <- do.call('rbind', list(AAfreq1.post, AAfreq2.post, AAfreq3.post))
 
@@ -194,18 +226,29 @@ ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) +
 ```{r fig.retina=3}
 ggplot(data=AAfreq.post, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
-  labs(title = "postfix frequency plot") +
+  labs(title = "sufix frequency plot") +
   theme_light()
 ```
 
 ## ssrc calc
 
-```{r fig.}
-plot(rt <- SS$RTINSECONDS, 
-     hy <- sapply(as.character(SS$pep_seq), ssrc), 
-     pch=16, col=rgb(0.3, 0.3, 0.3, 0.1))
-cor(rt, hy, method = 'spearman')
-abline(lm(hy ~ rt))
+```{r fig.retina=3, fig.height=12}
+WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
+WU$sufix <- substr(WU$pep_seq, 10,100)
+ggplot(WU, aes(x = RTINSECONDS, y = ssrc)) +
+  geom_point(aes(alpha=pep_score, colour = datfilename)) +
+  facet_wrap(~ datfilename * sufix, ncol = 5, nrow = 8) +
+  geom_smooth(method = 'lm') 
+#+
+#  stat_smooth_func(geom="text",method="lm",hjust=0,parse=TRUE) 
+ 
+#plot(rt <- WU$RTINSECONDS, 
+#     hy <- , 
+#     pch=16, col=rgb(0.3, 0.3, 0.3, 0.1))
+```
+```{r}
+cor(WU$RTINSECONDS, WU$ssrc, method = 'spearman')
+#abline(lm(hy ~ rt))
 ```
 
  
