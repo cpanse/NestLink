@@ -163,4 +163,7 @@ shinyServer(function(input, output, session) {
    plot(table(unlist(strsplit(substr(FC$peptide, 3, 9), ""))))
    #capture.output(table(nchar(as.character(getFC()$peptide))))
  })
+ output$sessionInfo <- renderPrint({
+   capture.output(sessionInfo())
+ })
 })
