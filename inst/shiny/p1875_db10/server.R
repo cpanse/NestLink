@@ -13,9 +13,6 @@ library(ggplot2)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
-  
- 
-  
   loadNB <- reactive({
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
     progress$set(message = "load NBs ...")
@@ -94,12 +91,7 @@ shinyServer(function(input, output, session) {
   })
   
   getDat <- reactive({
-    print(input$plotFC)
-    print(input$plotuFC)
-    print(input$plotNB)
-    print(input$plotuNB)
-    # rr <- data.frame(colnames = c("peptide", "cond",   "pim",     "ssrc") )
-   #rr <- rbind(getUniqueNB(), getFC())
+   
     rr <- getFC()
     if (input$plotFC == FALSE){
       rr <- rr[FALSE, ]
@@ -133,8 +125,15 @@ shinyServer(function(input, output, session) {
    progress$set(message = "render parent ion histogram ...")
    on.exit(progress$close())
    
-   ggplot(getDat(), aes(x=pim, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity")
+   p <- ggplot(getDat(), aes(x=pim, fill=cond)) +
+     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity") +
+     theme_light()
+   
+   
+   if (input$ggplot_facet_wrap){
+     p <- p + facet_wrap(~cond)
+   }
+   p
  })
  
  output$histSsrc <- renderPlot({
@@ -142,8 +141,15 @@ shinyServer(function(input, output, session) {
    progress$set(message = "render ssrc histogram ...")
    on.exit(progress$close())
    
-   ggplot(getDat(), aes(x=ssrc, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity")
+   p <- ggplot(getDat(), aes(x=ssrc, fill=cond)) +
+     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity") +
+     theme_light()
+   
+   
+   if (input$ggplot_facet_wrap){
+     p <- p + facet_wrap(~cond)
+   }
+   p
  })
  
  output$histESP_Prediction <- renderPlot({
@@ -151,8 +157,15 @@ shinyServer(function(input, output, session) {
    progress$set(message = "render ESP_Prediction histogram ...")
    on.exit(progress$close())
    
-   ggplot(getDat(), aes(x=ESP_Prediction, fill=cond)) +
-     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity")
+   p<- ggplot(getDat(), aes(x=ESP_Prediction, fill=cond)) +
+     geom_histogram(bins=input$bins, alpha=input$alpha, position="identity") +
+     theme_light()
+   
+   
+   if (input$ggplot_facet_wrap){
+     p <- p + facet_wrap(~cond)
+   }
+   p
  })
  
  output$FlyCodeTable<- DT::renderDataTable({
@@ -163,7 +176,17 @@ shinyServer(function(input, output, session) {
    plot(table(unlist(strsplit(substr(FC$peptide, 3, 9), ""))))
    #capture.output(table(nchar(as.character(getFC()$peptide))))
  })
+ 
  output$sessionInfo <- renderPrint({
    capture.output(sessionInfo())
  })
+ 
+ output$downloadData <- downloadHandler(
+   filename = function() {
+     paste("NestLink-FGCZ-p1875-DB10-", Sys.Date(), ".csv", sep="")
+   },
+   content = function(file) {
+     write.csv(getDat(), file, row.names = FALSE)
+   }
+ )
 })
