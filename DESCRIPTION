@@ -6,13 +6,13 @@ Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("a
         person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.uzh.ch", role = "ctb"),
         person("Bernd", "Roschitzki", role = "ctb"))
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki
-Version: 0.99.13
+Version: 0.99.14
 Depends: R (>= 3.2.2),
   Biostrings,
   DT, 
   gplots, 
   ggplot2,
-  protViz (>= 0.2.37), 
+  protViz (>= 0.2.48), 
   shiny,
   ShortRead,
   specL

@@ -42,7 +42,7 @@ shinyUI(fluidPage(
        checkboxInput("plotuNB", "Plot Unique NB", TRUE),
       HTML("<hr>"),
       # Button
-      downloadButton("downloadFC", "Download FCs")
+      downloadButton("downloadData", "Download Data")
     ),
     
     # Show a plot of the generated distribution
