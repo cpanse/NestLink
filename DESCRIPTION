@@ -12,7 +12,7 @@ Depends: R (>= 3.2.2),
   DT, 
   gplots, 
   ggplot2,
-  protViz (>= 0.2.48), 
+  protViz (>= 0.2.45), 
   shiny,
   ShortRead,
   specL
