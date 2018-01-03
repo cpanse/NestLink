@@ -7,10 +7,9 @@
 # https://github.com/cpanse/NestLink
 
 # [specL](http://dx.doi.org/10.1093/bioinformatics/btv105)
-if (packageVersion('protViz') < '0.2.45')
-{
-  message("protViz package version should be 0.2.45 or higher")
-}
+stopifnot(packageVersion('protViz') >= '0.2.45')
+stopifnot(packageVersion('NestLink') >= '0.99.14')
+
 
 library(protViz)
 library(gplots)
@@ -76,6 +75,63 @@ stopifnot(length(peptides.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGG
           == sample.size)
 
 
+getFC <- function(){
+ 
+  FC <- read.table(system.file("extdata/FC.tryptic",
+                               package = "NestLink"),
+                   col.names = c("peptide", "ESP_Prediction"),
+                   header = TRUE)
+  
+  FC$peptide <- (as.character(FC$peptide))
+  idx <- grep ("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$", FC$peptide)
+  
+  FC$cond <- "FC"
+  
+  FC$pim <- parentIonMass(FC$peptide)
+  
+  FC <- FC[nchar(FC$peptide) > 2, ]
+  
+  FC$ssrc <- sapply(FC$peptide, ssrc)
+  
+  FC$peptideLength <- nchar(as.character(FC$peptide))
+  
+  FC[idx,]
+}
+
+
+getNB <- function(){
+ 
+  NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
+                   col.names = c("peptide", "ESP_Prediction"), header = TRUE)
+  NB$cond <- "NB"
+  NB$peptide <- (as.character(NB$peptide))
+  NB$pim <- parentIonMass(NB$peptide)
+  NB <- NB[nchar(NB$peptide) >2, ]
+  NB$ssrc <- sapply(NB$peptide, ssrc)
+  NB$peptideLength <- nchar(as.character(NB$peptide))
+  NB
+}
+
+getDat <- function(){
+  
+  rr <- getFC()
+  if (input$plotFC == FALSE){
+    rr <- rr[FALSE, ]
+  }
+  if (input$plotuFC){
+    rr <- rbind(rr, getUniqueFC())
+  }
+  
+  if (input$plotNB){
+    rr <- rbind(rr, getNB())
+  }
+  if (input$plotuNB){
+    rr <- rbind(rr, getUniqueNB())
+  }
+  print(names(rr))
+  rr
+}
+
 
 ## MAIN
 pdf("~/NestLink.pdf", 12,10)
@@ -83,3 +139,5 @@ pdf("~/NestLink.pdf", 12,10)
 print(.in_silico_LCMS_map(peptides.GSx7cTerm, main='GSx7cTerm'))
 
 dev.off()
+
+
