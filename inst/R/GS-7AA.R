@@ -36,14 +36,14 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 
 hydrophobicity <- function(x){ unlist(lapply(x, ssrc)) }
 
-.in_silico_LCMS_map <- function(x, bins=10, ...){
+.in_silico_LCMS_map <- function(x, bins=10, alpha = 0.5, ...){
   hyd <- hydrophobicity(x)
   pim <- unlist(lapply(x, function(x){parentIonMass(x)}))
 
   df <- data.frame(hyd=hyd, pim=pim)
   
   p <- ggplot(df, aes(hyd, pim)) + 
-    geom_point(color=rgb(1, 0.6, 0.6,alpha=0.5)) +
+    geom_point(color=rgb(1, 0.6, 0.6,alpha=alpha)) +
     # stat_bin2d(bins=50) +  
     labs(title = "in-silico LC-MS map", 
          subtitle = paste(deparse(substitute(x)), "| sample size =", length(x))) + 
@@ -115,11 +115,12 @@ stopifnot(length(FC.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|
 
 
 ## MAIN
-pdf("~/NestLink.pdf", 6,0.6 * 6)
+pdf("~/NestLink.pdf", 6, 0.6 * 6)
 op<-par(mfrow=c(2,1))
-print(.in_silico_LCMS_map(FC.GSx7cTerm))
+print(.in_silico_LCMS_map(FC.GSx7cTerm, alpha = 0.2))
 
-p <- ggplot(rbind(.getFC(), .getNB()), aes(x=ESP_Prediction, fill=cond)) +
+ESP <- rbind(.getFC(), .getNB())
+p <- ggplot(ESP, aes(x=ESP_Prediction, fill=cond)) +
   geom_histogram(bins = 50, alpha = 0.4, position="identity") +
   labs(x = "detectability in LC-MS (ESP prediction)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
