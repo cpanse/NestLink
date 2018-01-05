@@ -8,7 +8,6 @@
 # https://CRAN.R-project.org/package=protViz
 # https://github.com/cpanse/NestLink
 
-# [specL](http://dx.doi.org/10.1093/bioinformatics/btv105)
 stopifnot(packageVersion('protViz') >= '0.2.45')
 stopifnot(packageVersion('NestLink') >= '0.99.14')
 
@@ -44,13 +43,14 @@ hydrophobicity <- function(x){ unlist(lapply(x, ssrc)) }
   df <- data.frame(hyd=hyd, pim=pim)
   
   p <- ggplot(df, aes(hyd, pim)) + 
-    stat_bin2d(bins=80) +  
-    labs(title = "in-silico LCMS map", 
+    geom_point(color=rgb(1, 0.6, 0.6,alpha=0.5)) +
+    # stat_bin2d(bins=50) +  
+    labs(title = "in-silico LC-MS map", 
          subtitle = paste(deparse(substitute(x)), "| sample size =", length(x))) + 
     labs(x = "hydrophobicity value [as computed by SSRC; dimensionless quantity]", y = "parent ion mass [in Dalton]") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-    scale_fill_gradientn(colours = diverge_hsv(16, h = 0, s = c(1, 0.4), v=c(0.8, 1.0), alpha = 0.5)[9:16])
+    scale_fill_gradientn(colours = diverge_hsv(32, h = 0, s = c(1, 0.4), v=c(0.8, 1.0), alpha = 0.5)[17:(17+8)])
   p
 }
 
@@ -115,13 +115,13 @@ stopifnot(length(FC.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|
 
 
 ## MAIN
-pdf("~/NestLink.pdf", 12,6)
-
+pdf("~/NestLink.pdf", 6,0.6 * 6)
+op<-par(mfrow=c(2,1))
 print(.in_silico_LCMS_map(FC.GSx7cTerm))
 
 p <- ggplot(rbind(.getFC(), .getNB()), aes(x=ESP_Prediction, fill=cond)) +
   geom_histogram(bins = 50, alpha = 0.4, position="identity") +
-  labs(x = "ESP prediction") +
+  labs(x = "detectability in LC-MS (ESP prediction)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
       panel.background = element_blank(), axis.line = element_line(colour = "black"))
 print(p)
