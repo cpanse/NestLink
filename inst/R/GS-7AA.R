@@ -48,7 +48,8 @@ hydrophobicity <-
     geom_point(color=rgb(1, 0.6, 0.6, alpha = alpha), size = size, pch = 16) +
     labs(title = "in-silico LC-MS map", 
          subtitle = paste(deparse(substitute(x)), "| sample size =", length(x), "| size =", size)) + 
-    labs(x = "hydrophobicity value [as computed by SSRC; dimensionless quantity]", y = "parent ion mass [in Dalton]") +
+    labs(x = "hydrophobicity value [as computed by SSRC; dimensionless quantity]",
+         y = "peptide mass [in Dalton]") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black")) +
     scale_fill_gradientn(colours = diverge_hsv(32, h = 0, s = c(1, 0.4), v=c(0.8, 1.0), alpha = 0.5)[17:(17+8)])
@@ -84,6 +85,8 @@ stopifnot(length(FC.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|
                    col.names = c("peptide", "ESP_Prediction"),
                    header = TRUE)
   
+  
+  
   FC$peptide <- (as.character(FC$peptide))
   idx <- grep ("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$", FC$peptide)
   
@@ -105,15 +108,47 @@ stopifnot(length(FC.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|
  
   NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
                    col.names = c("peptide", "ESP_Prediction"), header = TRUE)
+  
+  # unambiguously assignable peptides (those, which occur only on one nanobody)
+  idx <- which(table(NB$peptide)  == 1)
+  NB <- NB[idx, ] 
+  # 
+  
   NB$cond <- "NB"
   NB$peptide <- (as.character(NB$peptide))
   NB$pim <- parentIonMass(NB$peptide)
   NB <- NB[nchar(NB$peptide) >2, ]
   NB$ssrc <- sapply(NB$peptide, ssrc)
   NB$peptideLength <- nchar(as.character(NB$peptide))
-  unique(NB)
+  # unique(NB)
+  NB
 }
 
+#' make_it_unambiguous
+#'
+#' @param x a \code{data.frame} containing a column peptide
+#' @return 
+#' a \code{data.frame} of unambiguously assignable peptides 
+#' (those, which occur only on one nanobody)
+#' @export
+NB.unambiguous <- function(x){
+  stopifnot('peptide' %in% names(x))
+  
+  
+  unambiguous <- table(x$peptide) == 1
+  
+  unambiguous.peptides <- (row.names(unambiguous)[unambiguous])
+  
+  x$cond <- "NB.unambiguous"
+  
+  x[x$peptide %in% unambiguous.peptides, ] 
+}
+
+NB.unique <- function(x){
+  stopifnot('peptide' %in% names(x))
+  x$cond <- "NB.unique"
+  unique(x)
+}
 
 ## MAIN
 pdf("~/NestLink.pdf", 6, 0.6 * 6)
@@ -128,6 +163,34 @@ p <- ggplot(ESP, aes(x = ESP_Prediction, fill = cond)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
       panel.background = element_blank(), axis.line = element_line(colour = "black"))
 print(p)
+
+ESP <- rbind(.getFC(), NB.unambiguous(.getNB()))
+p <- ggplot(ESP, aes(x = ESP_Prediction, fill = cond)) +
+  geom_histogram(bins = 50, alpha = 0.4, position="identity") +
+  labs(x = "detectability in LC-MS (ESP prediction)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+print(p)
+
+ESP <- rbind(.getFC(), NB.unique(.getNB()))
+p <- ggplot(ESP, aes(x = ESP_Prediction, fill = cond)) +
+  geom_histogram(bins = 50, alpha = 0.4, position="identity") +
+  labs(x = "detectability in LC-MS (ESP prediction)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+print(p)
+
+  
+ESP <- rbind(.getNB(), NB.unambiguous(.getNB()), NB.unique(.getNB()))
+
+p <- ggplot(ESP, aes(x = ESP_Prediction, fill = cond)) +
+  geom_histogram(bins = 50, alpha = 0.4, position="identity") +
+  labs(x = "detectability in LC-MS (ESP prediction)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+print(p)
+
+table(ESP$cond)
 
 dev.off()
 
