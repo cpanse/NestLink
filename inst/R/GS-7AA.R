@@ -52,7 +52,7 @@ hydrophobicity <-
          y = "peptide mass [in Dalton]") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-    scale_fill_gradientn(colours = diverge_hsv(32, h = 0, s = c(1, 0.4), v=c(0.8, 1.0), alpha = 0.5)[17:(17+8)])
+    scale_fill_gradientn(colours = diverge_hsv(32, h = 0, s = c(1, 0.4), v = c(0.8, 1.0), alpha = 0.5)[17:(17+8)])
   p
 }
 
@@ -67,7 +67,6 @@ aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1
 ## Compose a GSXXXXXXX(WR|WLTVR|WQGGER|WQSR|WLR) peptide
 set.seed(2)
 FC.GSx7cTerm <- replicate(sample.size, compose_GSx7cTerm(pool=aa_pool_x7))
-
 
 ## Some Sanity Checks
 table(aa_pool_x7)
