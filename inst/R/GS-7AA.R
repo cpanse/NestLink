@@ -108,11 +108,6 @@ stopifnot(length(FC.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|
   NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
                    col.names = c("peptide", "ESP_Prediction"), header = TRUE)
   
-  # unambiguously assignable peptides (those, which occur only on one nanobody)
-  idx <- which(table(NB$peptide)  == 1)
-  NB <- NB[idx, ] 
-  # 
-  
   NB$cond <- "NB"
   NB$peptide <- (as.character(NB$peptide))
   NB$pim <- parentIonMass(NB$peptide)
