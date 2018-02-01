@@ -16,7 +16,7 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{NestLink - p1875 db10 / WU160118 -	postprocessing / summary}
-date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06, 2017-11-08, 2018-01-30'
+date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06, 2017-11-08, 2018-01-30, 2018-02-01'
 ---
 
 
