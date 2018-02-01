@@ -275,13 +275,14 @@ WU <- WU[idx & WU$pep_score > 25,]
 WU <- WU[WU$datfilename == "F255737",]
 WU$suffix <- substr(WU$pep_seq, 10, 100)
 WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
-ggplot(WU, aes(x = RTINSECONDS, y = moverz)) +
+
+ggplot(WU, aes(x = RTINSECONDS, y = moverz * pep_exp_z)) +
   geom_point(aes(alpha = pep_score, colour = datfilename)) +
   facet_wrap(~ datfilename * suffix, ncol=5) 
 ```
 
 ```{r fig.retina=3, fig.width=12, fig.height=4}
-ggplot(WU, aes(x = ssrc, y = moverz)) +
+ggplot(WU, aes(x = ssrc, y = moverz * pep_exp_z)) +
   geom_point(aes(alpha=pep_score, colour = datfilename)) +
   facet_wrap(~ datfilename * suffix,  ncol = 5)
 ```
@@ -289,12 +290,12 @@ ggplot(WU, aes(x = ssrc, y = moverz)) +
 
 
 ```{r fig.retina=3, fig.width=8, fig.height=4}
-ggplot(WU, aes(x = RTINSECONDS, y = moverz)) +
-  geom_point(aes(colour = suffix)) 
+ggplot(WU, aes(x = RTINSECONDS, y = moverz * pep_exp_z)) +
+  geom_point(aes(colour = suffix), size = 3.0, alpha = 0.1) 
 ```
 
 ```{r fig.retina=3, fig.width=8, fig.height=4}
-ggplot(WU, aes(x = ssrc, y = moverz)) +
-  geom_point(aes(colour = suffix)) 
+ggplot(WU, aes(x = ssrc, y = moverz * pep_exp_z)) +
+  geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) 
 ```
  
