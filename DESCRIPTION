@@ -4,24 +4,26 @@ Title: NestLink
 Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
         comment = c(ORCID = "0000-0003-1975-3064")),
         person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.uzh.ch", role = "ctb"),
-        person("Bernd", "Roschitzki", role = "ctb"))
-Author: Christian Panse, Lennart Opitz, Bernd Roschitzki
-Version: 0.99.14
+        person("Bernd", "Roschitzki", role = "ctb"),
+        person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"))
+Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
+Version: 0.99.15
 Depends: R (>= 3.2.2),
   Biostrings,
+  BiocStyle (>= 2.4.1),
   DT, 
-  gplots, 
   ggplot2,
   protViz (>= 0.2.45), 
   shiny,
   ShortRead,
-  specL
+  specL (>= 1.10.0)
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
 Description: provides data and solutions for deriving to proteins of interest. 
-  The peptides are engineered to contain only a subset of amino acids of pre-defined composition. 
-  Individual peptides should differ from each other in mass, sequence and hydrophobicity, 
-  so that large mixtures of such peptide can be efficiently separated by reversed phase 
+  The peptides are engineered to contain only a subset of amino acids of the pre-defined composition. 
+  Individual peptides should differ from each other in mass, sequence, and hydrophobicity, 
+  so those large mixtures of such peptide can be efficiently separated by reversed phase 
   chromatography and unambiguously detected by mass spectrometry due to their mass and sequence.
+  The data were acquired at the Functional Genomics Center Zurich.
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr

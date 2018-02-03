@@ -77,72 +77,7 @@ stopifnot(length(FC.GSx7cTerm[grepl("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|
           == sample.size)
 
 
-.getFC <- function(){
- 
-  FC <- read.table(system.file("extdata/FC.tryptic",
-                               package = "NestLink"),
-                   col.names = c("peptide", "ESP_Prediction"),
-                   header = TRUE)
-  
-  
-  
-  FC$peptide <- (as.character(FC$peptide))
-  idx <- grep ("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$", FC$peptide)
-  
-  FC$cond <- "FC"
-  
-  FC$pim <- parentIonMass(FC$peptide)
-  
-  FC <- FC[nchar(FC$peptide) > 2, ]
-  
-  FC$ssrc <- sapply(FC$peptide, ssrc)
-  
-  FC$peptideLength <- nchar(as.character(FC$peptide))
-  
-  unique(FC[idx,])
-}
 
-
-.getNB <- function(){
- 
-  NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
-                   col.names = c("peptide", "ESP_Prediction"), header = TRUE)
-  
-  NB$cond <- "NB"
-  NB$peptide <- (as.character(NB$peptide))
-  NB$pim <- parentIonMass(NB$peptide)
-  NB <- NB[nchar(NB$peptide) >2, ]
-  NB$ssrc <- sapply(NB$peptide, ssrc)
-  NB$peptideLength <- nchar(as.character(NB$peptide))
-  # unique(NB)
-  NB
-}
-
-#' make_it_unambiguous
-#'
-#' @param x a \code{data.frame} containing a column peptide
-#' @return 
-#' a \code{data.frame} of unambiguously assignable peptides 
-#' (those, which occur only on one nanobody)
-#' @export
-NB.unambiguous <- function(x){
-  stopifnot('peptide' %in% names(x))
-  
-  
-  unambiguous <- table(x$peptide) == 1
-  
-  unambiguous.peptides <- (row.names(unambiguous)[unambiguous])
-  
-  x$cond <- "NB.unambiguous"
-  
-  x[x$peptide %in% unambiguous.peptides, ] 
-}
-
-NB.unique <- function(x){
-  stopifnot('peptide' %in% names(x))
-  x$cond <- "NB.unique"
-  unique(x)
-}
 
 ## MAIN
 pdf("~/NestLink.pdf", 6, 0.6 * 6)

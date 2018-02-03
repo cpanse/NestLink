@@ -1,12 +1,12 @@
 #R
 
 
-#' compose a peptide with a defined AA sequence
+#' Compose a peptide with a defined AA sequence frequency
 #' @author Christian Panse 
 #' @param pool AA distributen.
 #' @param cTerm c-Terms
 #' @return a AA sequence
-#' @export 
+#' @export compose_GPGx8cTerm
 compose_GPGx8cTerm <- 
   function(pool= c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12), rep('Q', 12), rep('D', 8), 
                    rep('E', 0), rep('V', 12), rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
@@ -22,7 +22,7 @@ compose_GPGx8cTerm <-
 #' @param pool AA distributen.
 #' @param pool AA distributen.
 #' @return a AA sequence
-#' @export 
+#' @export compose_GPx10R
 compose_GPx10R <- function(aa_pool1, aa_pool2){ 
   paste("GP", paste(aa_pool1[sample(length(aa_pool1), 2)], collapse=''), 
         paste(aa_pool2[sample(length(aa_pool2), 6)], collapse=''),
@@ -91,4 +91,95 @@ get_pool_3_8 <- function(){
   aa_pool_3_8 <- c(rep('A', 5), rep('S', 4), rep('T', 5), rep('N', 2), rep('Q', 2), rep('D', 8), 
                  rep('E', 8), rep('V', 7), rep('L', 5), rep('F', 4), rep('Y', 6), rep('W', 4), 
                  rep('G', 12), rep('P', 28))
+}
+
+
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' @export .getFC
+.getFC <- function(){
+  
+  FC <- read.table(system.file("extdata/FC.tryptic",
+                               package = "NestLink"),
+                   col.names = c("peptide", "ESP_Prediction"),
+                   header = TRUE)
+  
+  
+  
+  FC$peptide <- (as.character(FC$peptide))
+  idx <- grep ("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$", FC$peptide)
+  
+  FC$cond <- "FC"
+  
+  FC$pim <- parentIonMass(FC$peptide)
+  
+  FC <- FC[nchar(FC$peptide) > 2, ]
+  
+  FC$ssrc <- sapply(FC$peptide, ssrc)
+  
+  FC$peptideLength <- nchar(as.character(FC$peptide))
+  
+  unique(FC[idx,])
+}
+
+
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' export .getNB 
+.getNB <- function(){
+  
+  NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
+                   col.names = c("peptide", "ESP_Prediction"), header = TRUE)
+  
+  NB$cond <- "NB"
+  NB$peptide <- (as.character(NB$peptide))
+  NB$pim <- parentIonMass(NB$peptide)
+  NB <- NB[nchar(NB$peptide) >2, ]
+  NB$ssrc <- sapply(NB$peptide, ssrc)
+  NB$peptideLength <- nchar(as.character(NB$peptide))
+  # unique(NB)
+  NB
+}
+
+#' make_it_unambiguous
+#'
+#' @param x a \code{data.frame} containing a column peptide
+#' @return 
+#' a \code{data.frame} of unambiguously assignable peptides 
+#' (those, which occur only on one nanobody)
+#' @export NB.unambiguous
+NB.unambiguous <- function(x){
+  stopifnot('peptide' %in% names(x))
+  
+  
+  unambiguous <- table(x$peptide) == 1
+  
+  unambiguous.peptides <- (row.names(unambiguous)[unambiguous])
+  
+  x$cond <- "NB.unambiguous"
+  
+  x[x$peptide %in% unambiguous.peptides, ] 
+}
+
+#' Title
+#'
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' @export NB.unique
+NB.unique <- function(x){
+  stopifnot('peptide' %in% names(x))
+  x$cond <- "NB.unique"
+  unique(x)
 }
