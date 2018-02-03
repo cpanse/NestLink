@@ -20,6 +20,8 @@ date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06, 2017-11-08, 2018-01-30, 2
 ---
 
 
+
+
   
 
 ```{r setup, include=FALSE}
@@ -268,54 +270,94 @@ cor(WU$RTINSECONDS, WU$ssrc, method = 'spearman')
 
 
 ## Consider only Mascot Result File F255737
-```{r fig.retina=3, fig.width=12, fig.height=4}
-
+```{r}
 WU <- WU160118
 PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 idx <- grepl(PATTERN, WU$pep_seq)
-WU <- WU[idx & WU$pep_score > 25,]
-WU <- WU[WU$datfilename == "F255737",]
-WU$suffix <- substr(WU$pep_seq, 10, 100)
-WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
 
-ggplot(WU, aes(x = RTINSECONDS, y = moverz * pep_exp_z)) +
-  geom_point(aes(alpha = pep_score, colour = datfilename)) +
-  facet_wrap(~ datfilename * suffix, ncol=5) 
+WU <- WU[idx & WU$pep_score > 25,]
+
+WU <- WU[WU$datfilename == "F255737",]
+
+WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN=min)
+names(WU) <-c("pep_seq","RTINSECONDS")
+WU$suffix <- substr(WU$pep_seq, 10, 100)
+WU$peptide_mass <- parentIonMass(as.character(WU$pep_seq))
+WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
+WU$datfilename <- "F255737"
 ```
 
 ```{r fig.retina=3, fig.width=12, fig.height=4}
-ggplot(WU, aes(x = ssrc, y = moverz * pep_exp_z)) +
-  geom_point(aes(alpha=pep_score, colour = datfilename)) +
-  facet_wrap(~ datfilename * suffix,  ncol = 5)
+ggplot(WU, aes(x = RTINSECONDS, y = peptide_mass)) +
+  geom_point(aes(colour = suffix)) +
+  facet_wrap(~ datfilename * suffix, ncol=5) 
+
+ggplot(WU, aes(x = RTINSECONDS, fill = suffix)) + 
+  geom_histogram(bins = 20) + 
+  facet_wrap(~ datfilename * suffix, ncol=5)
 ```
 
+```{r fig.retina=3, fig.width=12, fig.height=4}
+ggplot(WU, aes(x = ssrc, y = peptide_mass)) +
+  geom_point(aes(colour = suffix)) +
+  facet_wrap(~ datfilename * suffix,  ncol = 5)
 
+ggplot(WU, aes(x = ssrc,fill = suffix)) + 
+  geom_histogram(bins = 20) + 
+  facet_wrap(~ datfilename * suffix, ncol=5)
+```
 
 ```{r fig.retina=3, fig.width=8, fig.height=4}
-ggplot(WU, aes(x = RTINSECONDS, y = moverz * pep_exp_z)) +
+ggplot(WU, aes(x = RTINSECONDS, y = peptide_mass)) +
   geom_point(aes(colour = suffix), size = 3.0, alpha = 0.1) 
 ```
 
 ```{r fig.retina=3, fig.width=8, fig.height=4}
-ggplot(WU, aes(x = ssrc, y = moverz * pep_exp_z)) +
+ggplot(WU, aes(x = ssrc, y = peptide_mass)) +
   geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) 
 ```
  
- 
 ## Trellis plots in dep. from the Mascot Ion Score cut-off
 ```{r fig.retina=3, fig.height=12}
-WU$cutoff <- 25
-WU40 <- WU[WU$pep_score >= 40,]
-WU60 <- WU[WU$pep_score >= 60,]
-WU40$cutoff <- 40
-WU60$cutoff  <- 60
 
-ggplot(rbind(WU, WU40, WU60), aes(x = RTINSECONDS, y = moverz * pep_exp_z)) +
+WU <-  do.call('rbind', lapply(c(25,35,45), function(cutoff){
+  WU <- WU160118 
+  PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+  idx <- grepl(PATTERN, WU$pep_seq)
+  
+  WU <- WU[idx & WU$pep_score > cutoff, ]
+  
+  WU <- WU[WU$datfilename == "F255737",]
+  
+  WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN=min)
+  names(WU) <-c("pep_seq","RTINSECONDS")
+  WU$suffix <- substr(WU$pep_seq, 10, 100)
+  WU$peptide_mass <- parentIonMass(as.character(WU$pep_seq))
+  WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
+  WU$datfilename <- "F255737"
+  WU$mascotScoreCutOff <- cutoff
+  WU}))
+
+
+ggplot(WU, aes(x = RTINSECONDS, y = peptide_mass)) +
   geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) +
-  facet_wrap(~cutoff, ncol = 1)
+  facet_wrap(~ mascotScoreCutOff, ncol = 1)
 
-ggplot(rbind(WU, WU40, WU60), aes(x = ssrc, y = moverz * pep_exp_z)) +
+ggplot(WU, aes(x = ssrc, y = peptide_mass)) +
   geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) +
-  facet_wrap(~cutoff, ncol=1)
+  facet_wrap(~ mascotScoreCutOff, ncol = 1 )
 
+```
+# Git log
+```{bash}
+git log WU160118.Rmd
+```
+
+# Session info
+
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
 ```
