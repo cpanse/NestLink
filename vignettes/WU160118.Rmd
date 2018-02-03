@@ -105,16 +105,16 @@ Pascal E.: ``We confirmed this assumption also for the gas-phase by blabla-analy
 
 ## AddOns
 ```{r}
-WU$sufix <- substr(WU$pep_seq, 10, 100)
+WU$suffix <- substr(WU$pep_seq, 10, 100)
 
-ggplot(WU, aes(x = moverz * chargeInt, fill = sufix, colour = sufix)) +
+ggplot(WU, aes(x = moverz * chargeInt, fill = suffix, colour = suffix)) +
     geom_histogram(binwidth= 10, alpha=.2, position="identity") +
     #facet_wrap(~ substr(pep_seq, 10, 100)) +
    theme_light()
 ```
 
 ```{r}
-ggplot(WU, aes(x = moverz * chargeInt, fill = sufix)) +
+ggplot(WU, aes(x = moverz * chargeInt, fill = suffix)) +
     geom_histogram(binwidth= 10, alpha=.9, position="identity") +
     facet_wrap(~ substr(pep_seq, 10, 100)) +
    theme_light()
@@ -169,7 +169,7 @@ aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1
               rep('E', 11), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
               rep('G', 8), rep('P', 12))
 
-aa_pool_x7.post <- c(rep('WR', 20), rep('WLTVR'), rep('WQEGGR', 20), rep('WLR', 20), rep('WQSR', 20))
+aa_pool_x7.post <- c(rep('WR', 20), rep('WLTVR', 20), rep('WQEGGR', 20), rep('WLR', 20), rep('WQSR', 20))
 
 ```
 
@@ -241,18 +241,18 @@ ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) +
 ```{r fig.retina=3}
 ggplot(data=AAfreq.post, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
-  labs(title = "sufix frequency plot") +
+  labs(title = "suffix frequency plot") +
   theme_light()
 ```
 
-## ssrc calc
+## ssrc calc prediction vs. measured rtinseconds
 
 ```{r fig.retina=3, fig.height=12}
 WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
-WU$sufix <- substr(WU$pep_seq, 10,100)
+WU$suffix <- substr(WU$pep_seq, 10,100)
 ggplot(WU, aes(x = RTINSECONDS, y = ssrc)) +
   geom_point(aes(alpha=pep_score, colour = datfilename)) +
-  facet_wrap(~ datfilename * sufix, ncol = 5, nrow = 8) +
+  facet_wrap(~ datfilename * suffix, ncol = 5, nrow = 8) +
   geom_smooth(method = 'lm') 
 #+
 #  stat_smooth_func(geom="text",method="lm",hjust=0,parse=TRUE) 
@@ -266,6 +266,8 @@ cor(WU$RTINSECONDS, WU$ssrc, method = 'spearman')
 #abline(lm(hy ~ rt))
 ```
 
+
+## Consider only Mascot Result File F255737
 ```{r fig.retina=3, fig.width=12, fig.height=4}
 
 WU <- WU160118
@@ -299,3 +301,21 @@ ggplot(WU, aes(x = ssrc, y = moverz * pep_exp_z)) +
   geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) 
 ```
  
+ 
+## Trellis plots in dep. from the Mascot Ion Score cut-off
+```{r fig.retina=3, fig.height=12}
+WU$cutoff <- 25
+WU40 <- WU[WU$pep_score >= 40,]
+WU60 <- WU[WU$pep_score >= 60,]
+WU40$cutoff <- 40
+WU60$cutoff  <- 60
+
+ggplot(rbind(WU, WU40, WU60), aes(x = RTINSECONDS, y = moverz * pep_exp_z)) +
+  geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) +
+  facet_wrap(~cutoff, ncol = 1)
+
+ggplot(rbind(WU, WU40, WU60), aes(x = ssrc, y = moverz * pep_exp_z)) +
+  geom_point(aes(colour = suffix),  size = 3.0, alpha = 0.1) +
+  facet_wrap(~cutoff, ncol=1)
+
+```
