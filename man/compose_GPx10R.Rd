@@ -2,21 +2,21 @@
 % Please edit documentation in R/compose.R
 \name{compose_GPx10R}
 \alias{compose_GPx10R}
-\title{compose a peptide with a defined AA sequence}
+\title{Compose a peptide with a defined AA sequence}
 \usage{
 compose_GPx10R(aa_pool1, aa_pool2)
 }
 \arguments{
-\item{pool}{AA distributen.}
+\item{aa_pool1}{AA distributen.}
 
-\item{pool}{AA distributen.}
+\item{aa_pool2}{AA distributen.}
 }
 \value{
 a AA sequence
 }
 \description{
-compose a peptide with a defined AA sequence
+Compose a peptide with a defined AA sequence
 }
 \author{
-Christian Panse
+Christian Panse <cp@fgcz.ethz.ch> 2015
 }

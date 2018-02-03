@@ -1,12 +1,51 @@
 #R
 
 
+#' Compose a FlyCode GSx7cTerm Amino Acid Sequence
+#'
+#' @description composes, out of a given input distributen, a random sampled amino acid sequence.
+#' @param pool a vector of amino acids.
+#' @param cTerm a vector of a sequence suffix.
+#'
+#' @return a amino acid sequence, e.g., GSAPTTVFGWLTVR.
+#' @export compose_GSx7cTerm
+#' 
+#' @examples  
+#'
+#'  sample.size <- 100
+#'  ## Compose a GSXXXXXXX(WR|WLTVR|WQGGER|WQSR|WLR) peptide
+#'  set.seed(2)
+#'  FC.GSx7cTerm <- replicate(sample.size, compose_GSx7cTerm())
+#'  ## Some Sanity Checks
+#'  table(FC.GSx7cTerm)
+#'  stopifnot(length(FC.GSx7cTerm) == 100)
+#'  FC.PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+#'  stopifnot(
+#'    length(FC.GSx7cTerm[grepl(FC.PATTERN, FC.GSx7cTerm)]) 
+#'      == sample.size)
+#' 
+#' @author Christian Panse <cp@fgcz.ethz.ch> 2015
+#' @export compose_GSx7cTerm
+compose_GSx7cTerm <- 
+  function(pool=c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1), rep('D', 11), 
+                  rep('E', 11), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
+                  rep('G', 8), rep('P', 12)), 
+           cTerm=c('WR','WLTVR','WQEGGR','WQSR','WLR')){ 
+    
+    paste("GS", 
+          paste(pool[sample(length(pool), 7)], collapse=''), 
+          cTerm[sample(length(cTerm), 1)], 
+          sep='') 
+  }
+
+
 #' Compose a peptide with a defined AA sequence frequency
-#' @author Christian Panse 
+#' @author Christian Panse, 2015
 #' @param pool AA distributen.
 #' @param cTerm c-Terms
+#' @author Christian Panse <cp@fgcz.ethz.ch> 2015
 #' @return a AA sequence
-#' @export compose_GPGx8cTerm
+#' @export 
 compose_GPGx8cTerm <- 
   function(pool= c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12), rep('Q', 12), rep('D', 8), 
                    rep('E', 0), rep('V', 12), rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
@@ -17,12 +56,13 @@ compose_GPGx8cTerm <-
           sep='') 
   }
 
-#' compose a peptide with a defined AA sequence
-#' @author Christian Panse 
-#' @param pool AA distributen.
-#' @param pool AA distributen.
+#' Compose a peptide with a defined AA sequence
+#' @author Christian Panse <cp@fgcz.ethz.ch> 2015 
+#' @param aa_pool1 AA distributen.
+#' @param aa_pool2 AA distributen.
+#' 
 #' @return a AA sequence
-#' @export compose_GPx10R
+#' @export 
 compose_GPx10R <- function(aa_pool1, aa_pool2){ 
   paste("GP", paste(aa_pool1[sample(length(aa_pool1), 2)], collapse=''), 
         paste(aa_pool2[sample(length(aa_pool2), 6)], collapse=''),
@@ -94,12 +134,11 @@ get_pool_3_8 <- function(){
 }
 
 
-#' Title
+#' Read FlyCodes
 #'
-#' @return
+#' @return a data.frame of FlyCodes
 #' @export
-#'
-#' @examples
+#' @author Christian Panse <cp@fgcz.ethz.ch> 2015
 #' @export .getFC
 .getFC <- function(){
   
@@ -127,9 +166,9 @@ get_pool_3_8 <- function(){
 }
 
 
-#' Title
+#' Read NanoBodies
 #'
-#' @return
+#' @return a data.frame of NBs
 #' @export
 #'
 #' @examples
@@ -145,14 +184,13 @@ get_pool_3_8 <- function(){
   NB <- NB[nchar(NB$peptide) >2, ]
   NB$ssrc <- sapply(NB$peptide, ssrc)
   NB$peptideLength <- nchar(as.character(NB$peptide))
-  # unique(NB)
   NB
 }
 
-#' make_it_unambiguous
+#' Determine unambiguous NBs
 #'
 #' @param x a \code{data.frame} containing a column peptide
-#' @return 
+#' @return a data.frame 
 #' a \code{data.frame} of unambiguously assignable peptides 
 #' (those, which occur only on one nanobody)
 #' @export NB.unambiguous
@@ -169,12 +207,12 @@ NB.unambiguous <- function(x){
   x[x$peptide %in% unambiguous.peptides, ] 
 }
 
-#' Title
+#' make NB table unique
 #'
-#' @param x 
+#' @param x a data.frame
 #'
-#' @return
-#' @export
+#' @return a data.frame
+#' @export NB.unique
 #'
 #' @examples
 #' @export NB.unique
