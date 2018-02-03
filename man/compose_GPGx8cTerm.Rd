@@ -21,5 +21,7 @@ a AA sequence
 Compose a peptide with a defined AA sequence frequency
 }
 \author{
-Christian Panse
+Christian Panse, 2015
+
+Christian Panse <cp@fgcz.ethz.ch> 2015
 }
