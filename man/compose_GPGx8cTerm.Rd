@@ -2,7 +2,7 @@
 % Please edit documentation in R/compose.R
 \name{compose_GPGx8cTerm}
 \alias{compose_GPGx8cTerm}
-\title{compose a peptide with a defined AA sequence}
+\title{Compose a peptide with a defined AA sequence frequency}
 \usage{
 compose_GPGx8cTerm(pool = c(rep("A", 12), rep("S", 0), rep("T", 12), rep("N",
   12), rep("Q", 12), rep("D", 8), rep("E", 0), rep("V", 12), rep("L", 0),
@@ -18,7 +18,7 @@ compose_GPGx8cTerm(pool = c(rep("A", 12), rep("S", 0), rep("T", 12), rep("N",
 a AA sequence
 }
 \description{
-compose a peptide with a defined AA sequence
+Compose a peptide with a defined AA sequence frequency
 }
 \author{
 Christian Panse
