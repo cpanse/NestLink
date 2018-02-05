@@ -30,7 +30,8 @@ shinyServer(function(input, output, session) {
     })
   
   getNB <- reactive({
-    NB <- loadNB()
+    #NB <- loadNB()
+    NB <- NestLink:::.getNB()
     filter <- input$pimrange[1] < NB$pim & NB$pim < input$pimrange[2] & input$ssrcrange[1] < NB$ssrc & NB$ssrc < input$ssrcrange[2]
     
     NB[filter,]
@@ -74,7 +75,8 @@ shinyServer(function(input, output, session) {
 })
     
   getFC <- reactive({
-    FC<-loadFC()
+    #FC<-loadFC()
+    FC <- NestLink:::.getFC()
     filter <- input$pimrange[1] < FC$pim & FC$pim < input$pimrange[2] & input$ssrcrange[1] < FC$ssrc & FC$ssrc < input$ssrcrange[2]
     FC[filter,]
   })
