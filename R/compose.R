@@ -70,12 +70,21 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
         sep='') 
 }
 
+.plot_in_silico_LCMS_map <- function(peptides, ...){
+  plot_in_silico_LCMS_map(peptides, ...)
+}
+
+
 #' plot a LC-MS map
 #' @author Christian Panse 
-#' @param peptides
-#' @return gplots::hist2d 
+#' @param peptides a vector of pepitdes.
+#' @param ... pass through the plot method.
+#' @importFrom graphics abline axis barplot legend plot
+#' @importFrom grDevices dev.off heat.colors png
+#' @importFrom scales pretty_breaks
+#' @return gplots::hist2d  a gplot 2d histogram
 #' 
-.plot_in_silico_LCMS_map <- function(peptides, ...){
+plot_in_silico_LCMS_map <- function(peptides, ...){
   hyd <- unlist(lapply(peptides, function(x){specL::ssrc(x)}))
   pim <- unlist(lapply(peptides, function(x){protViz::parentIonMass(x)}))
   
@@ -137,10 +146,17 @@ get_pool_3_8 <- function(){
 #' Read FlyCodes
 #'
 #' @return a data.frame of FlyCodes
-#' @export
+#' @param pattern a regular expression FlyCode pattern 
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015
-#' @export .getFC
-.getFC <- function(){
+#' @importFrom specL ssrc
+#' @importFrom protViz parentIonMass
+#' @importFrom utils read.table write.table
+#' @examples 
+#' FC <- getFC()
+#' dim(FC)
+#' 
+#' @export getFC
+getFC <- function(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"){
   
   FC <- read.table(system.file("extdata/FC.tryptic",
                                package = "NestLink"),
@@ -150,7 +166,7 @@ get_pool_3_8 <- function(){
   
   
   FC$peptide <- (as.character(FC$peptide))
-  idx <- grep ("^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$", FC$peptide)
+  idx <- grep (pattern, FC$peptide)
   
   FC$cond <- "FC"
   
@@ -166,14 +182,15 @@ get_pool_3_8 <- function(){
 }
 
 
+
 #' Read NanoBodies
 #'
 #' @return a data.frame of NBs
-#' @export
-#'
 #' @examples
-#' export .getNB 
-.getNB <- function(){
+#' NB <- getNB()
+#' dim(NB)
+#' @export getNB 
+getNB <- function(){
   
   NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
                    col.names = c("peptide", "ESP_Prediction"), header = TRUE)
@@ -193,6 +210,9 @@ get_pool_3_8 <- function(){
 #' @return a data.frame 
 #' a \code{data.frame} of unambiguously assignable peptides 
 #' (those, which occur only on one nanobody)
+#' @examples 
+#' NB <- getNB()
+#' dim(NB.unambiguous(NB))
 #' @export NB.unambiguous
 NB.unambiguous <- function(x){
   stopifnot('peptide' %in% names(x))
@@ -215,6 +235,8 @@ NB.unambiguous <- function(x){
 #' @export NB.unique
 #'
 #' @examples
+#' NB <- getNB()
+#' dim(NB.unique(NB))
 #' @export NB.unique
 NB.unique <- function(x){
   stopifnot('peptide' %in% names(x))

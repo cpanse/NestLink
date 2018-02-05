@@ -15,3 +15,7 @@ a data.frame
 \description{
 make NB table unique
 }
+\examples{
+NB <- getNB()
+dim(NB.unique(NB))
+}

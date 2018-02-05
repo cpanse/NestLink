@@ -17,3 +17,7 @@ a \code{data.frame} of unambiguously assignable peptides
 \description{
 Determine unambiguous NBs
 }
+\examples{
+NB <- getNB()
+dim(NB.unambiguous(NB))
+}
