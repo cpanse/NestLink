@@ -7,79 +7,38 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-library(protViz)
-library(ggplot2)
-# Define server logic required to draw a histogram
+library(NestLink)
+
 shinyServer(function(input, output, session) {
-  
-  loadNB <- reactive({
-    progress <- shiny::Progress$new(session = session, min = 0, max = 1)
-    progress$set(message = "load NBs ...")
-    on.exit(progress$close())
-    
-    NB <- read.table(system.file("extdata/NB.tryptic", package = "NestLink"),
-                     col.names = c("peptide", "ESP_Prediction"), header = TRUE)
-    NB$cond <- "NB"
-    NB$peptide <- (as.character(NB$peptide))
-    NB$pim <- parentIonMass(NB$peptide)
-    NB <- NB[nchar(NB$peptide) >2, ]
-    NB$ssrc <- sapply(NB$peptide, ssrc)
-    NB$peptideLength <- nchar(as.character(NB$peptide))
-    NB
-    })
-  
-  getNB <- reactive({
-    #NB <- loadNB()
-    NB <- NestLink:::.getNB()
+
+  getNBr <- reactive({
+    NB <- getNB()
     filter <- input$pimrange[1] < NB$pim & NB$pim < input$pimrange[2] & input$ssrcrange[1] < NB$ssrc & NB$ssrc < input$ssrcrange[2]
     
     NB[filter,]
   })
   
   getUniqueNB <- reactive({
-    uNB <- getNB()
+    uNB <- getNBr()
     uNB$cond <- 'uNB'
     uNB <- unique(uNB)
     uNB
   })
   
+  getFCr <- reactive({
+    FC <- getFC()
+    filter <- input$pimrange[1] < FC$pim & FC$pim < input$pimrange[2] & input$ssrcrange[1] < FC$ssrc & FC$ssrc < input$ssrcrange[2]
+    FC[filter,]
+  })
+  
   getUniqueFC <- reactive({
-    uFC <- getFC()
+    uFC <- getFCr()
     uFC$cond <- 'uFC'
     uFC <- unique(uFC)
     uFC
   })
+    
   
-  loadFC <- reactive({
-    progress <- shiny::Progress$new(session = session, min = 0, max = 1)
-    progress$set(message = "load FlyCodes ...")
-    on.exit(progress$close())
-    
-    FC <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"),
-                     col.names = c("peptide", "ESP_Prediction"), header = TRUE)
-    
-    FC$peptide <- (as.character(FC$peptide))
-    idx <- grep (input$FCPattern, FC$peptide)
-   
-    FC$cond <- "FC"
-    #FC$peptideLength <- nchar(as.character(FC$peptide))
-    #FC$peptideLength <- nchar(FC$peptide)
-    # FC$peptide <- (as.character(FC$peptide))
-    FC$pim <- parentIonMass(FC$peptide)
-    FC <- FC[nchar(FC$peptide) >2, ]
-    FC$ssrc <- sapply(FC$peptide, ssrc)
-    FC$peptideLength <- nchar(as.character(FC$peptide))
-    FC[idx,]
-    #FC
-})
-    
-  getFC <- reactive({
-    #FC<-loadFC()
-    FC <- NestLink:::.getFC()
-    filter <- input$pimrange[1] < FC$pim & FC$pim < input$pimrange[2] & input$ssrcrange[1] < FC$ssrc & FC$ssrc < input$ssrcrange[2]
-    FC[filter,]
-  })
   
   output$hist2dNB <- renderPlot({
     progress <- shiny::Progress$new(session = session, min = 0, max = 1)
@@ -176,7 +135,6 @@ shinyServer(function(input, output, session) {
  
  output$overview <- renderPrint({
    plot(table(unlist(strsplit(substr(FC$peptide, 3, 9), ""))))
-   #capture.output(table(nchar(as.character(getFC()$peptide))))
  })
  
  output$sessionInfo <- renderPrint({
