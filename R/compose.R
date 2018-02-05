@@ -81,7 +81,6 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 #' @param ... pass through the plot method.
 #' @importFrom graphics abline axis barplot legend plot
 #' @importFrom grDevices dev.off heat.colors png
-#' @importFrom scales pretty_breaks
 #' @return gplots::hist2d  a gplot 2d histogram
 #' 
 plot_in_silico_LCMS_map <- function(peptides, ...){
