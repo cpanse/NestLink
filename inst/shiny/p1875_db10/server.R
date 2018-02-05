@@ -7,7 +7,9 @@
 #    http://shiny.rstudio.com/
 #
 
+library(shiny)
 library(NestLink)
+library(DT)
 
 shinyServer(function(input, output, session) {
 

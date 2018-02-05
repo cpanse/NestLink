@@ -7,14 +7,11 @@ Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("a
         person("Bernd", "Roschitzki", role = "ctb"),
         person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"))
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
-Version: 0.99.16
+Version: 0.99.17
 Depends: R (>= 3.2.2),
-  Biostrings,
   BiocStyle (>= 2.4.0),
-  DT, 
   ggplot2,
   protViz (>= 0.2.45), 
-  shiny,
   ShortRead,
   specL (>= 1.10.0)
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
@@ -29,7 +26,7 @@ Description: provides data and solutions for deriving to proteins of interest.
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: knitr, testthat
+Suggests: DT, knitr, shiny, testthat
 NeedsCompilation: no
 biocViews: MassSpectrometryData
 RoxygenNote: 6.0.1
