@@ -349,16 +349,37 @@ PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 idx <- grepl(PATTERN, WU$pep_seq)
 
 WU <- WU[idx & WU$pep_score > 25,]
+```
 
+```{r fig.retina=3}
+WU$suffix <- substr(WU$pep_seq, 10, 100)
+WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
+
+ggplot(WU, aes(x = RTINSECONDS, fill = datfilename)) + 
+  geom_histogram(bins = 20)
+
+ggplot(WU, aes(x = ssrc, fill = datfilename)) + 
+  geom_histogram(bins = 20)
+
+ggplot(WU, aes(x = RTINSECONDS, fill = suffix)) + 
+  geom_histogram(bins = 20)
+
+ggplot(WU, aes(x = ssrc, fill = suffix)) + 
+  geom_histogram(bins = 20)
+```
+
+```{r}
 WU <- WU[WU$datfilename == "F255737",]
 
-WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN=min)
-names(WU) <-c("pep_seq","RTINSECONDS")
+WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN = min)
+names(WU) <-c("pep_seq", "RTINSECONDS")
 WU$suffix <- substr(WU$pep_seq, 10, 100)
 WU$peptide_mass <- parentIonMass(as.character(WU$pep_seq))
 WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
 WU$datfilename <- "F255737"
 ```
+
+
 
 ```{r fig.retina=3, fig.width=12, fig.height=4}
 ggplot(WU, aes(x = RTINSECONDS, y = peptide_mass)) +
