@@ -356,16 +356,16 @@ WU$suffix <- substr(WU$pep_seq, 10, 100)
 WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
 
 ggplot(WU, aes(x = RTINSECONDS, fill = datfilename)) + 
-  geom_histogram(bins = 20)
+  geom_histogram(bins = 50)
 
 ggplot(WU, aes(x = ssrc, fill = datfilename)) + 
-  geom_histogram(bins = 20)
+  geom_histogram(bins = 50)
 
 ggplot(WU, aes(x = RTINSECONDS, fill = suffix)) + 
-  geom_histogram(bins = 20)
+  geom_histogram(bins = 50)
 
 ggplot(WU, aes(x = ssrc, fill = suffix)) + 
-  geom_histogram(bins = 20)
+  geom_histogram(bins = 50)
 ```
 
 ```{r}

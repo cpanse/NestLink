@@ -84,7 +84,7 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 #' @return gplots::hist2d  a gplot 2d histogram
 #' 
 plot_in_silico_LCMS_map <- function(peptides, ...){
-  hyd <- unlist(lapply(peptides, function(x){specL::ssrc(x)}))
+  hyd <- unlist(lapply(peptides, function(x){protViz::ssrc(x)}))
   pim <- unlist(lapply(peptides, function(x){protViz::parentIonMass(x)}))
   
   pim.range <- range(pim) 
@@ -147,7 +147,6 @@ get_pool_3_8 <- function(){
 #' @return a data.frame of FlyCodes
 #' @param pattern a regular expression FlyCode pattern 
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015
-#' @importFrom specL ssrc
 #' @importFrom protViz parentIonMass
 #' @importFrom utils read.table write.table
 #' @examples 
@@ -229,7 +228,7 @@ NB.unambiguous <- function(x){
 #' make NB table unique
 #'
 #' @param x a data.frame
-#'
+#' @importFrom protViz ssrc
 #' @return a data.frame
 #' @export NB.unique
 #'
@@ -241,4 +240,55 @@ NB.unique <- function(x){
   stopifnot('peptide' %in% names(x))
   x$cond <- "NB.unique"
   unique(x)
+}
+
+
+.figure_sup_I <- function(cutoff=40, 
+                        PATTERN = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
+                        filename = tempfile(fileext=".pdf")){
+  
+  load(system.file("extdata/WU160118.RData", package = "NestLink"))
+  
+  WU <- WU160118
+
+  idx <- grepl(PATTERN, WU$pep_seq)
+  WU <- WU[idx,]
+  
+  WU <-  do.call('rbind', lapply(cutoff, function(cutoff){
+    WU <- WU160118 
+    PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+    idx <- grepl(PATTERN, WU$pep_seq)
+    
+    WU <- WU[idx & WU$pep_score > cutoff, ]
+    
+    WU <- WU[WU$datfilename == "F255737",]
+    
+    WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN=min)
+    names(WU) <-c("pep_seq","RTINSECONDS")
+    WU$suffix <- substr(WU$pep_seq, 10, 100)
+    WU$peptide_mass <- parentIonMass(as.character(WU$pep_seq))
+    WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
+    WU$datfilename <- "F255737"
+    WU$mascotScoreCutOff <- cutoff
+    WU}))
+  
+  message(paste("writting to", filename, "..."))
+  pdf(filename, 6, 0.6 * 6)
+  message(dim(WU))
+  p <- ggplot(WU, aes(x = RTINSECONDS, y = peptide_mass)) +
+    geom_point(aes(colour = suffix),  size = 1.0) +
+    facet_wrap(~ mascotScoreCutOff, ncol = 1)
+  
+  print(p)
+  
+  p <- ggplot(WU, aes(x = ssrc, y = peptide_mass)) +
+    geom_point(aes(colour = suffix),  size = 1.0) +
+    facet_wrap(~ mascotScoreCutOff, ncol = 1)
+  
+  print(p)
+  
+  dev.off()
+  message("DONE")
+  
+  
 }
