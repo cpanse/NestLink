@@ -47,7 +47,8 @@ install_git('https://git.bioconductor.org/packages/specL')
 ```
 
 **Typical install time** - 
-Expect an hour to get all the R installs/packages running. If all dependencies are installed 
+Expect an hour to get all the R packages (BioConductor) running. 
+If all dependencies are installed 
 `install_github('cpanse/NestLink', build_vignettes = TRUE)` requires 1m47.014s 
 on a Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz running Debian Linux.
 
