@@ -14,7 +14,8 @@ Depends: R (> 3.4.0),
   protViz (>= 0.2.45), 
   specL (>= 1.10.0)
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
-Description: provides data and solutions for deriving to proteins of interest. 
+Description: provides mass spectrometry data and solutions for deriving the
+  proteins of interest. 
   The peptides are engineered to contain only a subset of amino acids of the
   pre-defined composition. Individual peptides should differ from each other
   in mass, sequence, and hydrophobicity, so those large mixtures of such peptide

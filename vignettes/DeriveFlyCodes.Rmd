@@ -22,8 +22,6 @@ output:
 </script>
 
 
-
-
 # Required R packages
 
 - [specL](http://dx.doi.org/10.1093/bioinformatics/btv105) 
@@ -44,6 +42,7 @@ if (packageVersion('specL') < '1.3.2')
 ```
 
 # Input Pool Frequency
+
 ```{r}
 aa_pool_x8 <- c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12), rep('Q', 12), rep('D', 8), 
               rep('E', 0), rep('V', 12), rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
@@ -128,9 +127,10 @@ legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),  fill=c('#1111AAAA', '#11AA1
 ``` 
 
 # Hydrophobicity
+
 ## Compute Hydrophobicity value using SSRC 
 
-the specL::ssrc model is an implementation of  
+the `ssrc` model is an implementation of  
 [@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601)
 
 just apply ssrc to a real world LC-MS run
@@ -142,7 +142,7 @@ legend("topleft", paste("spearman", round(cor(ssrc, rt, method='spearman'),2)))
 ```
 
 ```{r fig.width=5, fig.height=5}
-hydrophobicity <- function(x){unlist(lapply(x, specL::ssrc))}
+hydrophobicity <- function(x){unlist(lapply(x, ssrc))}
 hyd.GPGx8cTerm <- hydrophobicity(peptides.GPGx8cTerm)
 hyd.GPx10R <- hydrophobicity(peptides.GPx10R)
 hyd.iRT <- hydrophobicity(as.character(iRTpeptides$peptide))
