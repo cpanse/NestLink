@@ -15,6 +15,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 ## 2. Installation guide
 
+run a R session and execute the following R code snippet
 ```{r}
 source("https://bioconductor.org/biocLite.R")
 biocLite("specL")
