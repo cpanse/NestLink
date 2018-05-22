@@ -9,17 +9,22 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 ### Software dependencies
 - install R (> 3.4.0)
 
+- pandoc (for exporting markdown files to other formats).
+
 - install https://CRAN.R-project.org/package=devtools
 
 - install required R packages
 
+**Whatsoever for a clean install, I recommend using the current R version 3.5 and the current Bioconductor 3.7.**
+
+
 ### Versions the software has been tested on
 
-- Debian Linux, R (3.5), Bioconductor version 3.7
+- Debian Linux, R (3.5.0), Bioconductor version 3.7
 
-- Windows 10, R (3.4.4)
+- Microsoft Server 2012 R2 x64 , R (3.5.0), Bioconductor version 3.7
 
-**Whatsoever for a clean install, I recommend using the current R version 3.5 and the current Bioconductor 3.7.**
+- macOS High Sierra 10.13.4, R (3.4.2)
 
 
 ## 2. Installation guide
@@ -27,16 +32,22 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 run a R session and execute the following R code snippet
 
 ```{r}
-source("https://bioconductor.org/biocLite.R")
-biocLite("specL")
-biocLite("BiocStyle")
-
 library(devtools)
 install_github('cpanse/NestLink', build_vignettes = TRUE)
 ```
 
+alternative code snippets in case the line above failes.
+```{r}
+source("https://bioconductor.org/biocLite.R")
+biocLite("specL")
+biocLite("BiocStyle")
+
+install_git('https://git.bioconductor.org/packages/specL')
+
+```
+
 **Typical install time** - 
-Expect an hour to get all the R packages running. If all dependencies are installed 
+Expect an hour to get all the R installs/packages running. If all dependencies are installed 
 `install_github('cpanse/NestLink', build_vignettes = TRUE)` requires 1m47.014s 
 on a Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz running Debian Linux.
 
@@ -49,11 +60,12 @@ vignettes.
 browseVignettes('NestLink')
 ```
 
-Expected run time for the vignette build is 10 minutes on a todays desktop computer.
+Expected run time for the vignette build is 1 minute on a todays desktop computer.
 
 ## 4. Instructions for use
 
-can be found in the vignettes.
+read the vignettes.
+
 ```{r}
 browseVignettes('NestLink')
 ```
