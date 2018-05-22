@@ -1,5 +1,5 @@
 ---
-title: "Derive Peptide FlyCodes by Conducting Random Experiment"
+title: "I. Derive Peptide FlyCodes by Conducting Random Experiment"
 author: 
 - name: Christian Panse
   affiliation: Functional Genomics Center Zurich

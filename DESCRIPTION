@@ -12,7 +12,7 @@ Depends: R (> 3.4.0),
   BiocStyle (>= 2.2.0),
   ggplot2,
   protViz (>= 0.2.45), 
-  specL (>= 1.10.0)
+  specL (>= 1.14.0)
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
 Description: provides mass spectrometry data and solutions for deriving the
   proteins of interest. 
