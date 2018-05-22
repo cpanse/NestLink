@@ -1,11 +1,12 @@
 ---
-title: "F255744 prediction and reality"
+title: "Compare Predicted and Measured FlyCodes (F255744)"
 author: "Christian Panse"
 date: "2017-10-30"
 
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{NestLink - F255744 prediction and reality}
+  %\VignetteIndexEntry{Compare Predicted and Measured FlyCodes (F255744).}
+  %\VignetteEncoding{UTF-8}
 output:
   html_document:
     theme: united	
@@ -13,7 +14,7 @@ output:
 ---
 
 
-# RT versus SSRC
+# Retention Time(RT) versus SSRC
 
 ```{r fig.retina=3, fig.height=16}
 

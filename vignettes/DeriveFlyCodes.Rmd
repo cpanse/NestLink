@@ -1,5 +1,5 @@
 ---
-title: "Derive Peptide FlyCodes  by Conducting Random Experiment"
+title: "Derive Peptide FlyCodes by Conducting Random Experiment"
 author: 
 - name: Christian Panse
   affiliation: Functional Genomics Center Zurich
@@ -9,7 +9,7 @@ author:
 package: NestLink
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
 vignette: |
-  %\VignetteIndexEntry{Derive Peptide FlyCodes  by Conducting Random Experiment}
+  %\VignetteIndexEntry{Derive Peptide FlyCodes by Conducting Random Experiment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
