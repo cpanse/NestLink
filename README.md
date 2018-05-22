@@ -11,6 +11,10 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - install required R packages
 
+
+
+## 2. Installation guide
+
 ```{r}
 source("https://bioconductor.org/biocLite.R")
 biocLite("specL")
@@ -18,9 +22,6 @@ biocLite("specL")
 library(devtools)
 install_github('cpanse/NestLink', build_vignettes = TRUE)
 ```
-
-## 2. Installation guide
-
 
 ## 3. Demo 
 
