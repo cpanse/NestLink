@@ -50,3 +50,12 @@ par(mfrow=c(4,1))
 
 ```
 
+
+# Session info
+
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```

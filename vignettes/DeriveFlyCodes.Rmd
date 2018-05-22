@@ -219,9 +219,12 @@ h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPGx8cTerm, main='GPGx8cTerm')
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPx10R, main='GPx10R')
 ```
 
-# Session information
+# Session info
 
-```{r}
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
 
