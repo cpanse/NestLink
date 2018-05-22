@@ -444,12 +444,6 @@ ggplot(WU, aes(x = ssrc, y = peptide_mass)) +
 
 ```
 
-# Git log
-
-```{bash}
-git log WU160118.Rmd
-```
-
 # Session info
 
 Here is the output of `sessionInfo()` on the system on which this
