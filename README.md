@@ -37,7 +37,8 @@ install_github('cpanse/NestLink', build_vignettes = TRUE)
 
 **Typical install time** - 
 Expect an hour to get all the R packages running. If all dependencies are installed 
-`install_github('cpanse/NestLink', build_vignettes = TRUE)` requires less than 10 minutes.
+`install_github('cpanse/NestLink', build_vignettes = TRUE)` requires 1m47.014s 
+on a Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz running Debian Linux.
 
 ## 3. Demonstration / Documentation
 
