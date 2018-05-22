@@ -8,7 +8,7 @@ Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("a
         person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"))
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
 Version: 1.0.0
-Depends: R (>= 3.2.2),
+Depends: R (> 3.4.0),
   BiocStyle (>= 2.2.0),
   ggplot2,
   protViz (>= 0.2.45), 
