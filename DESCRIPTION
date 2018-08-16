@@ -1,4 +1,4 @@
-Package: NestLink
+ExperimentData, MassSpectrometryData, ReproducibleResearchPackage: NestLink
 Type: Package
 Title: NestLink
 Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
@@ -28,5 +28,5 @@ LazyData: TRUE
 VignetteBuilder: knitr
 Suggests: DT, knitr, shiny, testthat
 NeedsCompilation: no
-biocViews: MassSpectrometryData
+biocViews: ExperimentData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.0.1
