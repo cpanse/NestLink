@@ -17,7 +17,6 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 **Whatsoever for a clean install, I recommend using the current R version 3.5 and the current Bioconductor 3.7.**
 
-
 ### Versions the software has been tested on
 
 - Debian Linux, R (3.5.0), Bioconductor version 3.7
