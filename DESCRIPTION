@@ -15,7 +15,7 @@ Depends: R (> 3.4.0),
   protViz (>= 0.3.1), 
   ShortRead,
   specL (>= 1.14.0)
-Maintainer: Christian Panse <cp@fgcz.ethz.ch>
+Maintainer: Christian Panse <cp@fgcz.ethz.ch>, Lennart Opitz <Lennart.Opitz@fgcz.uzh.ch>
 Description: provides mass spectrometry data and solutions for deriving the
   proteins of interest. 
   The peptides are engineered to contain only a subset of amino acids of the
@@ -30,5 +30,5 @@ LazyData: TRUE
 VignetteBuilder: knitr
 Suggests: DT, knitr, shiny, testthat
 NeedsCompilation: no
-biocViews: ExperimentData, MassSpectrometryData, ReproducibleResearch
+biocViews: ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.0.1
