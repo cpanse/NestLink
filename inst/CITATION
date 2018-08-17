@@ -1,0 +1,20 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Article",
+         title = "{{Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles}}",
+         author = c(
+	 	    person("Pascal", "Egloff"),
+	 	    person("Iwan", "Zimmermann"),
+	 	    person("Fabian M.", "Arnold"),
+	 	    person("Cedric A.J.", "Hutter"),
+                    person("Damien", "Damien Morger"),
+                    person("Lennart", "Opitz"),
+                    person("Lucy", "Poveda"),
+                    person("Hans-Anto", "Keserue"),
+                    person("Christian", "Panse"),
+                    person("Bernd", "Roschitzki,"),
+                    person("Markus", "Seeger")),
+year = "{2018}",
+doi = "{10.1101/287813}",
+publisher = "{Cold Spring Harbor Laboratory}")
