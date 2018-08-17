@@ -1,21 +1,36 @@
-TwoPatternReadFilter = function(reads, leftPattern, rightPattern, maxMismatch,previousPatternPos=NULL){
-  vp = vmatchPattern(leftPattern, reads, max.mismatch=maxMismatch)
-  leftStart = sapply(startIndex(vp), function(x){if (is.null(x)) NA else x[1]})
-  leftEnd = sapply(endIndex(vp), function(x){if (is.null(x)) NA else x[1]})
-  vp = vmatchPattern(rightPattern, reads, max.mismatch=maxMismatch)
-  rightStart = sapply(startIndex(vp), function(x){if (is.null(x)) NA else x[1]})
-  rightEnd = sapply(endIndex(vp), function(x){if (is.null(x)) NA else x[1]})
-  toNA = which(rightStart<leftEnd)
-  rightStart[toNA]=NA
+#' filter sequence pattern for two motives
+#'
+#' @param reads 
+#' @param leftPattern 
+#' @param rightPattern 
+#' @param maxMismatch 
+#' @param previousPatternPos 
+#'
+#' @return list object 
+#' @importFrom Biostrings vmatchPattern
+#' @export TwoPatternReadFilter
+TwoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
+                                 previousPatternPos = NULL){
+  vp <- vmatchPattern(leftPattern, reads, max.mismatch = maxMismatch)
+  leftStart <- sapply(startIndex(vp), function(x){if (is.null(x)) NA else x[1]})
+  leftEnd <- sapply(endIndex(vp), function(x){if (is.null(x)) NA else x[1]})
+  vp <- vmatchPattern(rightPattern, reads, max.mismatch=maxMismatch)
+  rightStart <- sapply(startIndex(vp), function(x){if (is.null(x)) NA else x[1]})
+  rightEnd <- sapply(endIndex(vp), function(x){if (is.null(x)) NA else x[1]})
+  toNA <- which(rightStart<leftEnd)
+  rightStart[toNA] <- NA
+  # TODO(cp): check if this causes a problem
+  patternPositions <- NULL
   if(is.null(previousPatternPos)){
-    patternPositions = cbind(leftStart1=leftStart, leftEnd1=leftEnd, rightStart2=rightStart, rightEnd2=rightEnd)
+    patternPositions <- cbind(leftStart1=leftStart, leftEnd1=leftEnd, rightStart2=rightStart, rightEnd2=rightEnd)
   } else {
-    patternPositions = cbind(leftStart=leftStart, leftEnd=leftEnd, rightStart=rightStart, rightEnd=rightEnd, previousPatternPos)
+    patternPositions <- cbind(leftStart=leftStart, leftEnd=leftEnd, rightStart=rightStart, rightEnd=rightEnd, previousPatternPos)
   }
-  patternInRead = !apply(is.na(patternPositions),1,any)
-  reads = reads[patternInRead]
-  patternPositions = as.data.frame(patternPositions[patternInRead,])
-  result = list(reads=reads,patternPositions = patternPositions)
+  patternInRead <- !apply(is.na(patternPositions),1,any)
+  reads <- reads[patternInRead]
+  patternPositions <- as.data.frame(patternPositions[patternInRead,])
+  result <- list(reads=reads,patternPositions = patternPositions)
+  
   return(result)
 }
 

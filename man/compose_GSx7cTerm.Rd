@@ -24,6 +24,7 @@ composes, out of a given input distributen, a random sampled amino acid sequence
  
 
  sample.size <- 100
+ #
  ## Compose a GSXXXXXXX(WR|WLTVR|WQGGER|WQSR|WLR) peptide
  set.seed(2)
  FC.GSx7cTerm <- replicate(sample.size, compose_GSx7cTerm())

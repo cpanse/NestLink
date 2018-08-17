@@ -1,11 +1,13 @@
 #' run NGS workflow
 #' @param file - sequence file path 
 #' @param param - list of input parameters
-#' @return 
-#' @export 
+#' @return character
+#' @export runNGSAnalysis
+#' @import ShortRead
+#' @import Biostrings
 runNGSAnalysis = function(file, param){
-  require(ShortRead)
-  require(Biostrings)
+  # require(ShortRead)
+  # require(Biostrings)
   cat(paste0('Read file ', basename(file)))
   myReads = getReadsFromFastq(file)
   cat('...done \n')
