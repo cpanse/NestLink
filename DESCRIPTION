@@ -1,4 +1,4 @@
-ExperimentData, MassSpectrometryData, ReproducibleResearchPackage: NestLink
+Package: NestLink
 Type: Package
 Title: NestLink
 Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
@@ -7,11 +7,13 @@ Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("a
         person("Bernd", "Roschitzki", role = "ctb"),
         person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"))
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
-Version: 1.0.0
+Version: 1.0.1
 Depends: R (> 3.4.0),
+  Biostrings,
   BiocStyle (>= 2.2.0),
   ggplot2,
-  protViz (>= 0.2.45), 
+  protViz (>= 0.3.1), 
+  ShortRead,
   specL (>= 1.14.0)
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>
 Description: provides mass spectrometry data and solutions for deriving the
