@@ -6,8 +6,6 @@
 #' @import ShortRead
 #' @import Biostrings
 runNGSAnalysis = function(file, param){
-  # require(ShortRead)
-  # require(Biostrings)
   cat(paste0('Read file ', basename(file)))
   myReads = getReadsFromFastq(file)
   cat('...done \n')
