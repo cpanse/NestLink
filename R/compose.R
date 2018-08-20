@@ -252,7 +252,7 @@ NB.unique <- function(x){
 #'
 #' @return ggplot objecy
 #'
-#' @importFrom  ggplot2 ggplot aes geom_point facet_wrap
+#' @importFrom ggplot2 ggplot aes geom_point facet_wrap
 .figure_sup_I <- function(cutoff=40, 
                         PATTERN = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
                         filename = tempfile(fileext=".pdf")){
