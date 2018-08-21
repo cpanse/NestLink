@@ -244,15 +244,7 @@ NB.unique <- function(x){
 }
 
 
-#' suplement figure 1
-#'
-#' @param cutoff 
-#' @param PATTERN 
-#' @param filename 
-#'
-#' @return ggplot objecy
-#'
-#' @importFrom ggplot2 ggplot aes geom_point facet_wrap
+
 .figure_sup_I <- function(cutoff=40, 
                         PATTERN = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
                         filename = tempfile(fileext=".pdf")){
@@ -299,6 +291,4 @@ NB.unique <- function(x){
   
   dev.off()
   message("DONE")
-  
-  
 }

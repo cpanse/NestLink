@@ -31,4 +31,4 @@ VignetteBuilder: knitr
 Suggests: DT, knitr, shiny, testthat
 NeedsCompilation: no
 biocViews: ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
