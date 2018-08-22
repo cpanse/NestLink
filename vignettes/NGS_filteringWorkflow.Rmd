@@ -1,0 +1,55 @@
+---
+title: "NGS filtering workflow to get high quality FlyCode and Nanobody sequences"
+author: 
+- name: Lennart Opitz
+  affiliation: Functional Genomics Center Zurich
+  email: lennart.opitz@fgcz.ethz.ch
+package: NestLink
+date: '2018-08-21'
+output: BiocStyle::html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r workflow}
+#Load Packages and Functions:
+library(NestLink)
+
+#Define Input & Output-Folder:
+dataFolder = '/home/lopitz/myRepos/NestLink/inst/extdata'
+expFiles = list.files(dataFolder,pattern='*.fastq.gz',full.names = T)
+expFiles = as.list(expFiles)
+scratchFolder = '/scratch/p1644/o3040'
+
+if (!file.exists(scratchFolder)) {
+  dir.create(scratchFolder, recursive = TRUE)
+}
+setwd(scratchFolder)
+
+#Get knownNB:
+knownNB_File = list.files(dataFolder, pattern='knownNB.txt', full.names = T)
+knownNB_data = read.table(knownNB_File, sep='\t', header = T, row.names = 1, stringsAsFactors = F)
+knownNB = Biostrings::translate(DNAStringSet(knownNB_data$Sequence))
+names(knownNB) = rownames(knownNB_data)
+knownNB = sapply(knownNB,toString)
+
+#Set parameters:
+param = list()
+param[['NB_Linker1']] = "GGCCggcggGGCC"
+param[['NB_Linker2']] = "GCAGGAGGA"
+param[['ProteaseSite']] = "TTAGTCCCAAGA"
+param[['FC_Linker']] = "GGCCaaggaggcCGG"
+param[['knownNB']] = knownNB
+param[['nReads']] = 10000 
+param[['minRelBestHitFreq']] = 0.8 
+param[['minConsensusScore']] = 0.9
+param[['maxMismatch']] = 1
+param[['minNanobodyLength']] = 348
+param[['minFlycodeLength']] = 33
+param[['FCminFreq']] = 1
+
+#Run Analysis in parallel:
+runNGSAnalysis(param, file = expFiles[[1]])
+```
