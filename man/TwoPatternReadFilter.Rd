@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilityFunctions_NGS.r
 \name{TwoPatternReadFilter}
 \alias{TwoPatternReadFilter}
-\title{filter sequence pattern for two motives}
+\title{filter input sequences for two patterns}
 \usage{
 TwoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
   previousPatternPos = NULL)
@@ -22,5 +22,5 @@ TwoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
 list object
 }
 \description{
-filter sequence pattern for two motives
+filter input sequences for two patterns
 }
