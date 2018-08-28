@@ -213,6 +213,9 @@ getNB <- function(){
 #' NB <- getNB()
 #' dim(NB.unambiguous(NB))
 #' @export NB.unambiguous
+#' @importFrom grDevices pdf
+#' @importFrom stats aggregate median
+#' @importFrom utils packageVersion
 NB.unambiguous <- function(x){
   stopifnot('peptide' %in% names(x))
   
