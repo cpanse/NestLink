@@ -15,10 +15,7 @@ output:
 # Retention Time(RT) versus SSRC
 
 ```{r fig.retina=3, fig.height=16}
-
-
 library(protViz)
-# install.package('protViz')
 
 .ssrc.mascot <- function(x, scores = c(10, 20, 40, 50)){
  
@@ -39,8 +36,8 @@ library(protViz)
 # load(url("http://fgcz-ms.uzh.ch/~cpanse/p1875/F255744.RData"))
 #F255744 <- as.data.frame.mascot(F255744)
 
-load(system.file("extdata/F255744.RData", package = "NestLink"))
-
+# load(system.file("extdata/F255744.RData", package = "NestLink"))
+data(F255744)
 par(mfrow=c(4,1))
 .ssrc.mascot(F255744)
 

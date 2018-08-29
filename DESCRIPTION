@@ -35,7 +35,7 @@ Description: provides mass spectrometry data and solutions for deriving the
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: DT, knitr, shiny, testthat, BiocStyle (>= 2.2.0)
+Suggests: DT, knitr, shiny, testthat, BiocStyle (>= 2.2.0), specL
 NeedsCompilation: no
 biocViews: ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.1.0

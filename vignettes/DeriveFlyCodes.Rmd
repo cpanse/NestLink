@@ -25,6 +25,7 @@ output:
 
 ```{r}
 library(NestLink)
+stopifnot(require(specL))
 
 # browseVignettes("specL")
 ```
