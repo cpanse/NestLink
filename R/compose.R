@@ -247,13 +247,38 @@ NB.unique <- function(x){
   unique(x)
 }
 
+#' WU160118 Mascot Search results
+#' 
+#' @name WU160118
+#' @docType data
+#' @author Christian Panse 
+#' @references \url{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118}
+#' @keywords data
+#' @examples 
+#' data(WU160118)
+#' PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+#' idx <- grepl(PATTERN, WU160118$pep_seq)
+#' WU <- WU160118[idx & WU160118$pep_score > 25,]
+NULL
 
 
+#' F255744 Mascot Search results
+#' 
+#' @name F255744
+#' @docType data
+#' @author Pascal Egloff \email{p.egloff@imm.uzh.ch}
+#' @references \url{http://fgcz-mascot-server.uzh.ch/mascot/cgi/master_results_2.pl?file=..%2Fdata%2F20170819%2FF255744.dat}
+#' @keywords data
+NULL
+
+
+#' @importFrom ggplot2 ggplot facet_wrap aes geom_point 
+#' @importFrom protViz parentIonMass
 .figure_sup_I <- function(cutoff=40, 
-                        PATTERN = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
-                        filename = tempfile(fileext=".pdf")){
+                        PATTERN="^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
+                        filename=tempfile(fileext=".pdf")){
   
-  load(system.file("extdata/WU160118.RData", package = "NestLink"))
+  data('WU160118.RData')
   
   WU <- WU160118
 
@@ -270,7 +295,7 @@ NB.unique <- function(x){
     WU <- WU[WU$datfilename == "F255737",]
     
     WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN=min)
-    names(WU) <-c("pep_seq","RTINSECONDS")
+    names(WU) <-c("pep_seq", "RTINSECONDS")
     WU$suffix <- substr(WU$pep_seq, 10, 100)
     WU$peptide_mass <- parentIonMass(as.character(WU$pep_seq))
     WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)

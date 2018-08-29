@@ -118,7 +118,7 @@ table(ESP$cond)
 ## Load workunit 160118 
 
 ```{r}
-load(system.file("extdata/WU160118.RData", package = "NestLink"))
+data(WU160118)
 WU <- WU160118
 ```
 
