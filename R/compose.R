@@ -82,11 +82,12 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 #' @param ... pass through the plot method.
 #' @importFrom graphics abline axis barplot legend plot
 #' @importFrom grDevices dev.off heat.colors png
+#' @importFrom protViz parentIonMass ssrc
 #' @return gplots::hist2d  a gplot 2d histogram
 #' 
 plot_in_silico_LCMS_map <- function(peptides, ...){
-  hyd <- unlist(lapply(peptides, function(x){protViz::ssrc(x)}))
-  pim <- unlist(lapply(peptides, function(x){protViz::parentIonMass(x)}))
+  hyd <- unlist(lapply(peptides, function(x){ssrc(x)}))
+  pim <- unlist(lapply(peptides, function(x){parentIonMass(x)}))
   
   pim.range <- range(pim) 
   n.pim <- length(seq(pim.range[1], pim.range[2], by=2))

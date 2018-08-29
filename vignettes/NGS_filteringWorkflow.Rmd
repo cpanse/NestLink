@@ -8,7 +8,7 @@ package: NestLink
 date: '2018-08-21'
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{0. NGS filtering workflow to get high quality FlyCode and Nanobody sequences}
+  %\VignetteIndexEntry{1. NGS filtering workflow to get high quality FlyCode and Nanobody sequences}
   %\VignetteEncoding{UTF-8}
 output: BiocStyle::html_document
 ---

@@ -1,20 +1,27 @@
 Package: NestLink
 Type: Package
 Title: NestLink
-Authors@R: c(person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
-        comment = c(ORCID = "0000-0003-1975-3064")),
-        person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.uzh.ch", role = "ctb"),
-        person("Bernd", "Roschitzki", role = "ctb"),
-        person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"))
+Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"),
+  person("Iwan", "Zimmermann", role = "ctb"), 
+  person("Fabian M.", "Arnold", role = "ctb"),
+  person("Cedric A.J.", "Hutter", role = "ctb"), 
+  person("Damien", "Morger", role = "ctb"), 
+  person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.uzh.ch", role = "ctb"),
+  person("Lucy", "Poveda", role = "ctb"), 
+  person("Hans-Anton", "Keserue", role = "ctb"), 
+  person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
+          comment = c(ORCID = "0000-0003-1975-3064")),
+  person("Bernd", "Roschitzki", role = "ctb"),
+  person("Markus", "Seeger", email = "cp@fgcz.ethz.ch", role = c("aut", "ctb"),
+          comment = c(ORCID = "0000-0003-1761-8571"))
+        )
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
 Version: 0.99.50
 Depends: R (> 3.4.0),
   Biostrings,
-  BiocStyle (>= 2.2.0),
   ggplot2,
   protViz (>= 0.3.1), 
   ShortRead,
-  specL (>= 1.14.0)
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>, Lennart Opitz <Lennart.Opitz@fgcz.uzh.ch>
 Description: provides mass spectrometry data and solutions for deriving the
   proteins of interest. 
@@ -28,7 +35,7 @@ Description: provides mass spectrometry data and solutions for deriving the
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: DT, knitr, shiny, testthat
+Suggests: DT, knitr, shiny, testthat, BiocStyle (>= 2.2.0)
 NeedsCompilation: no
 biocViews: ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.1.0

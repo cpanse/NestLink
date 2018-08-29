@@ -8,9 +8,7 @@ vignette: >
   %\VignetteIndexEntry{3. Compare Predicted and Measured FlyCodes (F255744).}
   %\VignetteEncoding{UTF-8}
 output:
-  html_document:
-    theme: united	
-    toc: true
+  BiocStyle::html_document
 ---
 
 
