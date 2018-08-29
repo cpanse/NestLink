@@ -23,11 +23,10 @@ library(NestLink)
 
 #Define Input & Output-Folder:
 dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
-# dataFolder = '/home/lopitz/myRepos/NestLink/inst/extdata'
-expFiles = list.files(dataFolder,pattern='*.fastq.gz',full.names = T)
+
+expFiles = list.files(dataFolder,pattern='*.fastq.gz', full.names = T)
 expFiles = as.list(expFiles)
 
-# scratchFolder = '/scratch/p1644/o3040'
 (scratchFolder = tempdir())
 
 setwd(scratchFolder)

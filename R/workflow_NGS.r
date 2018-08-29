@@ -18,12 +18,12 @@ runNGSAnalysis <- function(file, param){
   cat('...done \n')
   stats <- c(stats, WidthFilter = length(filteredReads))
   cat(paste0('Filter by Pattern: ', basename(file)))
-  resultFC <- TwoPatternReadFilter(filteredReads, 
+  resultFC <- twoPatternReadFilter(filteredReads, 
                                    param[['ProteaseSite']], 
                                    param[['FC_Linker']], 
                                    maxMismatch = param[['maxMismatch']])
   stats <- c(stats, flankingPatternFC = length(resultFC$reads))
-  resultNB <- TwoPatternReadFilter(resultFC$reads, 
+  resultNB <- twoPatternReadFilter(resultFC$reads, 
                                    param[['NB_Linker1']], 
                                    param[['NB_Linker2']], 
                                    maxMismatch = param[['maxMismatch']], 
