@@ -9,7 +9,7 @@
 #' @return list object 
 #' @importFrom Biostrings vmatchPattern
 #' @export twoPatternReadFilter
-TwoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
+twoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
                                  previousPatternPos = NULL){
   vp <- vmatchPattern(leftPattern, reads, max.mismatch = maxMismatch)
   leftStart <- sapply(startIndex(vp), 
