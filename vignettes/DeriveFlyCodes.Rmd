@@ -9,7 +9,7 @@ author:
 package: NestLink
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
 vignette: |
-  %\VignetteIndexEntry{1. Derive Peptide FlyCodes by Conducting Random Experiment}
+  %\VignetteIndexEntry{0. Derive Peptide FlyCodes by Conducting Random Experiment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
@@ -22,21 +22,9 @@ output:
 </script>
 
 
-# Required R packages
-
-- [specL](http://dx.doi.org/10.1093/bioinformatics/btv105) 
-<!-- [see also @pmid25712692] -->
 
 ```{r}
 library(NestLink)
-
-if (packageVersion('specL') < '1.3.2')
-{
-  message("specL package version should be 1.3.2 or higher")
-  ## try http:// if https:// URLs are not supported
-  source("https://bioconductor.org/biocLite.R")
-  biocLite("specL")
-}
 
 # browseVignettes("specL")
 ```
