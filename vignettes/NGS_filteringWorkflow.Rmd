@@ -5,7 +5,7 @@ author:
   affiliation: Functional Genomics Center Zurich
   email: lennart.opitz@fgcz.ethz.ch
 package: NestLink
-date: '2018-08-21'
+date: '2018-08-29'
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{1. NGS filtering workflow to get high quality FlyCode and Nanobody sequences}
@@ -17,42 +17,46 @@ output: BiocStyle::html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r workflow}
-#Load Packages and Functions:
+#Load Package
+```{r workflow_chunk0, message=FALSE}
 library(NestLink)
+```
 
-#Define Input & Output-Folder:
+#Define Input & Output-Folder
+```{r workflow_chunk1}
 dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
-
-expFiles = list.files(dataFolder,pattern='*.fastq.gz', full.names = T)
-expFiles = as.list(expFiles)
-
-(scratchFolder = tempdir())
-
+expFile <- list.files(dataFolder,pattern='*.fastq.gz', full.names = TRUE)
+scratchFolder <- tempdir()
 setwd(scratchFolder)
+```
 
-#Get knownNB:
-knownNB_File = list.files(dataFolder, pattern='knownNB.txt', full.names = T)
-knownNB_data = read.table(knownNB_File, sep='\t', header = T, row.names = 1, stringsAsFactors = F)
-knownNB = Biostrings::translate(DNAStringSet(knownNB_data$Sequence))
-names(knownNB) = rownames(knownNB_data)
-knownNB = sapply(knownNB,toString)
+#Load known NanoBodies for QC Checks
+```{r workflow_chunk2}
+knownNB_File <- list.files(dataFolder, pattern='knownNB.txt', full.names = TRUE)
+knownNB_data <- read.table(knownNB_File, sep='\t', header = TRUE, row.names = 1, stringsAsFactors = FALSE)
+knownNB <- Biostrings::translate(DNAStringSet(knownNB_data$Sequence))
+names(knownNB) <- rownames(knownNB_data)
+knownNB <- sapply(knownNB, toString)
+```
 
-#Set parameters:
-param = list()
-param[['NB_Linker1']] = "GGCCggcggGGCC"
-param[['NB_Linker2']] = "GCAGGAGGA"
-param[['ProteaseSite']] = "TTAGTCCCAAGA"
-param[['FC_Linker']] = "GGCCaaggaggcCGG"
-param[['knownNB']] = knownNB
-param[['nReads']] = 10000 
-param[['minRelBestHitFreq']] = 0.8 
-param[['minConsensusScore']] = 0.9
-param[['maxMismatch']] = 1
-param[['minNanobodyLength']] = 348
-param[['minFlycodeLength']] = 33
-param[['FCminFreq']] = 1
+#Set Example Parameters
+```{r workflow_chunk3}
+param <- list()
+param[['NB_Linker1']] <- "GGCCggcggGGCC"
+param[['NB_Linker2']] <- "GCAGGAGGA"
+param[['ProteaseSite']] <- "TTAGTCCCAAGA"
+param[['FC_Linker']] <- "GGCCaaggaggcCGG"
+param[['knownNB']] <- knownNB
+param[['nReads']] <- 10000 
+param[['minRelBestHitFreq']] <- 0.8 
+param[['minConsensusScore']] <- 0.9
+param[['maxMismatch']] <- 1
+param[['minNanobodyLength']] <- 348
+param[['minFlycodeLength']] <- 33
+param[['FCminFreq']] <- 1
+```
 
-#Run Analysis in parallel:
-runNGSAnalysis(param, file = expFiles[[1]])
+#Run Workflow
+```{r workflow_chunk4}
+runNGSAnalysis(param, file = expFile[1])
 ```
