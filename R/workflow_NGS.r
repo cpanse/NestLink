@@ -6,18 +6,19 @@
 #' @import ShortRead
 #' @import Biostrings
 runNGSAnalysis <- function(file, param){
-  cat(paste0('Read file ', basename(file)))
+  message(paste0('Read file ', basename(file)))
   myReads <- .getReadsFromFastq(file)
-  cat('...done \n')
+  knownNB <- param[['knownNB']]
+  message('...done')
   if(param[['nReads']] > 0 & length(myReads) > param[['nReads']]){
-    myReads <- myReads[1:param[['nReads']]]
+    myReads <- myReads[seq_len(param[['nReads']])]
   }
   stats <- c(RawReads = length(myReads))
-  cat(paste0('Filter by ReadLength: ', basename(file)))
+  message(paste0('Filter by ReadLength: ', basename(file)))
   filteredReads <- .filterByReadLengthMedian(myReads, 0.95, 1.05)
-  cat('...done \n')
+  message('...done')
   stats <- c(stats, WidthFilter = length(filteredReads))
-  cat(paste0('Filter by Pattern: ', basename(file)))
+  message(paste0('Filter by Pattern: ', basename(file)))
   resultFC <- twoPatternReadFilter(filteredReads, 
                                    param[['ProteaseSite']], 
                                    param[['FC_Linker']], 
@@ -38,24 +39,24 @@ runNGSAnalysis <- function(file, param){
                              end = resultNB$patternPositions[['rightStart']] -1)
   names(mySeq[['seqFC']]) <- paste('read', seq(1, length(mySeq[['seqFC']]), 1), sep = '_')
   names(mySeq[['seqNB']]) <- paste('read', seq(1, length(mySeq[['seqFC']]), 1), sep = '_')
-  cat('...done \n')
+  message('...done')
   
-  cat(paste0('Filter N-Reads: ', basename(file)))
+  message(paste0('Filter N-Reads: ', basename(file)))
   #Filter reads containing Ns:
   mySeq <- .filterReadsWithNs(mySeq)
   stats <- c(stats, readsWithoutNs = length(mySeq[['seqNB']]))
-  cat('...done \n')
+  message('...done')
   #Filter by width : in frame and flycode >10AS (>32nt)
   
   sampleName <- gsub('.extendedFrags.fastq.gz', '', basename(file))
-  nb_width <- sort(table(width(mySeq[['seqNB']])), decreasing = TRUE)[1:10]
+  nb_width <- sort(table(width(mySeq[['seqNB']])), decreasing = TRUE)[seq_len(10)]
   png(paste0('Barplot_NB_Length_', sampleName,'.png'), 600, 400)
   barplot(nb_width[order(names(nb_width))], 
           xlab = 'NB length in [nt]', ylab = 'Frequency', 
           main = 'NB length before Length/InFrame Filtering')
   dev.off()
   
-  cat(paste0('Filter for in Frame and FlycodeLength: ', basename(file)))
+  message(paste0('Filter for in Frame and FlycodeLength: ', basename(file)))
   mySeq <- .filterForInFrame(mySeq, minFlycodeLength = param[['minFlycodeLength']], 
                             minNanobodyLength = param[['minNanobodyLength']])
   stats <- c(stats, readsWithExpected_FC_NB_Sizes = length(mySeq[['seqNB']]))
@@ -63,32 +64,32 @@ runNGSAnalysis <- function(file, param){
   mySeqAS <- list()
   mySeqAS[['seqAS_FC']] <- translate(mySeq[['seqFC']])
   mySeqAS[['seqAS_NB']] <- translate(mySeq[['seqNB']])
-  cat('...done \n')
+  message('...done')
   #remove StopCodonSeqs:
-  cat(paste0('Filter for Stop-Codons: ', basename(file)))
+  message(paste0('Filter for Stop-Codons: ', basename(file)))
   mySeqAS <- .filterForStopCodons(mySeqAS)
   stats <- c(stats, ASSeqWithoutStopCodons = length(mySeqAS[['seqAS_FC']]))
-  cat('...done \n')
+  message('...done')
   #remove ReadsWithWrong Start/End AS:
-  cat(paste0('Filter for Correct FC Start/End AS Pattern: ', basename(file)))
+  message(paste0('Filter for Correct FC Start/End AS Pattern: ', basename(file)))
   mySeqAS <- .filterForStartEndPattern(mySeqAS, myFCPattern = '^GS')
   stats <- c(stats, ASSeqWithCorrectFlycodeEnds = length(mySeqAS[['seqAS_FC']]))
   
   bigTable <- data.frame(ID = names(mySeqAS[['seqAS_FC']]), 
-                         Flycode = sapply(mySeqAS[['seqAS_FC']], toString),
-                         NanoBody = sapply(mySeqAS[['seqAS_NB']], toString), stringsAsFactors = FALSE)
-  cat('...done \n')
+                         Flycode = vapply(mySeqAS[['seqAS_FC']], toString, c(FC='')),
+                         NanoBody = vapply(mySeqAS[['seqAS_NB']], toString, c(NB='')), stringsAsFactors = FALSE)
+  message('...done')
   #Filter out Flycodes with Freq < minFreq
-  cat(paste0('Filter for FlyCode-Freq: ', basename(file)))
+  message(paste0('Filter for FlyCode-Freq: ', basename(file)))
   mySeqAS_CS <- .filterForMinFlycodeFrequency(mySeqAS = mySeqAS, 
                                              minFreq = param[['FCminFreq']], file = file, knownFC = '')
   
-  uniqFCReads <- sapply(mySeqAS_CS[['seqAS_FC']], toString)
+  uniqFCReads <- vapply(mySeqAS_CS[['seqAS_FC']], toString, c(FC=''))
   stats <- c(stats, uniqFC = length(mySeqAS_CS[['seqAS_FC']]))
-  cat('...done \n')
+  message('...done')
   
   ###Export Results:
-  cat(paste0('Export Result: ', basename(file)))
+  message(paste0('Export Result: ', basename(file)))
   
   sampleDir <- sub('.fastq.gz', '', basename(file))
   if (!file.exists(sampleDir)) {
@@ -106,13 +107,13 @@ runNGSAnalysis <- function(file, param){
   bigTable[['FC_Count']] <- 0
   bigTable[['NB_Count']] <- 0
   
-  for(j in 1:nrow(bigTable)){
+  for(j in seq_len(nrow(bigTable))){
     bigTable[['FC_Count']][j] <- max(1, sum(mySeqAS[['seqAS_FC']] == bigTable$Flycode[j]))
     bigTable[['NB_Count']][j] <- max(1, sum(mySeqAS[['seqAS_NB']] == bigTable$NanoBody[j]))
     bigTable[['CombinationCount']][j] <- max(1, 
                                              length(which(mySeqAS[['seqAS_FC']] == bigTable$Flycode[j] 
                                              & mySeqAS[['seqAS_NB']] == bigTable$NanoBody[j])))
-    for(k in 1:length(knownNB)){
+    for(k in seq_len(length(knownNB))){
       if(bigTable[['NanoBody']][j] == knownNB[[k]])
         bigTable[['NB_ID']][j] <- names(knownNB)[k]
     }
@@ -144,7 +145,7 @@ runNGSAnalysis <- function(file, param){
   uniqNB_Summary[['FlycodeCount']] <- 0
   uniqNB_Summary[['AssociatedFlycodes']] <- ''
   uniqNB_Summary[['NB_Name']] <- ''
-  for (j in 1:length(uniqNB)){
+  for (j in seq_len(length(uniqNB))){
     flycodes <- bigTable[which(bigTable$NanoBody == uniqNB[j]), ][['Flycode']]
     uniqNB_Summary[['FlycodeCount']][j] <- length(flycodes)
     uniqNB_Summary[['AssociatedFlycodes']][j] <- paste(flycodes,collapse=',')
@@ -161,7 +162,7 @@ runNGSAnalysis <- function(file, param){
   uniqFC_Summary[['NanobodyCount']] <- 0
   uniqFC_Summary[['AssociatedNanobodies']] <- ''
   uniqFC_Summary[['NB_Name']] <- ''
-  for (j in 1:length(uniqFC)){
+  for (j in seq_len(length(uniqFC))){
     nanobodies <- bigTable[which(bigTable$Flycode == uniqFC[j]), ][['NanoBody']]
     uniqFC_Summary[['NanobodyCount']][j] <- length(nanobodies)
     uniqFC_Summary[['AssociatedNanobodies']][j] <- paste(nanobodies, collapse = ',')
@@ -172,6 +173,6 @@ runNGSAnalysis <- function(file, param){
   
   uniqFC_Summary <- uniqFC_Summary[order(uniqFC_Summary$NB_Name, decreasing = TRUE), ]
   write.table(uniqFC_Summary,basename(sub('.fastq.gz', '_uniqFC2NB.txt', file)), sep = '\t', row.names = FALSE, quote = FALSE)
-  cat('...done \n')
+  message('...done')
   return('success')
 }
