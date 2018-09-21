@@ -1,6 +1,6 @@
 Package: NestLink
 Type: Package
-Title: NestLink
+Title: NestLink an R data package to guide through Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"),
   person("Iwan", "Zimmermann", role = "ctb"), 
   person("Fabian M.", "Arnold", role = "ctb"),

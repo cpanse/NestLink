@@ -1,18 +1,19 @@
 ---
-title: "Vignette Title"
+title: "FlyCode Lable-Free-Quantification based analysis"
 author:
-- name: First Author
-  affiliation: First Author's Affiliation
-- name: Second Author
-  affiliation: Second Author's Affiliation
-  email: corresponding@author.com
-package: packageName
+- name: Pascal Egloff
+  affiliation: Institute of Medical Microbiology, University of Zurich
+- name: Christian Panse
+  affiliation: Functional Genomics Center Zurich, UZH|ETHZ
+  email: cp@fgcz.ethz.ch
+- name: Markus Seeger, 
+  affiliation: Institute of Medical Microbiology, University of Zurich
 output:
   BiocStyle::html_document
 abstract: |
   Description of your vignette
 vignette: |
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{FlyCode Lable-Free-Quantification based analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,12 +21,12 @@ vignette: |
 # Getting started
 
 ```{r}
-P <- read.csv("data/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+                        package = "NestLink")
+P <- read.csv(filename,
               header = TRUE, sep=';')
 dim(P)
 ```
-
-
 
 ## clean 
 
@@ -83,6 +84,30 @@ table(P$FCset)
 table(P$Accession)
 ```
 
+```{r echo=FALSE}
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
+{
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+
+```
+
+
+```{r fig.retina=3}
+rv <-lapply(unique(P$FCset_ng), function(q){
+pairs(log(P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')], 2),
+      pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
+      lower.panel = panel.cor,
+      asp=1,
+      main=q)
+})
+```
 
 ```{r}
 FCfill2max <- function(P, n = max(table(P$Accession))){
@@ -103,6 +128,15 @@ FCfill2max <- function(P, n = max(table(P$Accession))){
    }
   P
 }
+```
+
+compute CVs for each row
+
+```{r}
+P.mean <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=mean)
+P.sd <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=sd)
+
+boxplot(100*P.sd/P.mean ~ P$FCset_ng,log='y', ylab='%')
 ```
 
 ```{r}
@@ -181,6 +215,11 @@ xyplot(cv ~ length/6 | as.character(FCset_ng), group = as.character(FCset_ng),
 
 # Relative  Quantification
 
+## compute log2 ratios
+```{r}
+P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
+```
+
 
 ```{r}
 bwplot((log(0.5*(coli1 + coli2)) - log(0.5 * (smeg1 + smeg2))) ~ Accession | FCset_ng,
@@ -191,35 +230,50 @@ bwplot((log(0.5*(coli1 + coli2)) - log(0.5 * (smeg1 + smeg2))) ~ Accession | FCs
 
 
 ```{r}
+bwplot(log2ratios ~ Accession | FCset_ng,
+       data = P,
+       scales = list(x = list(relation = "free")),
+       layout = c(1,4))
+```
 
+```{r}
+P<-na.omit(P)
+xyplot(log2ratios ~ Accession | FCset_ng,
+       data = P,
+       panel = function(x,y){
+          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
+          panel.points(x, mean(y))
+          panel.points(x, mean(y) + sd(y), pch='-', col='red')
+           panel.points(x, mean(y) - sd(y), pch='-', col='red')
+         },
+       scales = list(x = list(relation = "free")),
+       layout = c(4,1))
 
-set.seed(1); 
-S <- do.call('rbind', lapply(1:29, function(i){(FCrandom(P, i))}))
-
+ P.cv <- aggregate(P$log2ratios ~ P$Accession, FUN=function(x){sd(x)/mean(x)})
 ```
 
 
 ```{r}
-bwplot((log(0.5*(coli1 + coli2), 2) - log(0.5 * (smeg1 + smeg2), 2)) ~ n | FCset_ng,
-       data = S,
-       horizontal = F,
-       layout = c(4, 1), ylim = c(-1,1))
-
-bwplot((log(0.5*(coli1 + coli2), 2) - log(0.5 * (smeg1 + smeg2), 2)) ~ FCset_ng | n,
-       data = S,
-       horizontal = F,
-       layout = c(29, 1), ylim = c(-1,1))
-
-
-xyplot((log(0.5*(coli1 + coli2), 2) - log(0.5 * (smeg1 + smeg2), 2)) ~ n | FCset_ng,
-       data = S,
-       group = Accession,
-       horizontal = F,
-       layout = c(4, 1), ylim = c(-1,1))
+xyplot( log2ratios  ~ FCset_ng,
+       data = P,
+       panel = function(x,y){
+          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
+          panel.points(x, mean(y))
+          panel.points(x, mean(y) + sd(y), pch='-', col='red')
+           panel.points(x, mean(y) - sd(y), pch='-', col='red')
+         },
+       scales = list(x = list(relation = "free")),
+       layout = c(1,1))
 ```
 
-
-# compute log2 ratios
 ```{r}
-P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
+xyplot( log2ratios  ~ FCset_ng,
+       data = P,
+       panel = function(x,y){
+          #panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
+          panel.points(x, sd(y)/mean(y))
+         },
+       scales = list(x = list(relation = "free")),
+       layout = c(1,1))
+
 ```
