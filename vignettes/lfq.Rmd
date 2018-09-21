@@ -1,0 +1,225 @@
+---
+title: "Vignette Title"
+author:
+- name: First Author
+  affiliation: First Author's Affiliation
+- name: Second Author
+  affiliation: Second Author's Affiliation
+  email: corresponding@author.com
+package: packageName
+output:
+  BiocStyle::html_document
+abstract: |
+  Description of your vignette
+vignette: |
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Getting started
+
+```{r}
+P <- read.csv("data/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+              header = TRUE, sep=';')
+dim(P)
+```
+
+
+
+## clean 
+
+
+remove modificatio
+```{r}
+P <- P[P$Modifications == '', ]
+dim(P)
+```
+
+select rows
+```{r}
+P <- P[,c('Accession', 'Sequence', "X20170919_05_62465_nl5idx1.3_6titratecoli", "X20170919_16_62465_nl5idx1.3_6titratecoli",  "X20170919_09_62466_nl5idx1.3_7titratesmeg", "X20170919_14_62466_nl5idx1.3_7titratesmeg")]
+dim(P)
+```
+
+rename column names
+
+```{r}
+names(P)<-c('Accession','Sequence','coli1', 'coli2', 'smeg1', 'smeg2')
+dim(P)
+```
+
+
+remove all rows with invalid identidfier
+
+```{r}
+
+P<- P[grep("^P[0-9][A-Z][0-9]", P$Accession), ] 
+
+P<-droplevels(P)
+```
+
+
+add flycode set annotation
+```{r}
+P$FCset_ng <- NA
+
+P$FCset_ng[P$Accession %in% c('P1A4', 'P1B4', 'P1C4', 'P1D4', 'P1E4', 'P1F4')] <- 92
+
+P$FCset_ng[P$Accession %in% c('P1A5', 'P1B5', 'P1C5', 'P1D5', 'P1G4', 'P1H4')] <- 295
+
+P$FCset_ng[P$Accession %in% c('P1A6', 'P1B6', 'P1E5', 'P1F5', 'P1G5', 'P1H5')] <- 943
+
+P$FCset_ng[P$Accession %in% c('P1C6', 'P1D6', 'P1E6', 'P1F6', 'P1G6', 'P1H6')] <- 3017
+
+```
+
+## sanity check
+```{r}
+table(P$FCset)
+```
+
+```{r}
+table(P$Accession)
+```
+
+
+```{r}
+FCfill2max <- function(P, n = max(table(P$Accession))){
+   for (i in unique(P$Accession)){
+     idx <- which(P$Accession == i)
+     # determine the number of missing rows for Accession i
+     ndiff <- n - length(idx)
+     
+     if(length(idx) < n){
+       cand <- P[idx[1], ]  
+       cand[,2 ] <- "xxx"
+       cand[,3:6 ] <- 0
+       
+       for (j in 1:ndiff){
+         P <- rbind(P, cand)
+       }
+     }
+   }
+  P
+}
+```
+
+```{r}
+P <- FCfill2max(P)
+```
+
+# Absolute Quantification
+
+```{r}
+FCstatistic <- function(P){
+  PP <- aggregate(P$coli1 ~ P$Accession + P$FCset_ng, FUN=sum)
+  
+  names(PP) <- c('Accession', 'FCset_ng', 'coli1_sum')
+  PPP <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=mean)
+  
+  # boxplot(PP$coli1_sum ~ PP$FCset_ng)
+  
+  #PPP <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=function(x){cbind(length(x), mean(x), sd(x), 100*sd(x)/mean(x))})
+  
+  
+  P.mean <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=mean)
+  P.sd <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=sd)
+  P.cv <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=function(x){100*sd(x)/mean(x)})
+  P.length <- aggregate(P$coli1 ~ P$FCset_ng, FUN=length)
+  #fit <- lm(P.mean[,2] ~ P.mean[,1])
+  #abline(fit)
+  # TODO(CP): 
+  #names(PPP) <- c('FCset_ng', 'length', 'mean','sd','cv')
+
+ rv <- data.frame(FCset_ng=P.sd[,1],cv=P.cv[,2], length=P.length[,2])
+ rv
+}
+
+FCstatistic(P)
+```
+
+
+```{r}
+
+# TODO(cp); make it work for n = 0
+FCrandom <- function(P, n = 1){
+  for (i in unique(P$Accession)){
+    idx <- which(P$Accession == i)
+    stopifnot(length(idx) >= n)
+    smp <- sample(length(idx), n)
+    P <- P[-idx[smp],]
+  }
+  P$n <- n
+  P
+}
+```
+
+
+let start with the random exp
+
+
+```{r}
+library(lattice)
+set.seed(8)
+S <- do.call('rbind', lapply(1:29, function(i){FCstatistic(FCrandom(P, i))}))
+xyplot(cv ~ length|as.character(FCset_ng)  , data =S)
+xyplot(cv ~ length | as.character(FCset_ng), group = as.character(FCset_ng), type='l', data =S)
+```
+
+
+```{r}
+S.rep <- do.call('rbind', 
+              lapply(1:50, function(s){
+                set.seed(s); S <- do.call('rbind', lapply(1:29, function(i){FCstatistic(FCrandom(P, i))}))}))
+
+xyplot(cv ~ length/6 | as.character(FCset_ng), group = as.character(FCset_ng), 
+       data =S.rep, pch=16, col=rgb(0.5,0.5,0.5,0.2), layout = c(4,1))
+
+```
+
+
+# Relative  Quantification
+
+
+```{r}
+bwplot((log(0.5*(coli1 + coli2)) - log(0.5 * (smeg1 + smeg2))) ~ Accession | FCset_ng,
+       data = P,
+       scales = list(x = list(relation = "free")),
+       layout = c(1,4))
+```
+
+
+```{r}
+
+
+set.seed(1); 
+S <- do.call('rbind', lapply(1:29, function(i){(FCrandom(P, i))}))
+
+```
+
+
+```{r}
+bwplot((log(0.5*(coli1 + coli2), 2) - log(0.5 * (smeg1 + smeg2), 2)) ~ n | FCset_ng,
+       data = S,
+       horizontal = F,
+       layout = c(4, 1), ylim = c(-1,1))
+
+bwplot((log(0.5*(coli1 + coli2), 2) - log(0.5 * (smeg1 + smeg2), 2)) ~ FCset_ng | n,
+       data = S,
+       horizontal = F,
+       layout = c(29, 1), ylim = c(-1,1))
+
+
+xyplot((log(0.5*(coli1 + coli2), 2) - log(0.5 * (smeg1 + smeg2), 2)) ~ n | FCset_ng,
+       data = S,
+       group = Accession,
+       horizontal = F,
+       layout = c(4, 1), ylim = c(-1,1))
+```
+
+
+# compute log2 ratios
+```{r}
+P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
+```
