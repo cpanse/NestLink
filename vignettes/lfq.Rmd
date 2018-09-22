@@ -8,12 +8,13 @@ author:
   email: cp@fgcz.ethz.ch
 - name: Markus Seeger, 
   affiliation: Institute of Medical Microbiology, University of Zurich
+date: '2018-09-18, 2018-09-22'
 output:
   BiocStyle::html_document
 abstract: |
   Description of your vignette
 vignette: |
-  %\VignetteIndexEntry{FlyCode Lable-Free-Quantification based analysis}
+  %\VignetteIndexEntry{5. FlyCode Lable-Free-Quantification based analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -136,7 +137,7 @@ compute CVs for each row
 P.mean <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=mean)
 P.sd <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=sd)
 
-boxplot(100*P.sd/P.mean ~ P$FCset_ng,log='y', ylab='%')
+boxplot(100*P.sd/P.mean ~ P$FCset_ng,log='y', ylab='CV%')
 ```
 
 ```{r}
@@ -241,6 +242,7 @@ P<-na.omit(P)
 xyplot(log2ratios ~ Accession | FCset_ng,
        data = P,
        panel = function(x,y){
+         panel.abline(h=0, col='red')
           panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
           panel.points(x, mean(y))
           panel.points(x, mean(y) + sd(y), pch='-', col='red')
@@ -253,27 +255,90 @@ xyplot(log2ratios ~ Accession | FCset_ng,
 ```
 
 
-```{r}
-xyplot( log2ratios  ~ FCset_ng,
+```{r fig.cap='measured log2 ratios were plotted. red represents the sd and blue points the mean.', fig.retina=3}
+P<-na.omit(P)
+xyplot(log2ratios ~  FCset_ng,
        data = P,
        panel = function(x,y){
-          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
-          panel.points(x, mean(y))
-          panel.points(x, mean(y) + sd(y), pch='-', col='red')
-           panel.points(x, mean(y) - sd(y), pch='-', col='red')
+         panel.abline(h=0, col='red')
+          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.4))
+          panel.points(x, mean(y), pch=16)
+          panel.points(x, mean(y) + sd(y), pch='-', col='red',cex=5)
+           panel.points(x, mean(y) - sd(y), pch='-', col='red',cex=5)
          },
        scales = list(x = list(relation = "free")),
        layout = c(1,1))
 ```
 
 ```{r}
-xyplot( log2ratios  ~ FCset_ng,
-       data = P,
-       panel = function(x,y){
-          #panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
-          panel.points(x, sd(y)/mean(y))
-         },
-       scales = list(x = list(relation = "free")),
-       layout = c(1,1))
+P <- FCfill2max(P)
 
+FCstatistics <- function(P){
+  P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
+  P.length <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=length)
+  names(P.length) <- c('FCset_ng', 'length')
+  
+  P <- na.omit(P)
+  
+  P.mean <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=mean)
+  names(P.mean) <- c('FCset_ng', 'mean')
+  
+  P.sd <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=sd)
+  names(P.sd) <- c('FCset_ng', 'sd')
+  
+  
+
+ rv <- data.frame(FCset_ng=P.mean$FCset_ng, mean=P.mean$mean, sd=P.sd$sd, cv=P.sd$sd/P.mean$mean, length=P.length$length)
+ rv
+}
+
+library(parallel)
+set.seed(1)
+P.replicate <- do.call('rbind',
+                 mclapply(1:200, function(run){
+                   do.call('rbind', lapply(1:29,
+                                           function(i) {
+                                             rv<-FCstatistics(FCrandom(P, i))
+                                             rv$run = run
+                                             rv
+                                           }))
+                 }))
+
+```
+
+```{r fig.retina=3, fig.cap='the grey point cloud represents the means of 200 conducted random experiments (removals) with a different number of FlyCodes.'}
+
+xyplot(mean ~ length/6 | FCset_ng, 
+       data=P.replicate,
+       panel = function(...){
+         panel.abline(h=0, col='red')
+         panel.xyplot(...)
+       },
+       strip = strip.custom(style = 1),
+     
+       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
+       layout = c(4,1),
+       xlab= 'number of FlyCodes',
+       ylab ='mean of random log2ratios'
+       )
+
+```
+
+
+```{r}
+op<-par(mfrow=c(1,4))
+lapply(unique(P.replicate$FCset_ng), function(FCset_ng){
+  S <- P.replicate[P.replicate$FCset_ng == FCset_ng,]
+  nFlyCodes <- S$length / 6
+  plot(S$mean ~  nFlyCodes, pch=16,col=rgb(0.1,0.1,0.9,alpha=0.2), main=FCset_ng, ylim=c(-2,2), xlim=c(0,30))
+  
+  
+ 
+  col.sd <- rgb(0.9,0.0,0.3,alpha=0.1)
+  points(nFlyCodes, S$mean + S$sd, col=col.sd, pch=16)
+  points(nFlyCodes, S$mean - S$sd, col=col.sd, pch=16)
+  
+ 
+})
+  
 ```
