@@ -174,9 +174,9 @@ FCstatistic <- function(P){
 FCstatistic(P)
 ```
 
+### define random removal
 
 ```{r}
-
 # TODO(cp); make it work for n = 0
 FCrandom <- function(P, n = 1){
   for (i in unique(P$Accession)){
@@ -216,7 +216,7 @@ xyplot(cv ~ length/6 | as.character(FCset_ng), group = as.character(FCset_ng),
 
 # Relative  Quantification
 
-## compute log2 ratios
+## define log2 ratios
 ```{r}
 P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
 ```
@@ -225,16 +225,40 @@ P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg
 ```{r}
 bwplot((log(0.5*(coli1 + coli2)) - log(0.5 * (smeg1 + smeg2))) ~ Accession | FCset_ng,
        data = P,
-       scales = list(x = list(relation = "free")),
-       layout = c(1,4))
+       scales = list(x = list(relation = "free", rot=45)),
+       layout = c(4,1))
 ```
 
 
 ```{r}
 bwplot(log2ratios ~ Accession | FCset_ng,
        data = P,
-       scales = list(x = list(relation = "free")),
-       layout = c(1,4))
+       panel = function(...){
+         
+         panel.abline(h=0, col='red')
+         panel.bwplot(...)
+       },
+        ylim=c(-1,1),
+       scales = list(x = list(relation = "free", rot=45)),
+       layout = c(4,1))
+
+bwplot(log2ratios ~ FCset_ng,
+       data = P,
+       horizontal = FALSE,
+       panel = function(...){
+         
+         panel.abline(h=0, col='red')
+         panel.bwplot(...)
+       },
+       ylim=c(-1,1),
+       scales = list(x = list(relation = "free", rot=45)),
+       layout = c(1,1))
+```
+
+```{r}
+
+boxplot(log2ratios ~ FCset_ng,data=P,ylim=c(-1,1))
+abline(h=0, col=rgb(1,0,0,alpha=0.4))
 ```
 
 ```{r}
@@ -248,33 +272,41 @@ xyplot(log2ratios ~ Accession | FCset_ng,
           panel.points(x, mean(y) + sd(y), pch='-', col='red')
            panel.points(x, mean(y) - sd(y), pch='-', col='red')
          },
-       scales = list(x = list(relation = "free")),
+        ylim=c(-1,1),
+       scales = list(x = list(relation = "free", rot=45)),
        layout = c(4,1))
 
  P.cv <- aggregate(P$log2ratios ~ P$Accession, FUN=function(x){sd(x)/mean(x)})
 ```
 
 
-```{r fig.cap='measured log2 ratios were plotted. red represents the sd and blue points the mean.', fig.retina=3}
+```{r fig.retina=3, fig.cap="measured log2 ratios were plotted; red represents the sd and blue points the mean."}
 P<-na.omit(P)
-xyplot(log2ratios ~  FCset_ng,
+xyplot(log2ratios ~ FCset_ng|FCset_ng,
        data = P,
        panel = function(x,y){
          panel.abline(h=0, col='red')
-          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.4))
-          panel.points(x, mean(y), pch=16)
+          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
+          panel.points(x, mean(y))
+         #   panel.points(x, median(y),col='green')
           panel.points(x, mean(y) + sd(y), pch='-', col='red',cex=5)
            panel.points(x, mean(y) - sd(y), pch='-', col='red',cex=5)
          },
-       scales = list(x = list(relation = "free")),
-       layout = c(1,1))
+        ylim=c(-2,2),
+       scales = list(x = list(relation = "free", rot=45)),
+       layout = c(4,1))
 ```
+
+### define `FCstatistics`
 
 ```{r}
 P <- FCfill2max(P)
 
 FCstatistics <- function(P){
-  P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
+  if(!"log2ratios" %in% names(P)){
+    P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
+    warning("define log2ratios.")
+  }
   P.length <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=length)
   names(P.length) <- c('FCset_ng', 'length')
   
@@ -283,22 +315,32 @@ FCstatistics <- function(P){
   P.mean <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=mean)
   names(P.mean) <- c('FCset_ng', 'mean')
   
+  P.median <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=median)
+  names(P.median) <- c('FCset_ng', 'median')
+  
   P.sd <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=sd)
   names(P.sd) <- c('FCset_ng', 'sd')
   
   
 
- rv <- data.frame(FCset_ng=P.mean$FCset_ng, mean=P.mean$mean, sd=P.sd$sd, cv=P.sd$sd/P.mean$mean, length=P.length$length)
+ rv <- data.frame(FCset_ng=P.mean$FCset_ng, mean=P.mean$mean, sd=P.sd$sd, cv=P.sd$sd/P.mean$mean, length=P.length$length, median=P.median$median)
  rv
 }
+```
 
+
+### perform the random experiment
+```{r}
 library(parallel)
+
+#P$log2ratios <- log(P$coli1,2) - log(P$coli2,2)
+
 set.seed(1)
 P.replicate <- do.call('rbind',
                  mclapply(1:200, function(run){
                    do.call('rbind', lapply(1:29,
                                            function(i) {
-                                             rv<-FCstatistics(FCrandom(P, i))
+                                             rv <- FCstatistics(FCrandom(P, i))
                                              rv$run = run
                                              rv
                                            }))
@@ -315,7 +357,7 @@ xyplot(mean ~ length/6 | FCset_ng,
          panel.xyplot(...)
        },
        strip = strip.custom(style = 1),
-     
+      ylim=c(-1,1),
        pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
        layout = c(4,1),
        xlab= 'number of FlyCodes',
