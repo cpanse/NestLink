@@ -290,6 +290,8 @@ xyplot(log2ratios ~ FCset_ng|FCset_ng,
           panel.points(x, mean(y))
          #   panel.points(x, median(y),col='green')
           panel.points(x, mean(y) + sd(y), pch='-', col='red',cex=5)
+          ltext(x, mean(y) + sd(y), round(sd(y),3), pos=4)
+         
            panel.points(x, mean(y) - sd(y), pch='-', col='red',cex=5)
          },
         ylim=c(-2,2),
