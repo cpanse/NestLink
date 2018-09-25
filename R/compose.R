@@ -71,8 +71,16 @@ compose_GPGx8cTerm <-
 #' @param aa_pool2 AA distributen.
 #' @examples 
 #' set.seed(1)
-#' compose_GPx10R()
-#' (FlyCodes <- replicate(10, compose_GPx10R()))
+#' aa_pool_1_2_9_10 <- c(rep('A', 8), rep('S', 7), rep('T', 7), rep('N', 6), 
+#' rep('Q', 6), rep('D', 8), rep('E', 8), rep('V', 9), rep('L', 6), rep('F', 5),
+#' rep('Y', 9), rep('W', 6), rep('G', 15), rep('P', 0))
+#' 
+#' aa_pool_3_8 <- c(rep('A', 5), rep('S', 4), rep('T', 5), rep('N', 2),
+#' rep('Q', 2), rep('D', 8), rep('E', 8), rep('V', 7), rep('L', 5), rep('F', 4),
+#' rep('Y', 6), rep('W', 4), rep('G', 12), rep('P', 28))
+#' 
+#' compose_GPx10R(aa_pool_1_2_9_10, aa_pool_3_8)
+#' (FlyCodes <- replicate(10, compose_GPx10R(aa_pool_1_2_9_10, aa_pool_3_8)))
 #' plot(parentIonMass(FlyCodes) ~ssrc(FlyCodes))
 #' @return a AA sequence
 #' @export compose_GPx10R
@@ -163,7 +171,7 @@ get_pool_3_8 <- function(){
 }
 
 
-#' Read FlyCodes
+#' Read FlyCodes (FC)
 #'
 #' @return a data.frame of FlyCodes
 #' @param pattern a regular expression FlyCode pattern 
@@ -202,7 +210,7 @@ getFC <- function(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$")
 
 
 
-#' Read NanoBodies
+#' Read NanoBodies (NB)
 #'
 #' @return a data.frame of NBs
 #' @examples
@@ -275,9 +283,13 @@ NB.unique <- function(x){
 #' @keywords data
 #' @examples 
 #' data(WU160118)
+#' class(WU160118)
 #' PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 #' idx <- grepl(PATTERN, WU160118$pep_seq)
 #' WU <- WU160118[idx & WU160118$pep_score > 25,]
+#' 
+#' library(lattice)
+#' histogram(~RTINSECONDS| datfilename, data = WU, type='count')
 NULL
 
 
@@ -288,4 +300,22 @@ NULL
 #' @author Pascal Egloff \email{p.egloff@imm.uzh.ch}
 #' @references \url{http://fgcz-mascot-server.uzh.ch/mascot/cgi/master_results_2.pl?file=..%2Fdata%2F20170819%2FF255744.dat}
 #' @keywords data
+#' @examples 
+#' class(F255744)
+#' hist(F255744$RTINSECONDS)
+#' hist(F255744$RTINSECONDS[F255744$pep_score>20])
+NULL
+
+
+#' PGexport results
+#' 
+#' @name PGexport
+#' @docType data
+#' @author Pascal Egloff \email{p.egloff@imm.uzh.ch}
+#' @keywords data
+#' @examples 
+#' filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+#'   package = "NestLink")
+#' P <- read.csv(filename,
+#'   header = TRUE, sep=';')
 NULL

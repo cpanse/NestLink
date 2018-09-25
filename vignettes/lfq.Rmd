@@ -87,8 +87,11 @@ P$FCset_ng[P$Accession %in% c('P1C6', 'P1D6', 'P1E6', 'P1F6', 'P1G6', 'P1H6')] <
 ```
 
 ## sanity check
+
 ```{r}
 table(P$FCset)
+
+Pabs <- P
 ```
 
 ```{r}
@@ -150,6 +153,12 @@ P.sd <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=sd)
 
 boxplot(100*P.sd/P.mean ~ P$FCset_ng,log='y', ylab='CV%')
 ```
+
+
+```{r}
+
+```
+
 
 ```{r}
 P <- FCfill2max(P)
@@ -231,19 +240,91 @@ xyplot(cv ~ length/6 |  FCset_ng,
 
 # Relative  Quantification
 
+## Normalization
+
+```{r}
+P <- na.omit(P)
+P <- P[P$coli1 >0,]
+
+P0<-P
+P0$coli1 <- P0$coli1 / sum(P0$coli1)
+P0$coli2 <- P0$coli2 / sum(P0$coli2)
+P0$smeg1 <- P0$smeg1 / sum(P0$smeg1)
+P0$smeg2 <- P0$smeg2 / sum(P0$smeg2)
+
+P0$coli1 <- (log(P0$coli1,2) - mean(log(P0$coli1,2))) / sd(log(P0$coli1,2))
+P0$coli2 <- (log(P0$coli2,2) - mean(log(P0$coli2,2))) / sd(log(P0$coli2,2))
+P0$smeg1 <- (log(P0$smeg1,2) - mean(log(P0$smeg1,2))) / sd(log(P0$smeg1,2))
+P0$smeg2 <- (log(P0$smeg2,2) - mean(log(P0$smeg2,2))) / sd(log(P0$smeg2,2))
+
+P$coli1 <- (log(P$coli1,2) - mean(log(P$coli1,2))) / sd(log(P$coli1,2))
+P$coli2 <- (log(P$coli2,2) - mean(log(P$coli2,2))) / sd(log(P$coli2,2))
+P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
+P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
+```
+
+```{r fig.retina=3}
+
+b <- boxplot(P$coli1 - P$coli2, P$coli1 - P$smeg1, P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2 , P$smeg1 - P$smeg2, 
+        ylab='log2ratios', ylim = c(-1,1))
+axis(1, 1:6, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1', 'coli2- smeg2','smeg[12]'))
+
+```
+
+```{r fig.retina=3}
+op <- par(mfrow = c(2, 4))
+boxplot(P$coli1 ~ P$FCset_ng)
+boxplot(P$coli2 ~ P$FCset_ng)
+boxplot(P$smeg1 ~ P$FCset_ng)
+boxplot(P$smeg2 ~ P$FCset_ng)
+
+boxplot(P0$coli1 ~ P0$FCset_ng, main="sum")
+boxplot(P0$coli2 ~ P0$FCset_ng, main="sum")
+boxplot(P0$smeg1 ~ P0$FCset_ng, main="sum")
+boxplot(P0$smeg2 ~ P0$FCset_ng, main="sum")
+```
+
+
+## determine outliers (removal)
+
+```{r fig.retina=3}
+b <- boxplot(P$coli1, P$coli2, P$smeg1, P$smeg2)
+axis(3, 1:4, names(P[3:6]))
+
+outliers.idx <- sapply(1:length(b$group), 
+    function(i){
+      q <- P[, 2+ b$group[i]] == b$out[i];
+      text(b$group[i], b$out[i], P[q, 2], pos=4, cex=0.4); 
+      text(b$group[i], b$out[i], P[q, 1], pos=2, cex=0.4);
+      which(q)})
+
+```
+```{r}
+P[unique(outliers.idx),]
+# DONT
+# P <- P[-unique(outliers.idx),]
+```
+
+
+
+
+```{r fig.retina=3}
+rv <-lapply(unique(P$FCset_ng), function(q){
+pairs((P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
+      pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
+      lower.panel = panel.cor,
+      asp=1,
+      main=q)
+})
+```
+
+
 ## define log2 ratios
-```{r}
-P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
-```
-
 
 ```{r}
-bwplot((log(0.5*(coli1 + coli2)) - log(0.5 * (smeg1 + smeg2))) ~ Accession |  FCset_ng,
-       data = P,
-         strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       scales = list(x = list(relation = "free", rot=45)),
-       layout = c(4,1))
+P$log2ratios <- 0.5* (P$coli1 + P$coli2) - 0.5 * (P$smeg1 + P$smeg2)
 ```
+
 
 
 ```{r}
@@ -438,6 +519,7 @@ xyplot(mean ~ length/6 | FCset_ng,
        )
 
 ```
+TODO(cp): rename FGset to ConcGr
 
 
 ```{r}
@@ -453,3 +535,5 @@ lapply(unique(P.replicate$FCset_ng), function(FCset_ng){
  
 })
 ```
+
+
