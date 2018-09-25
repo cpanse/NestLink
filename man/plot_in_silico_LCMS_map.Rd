@@ -18,12 +18,14 @@ gplots::hist2d a gplot 2d histogram
 plot a LC-MS map of a given set of amino acid sequences
 }
 \details{
-TODO(cp): consider using hexbin using ggplot2 ggplot facet_wrap aes geom_point
+TODO(cp): consider using hexbin using ggplot2
+ggplot facet_wrap aes geom_point
 }
 \examples{
 set.seed(1)
 par(mfrow=c(2,1));
-rv <- plot_in_silico_LCMS_map(FlyCodes <- replicate(10000, compose_GPGx8cTerm()))
+FlyCodes <- replicate(10000, compose_GPGx8cTerm())
+rv <- plot_in_silico_LCMS_map(FlyCodes)
 }
 \author{
 Christian Panse

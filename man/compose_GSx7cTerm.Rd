@@ -18,7 +18,8 @@ compose_GSx7cTerm(pool = c(rep("A", 18), rep("S", 6), rep("T", 12), rep("N",
 a amino acid sequence, e.g., GSAPTTVFGWLTVR.
 }
 \description{
-composes, out of a given input distributen, a random sampled amino acid sequence.
+composes, out of a given input distributen,
+a random sampled amino acid sequence.
 }
 \examples{
  

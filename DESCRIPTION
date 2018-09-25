@@ -17,11 +17,12 @@ Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "c
         )
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
 Version: 0.99.50
-Depends: R (>= 3.4.0),
+Depends: R (>= 3.5.0),
   Biostrings,
   gplots,
   protViz (>= 0.3.1), 
-  ShortRead,
+  ShortRead
+Imports: grDevices, graphics, stats, utils
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>, Lennart Opitz <Lennart.Opitz@fgcz.uzh.ch>
 Description: provides mass spectrometry data and solutions for deriving the
   proteins of interest. 
