@@ -8,7 +8,8 @@
 PGexport results
 }
 \examples{
-filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+filename <- system.file(
+  "extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
   package = "NestLink")
 P <- read.csv(filename,
   header = TRUE, sep=';')
