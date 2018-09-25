@@ -17,9 +17,9 @@ Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "c
         )
 Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
 Version: 0.99.50
-Depends: R (> 3.4.0),
+Depends: R (>= 3.4.0),
   Biostrings,
-  ggplot2,
+  gplots,
   protViz (>= 0.3.1), 
   ShortRead,
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>, Lennart Opitz <Lennart.Opitz@fgcz.uzh.ch>
@@ -35,7 +35,7 @@ Description: provides mass spectrometry data and solutions for deriving the
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: BiocStyle (>= 2.2.0), DT, knitr, rmarkdown, shiny, testthat, specL
+Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, shiny, testthat, specL
 NeedsCompilation: no
 biocViews: ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.1.0

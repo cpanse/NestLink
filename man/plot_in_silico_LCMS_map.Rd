@@ -12,7 +12,7 @@ plot_in_silico_LCMS_map(peptides, ...)
 \item{...}{pass through the plot method.}
 }
 \value{
-gplots::hist2d  a gplot 2d histogram
+gplots::hist2d a gplot 2d histogram
 }
 \description{
 plot a LC-MS map

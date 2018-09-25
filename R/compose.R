@@ -82,9 +82,10 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 #' @param ... pass through the plot method.
 #' @importFrom graphics abline axis barplot legend plot
 #' @importFrom grDevices dev.off heat.colors png
+#' @importFrom gplots hist2d
+# ggplot2 ggplot facet_wrap aes geom_point 
 #' @importFrom protViz parentIonMass ssrc
-#' @return gplots::hist2d  a gplot 2d histogram
-#' 
+#' @return gplots::hist2d a gplot 2d histogram
 plot_in_silico_LCMS_map <- function(peptides, ...){
   hyd <- unlist(lapply(peptides, function(x){ssrc(x)}))
   pim <- unlist(lapply(peptides, function(x){parentIonMass(x)}))
@@ -95,7 +96,7 @@ plot_in_silico_LCMS_map <- function(peptides, ...){
   cm <- c('#44444444', heat.colors(50), 'green')
   n.cm <- length(cm)
   
-  h <- gplots::hist2d(hyd, pim,
+  h <- hist2d(hyd, pim,
                       sub = "in-silico lc-ms map (gplots::hist2d)",
                       xlab="hydrophobicity value",
                       ylab='parent ion mass',
@@ -270,54 +271,3 @@ NULL
 #' @references \url{http://fgcz-mascot-server.uzh.ch/mascot/cgi/master_results_2.pl?file=..%2Fdata%2F20170819%2FF255744.dat}
 #' @keywords data
 NULL
-
-
-#' @importFrom ggplot2 ggplot facet_wrap aes geom_point 
-#' @importFrom protViz parentIonMass
-.figure_sup_I <- function(cutoff=40, 
-                        PATTERN="^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
-                        filename=tempfile(fileext=".pdf")){
-  
-  data('WU160118.RData')
-  
-  WU <- WU160118
-
-  idx <- grepl(PATTERN, WU$pep_seq)
-  WU <- WU[idx,]
-  
-  WU <-  do.call('rbind', lapply(cutoff, function(cutoff){
-    WU <- WU160118 
-    PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
-    idx <- grepl(PATTERN, WU$pep_seq)
-    
-    WU <- WU[idx & WU$pep_score > cutoff, ]
-    
-    WU <- WU[WU$datfilename == "F255737",]
-    
-    WU <- aggregate(WU$RTINSECONDS ~ WU$pep_seq, FUN=min)
-    names(WU) <-c("pep_seq", "RTINSECONDS")
-    WU$suffix <- substr(WU$pep_seq, 10, 100)
-    WU$peptide_mass <- parentIonMass(as.character(WU$pep_seq))
-    WU$ssrc <- sapply(as.character(WU$pep_seq), ssrc)
-    WU$datfilename <- "F255737"
-    WU$mascotScoreCutOff <- cutoff
-    WU}))
-  
-  message(paste("writting to", filename, "..."))
-  pdf(filename, 6, 0.6 * 6)
-  message(dim(WU))
-  p <- ggplot(WU, aes(x = RTINSECONDS, y = peptide_mass)) +
-    geom_point(aes(colour = suffix),  size = 1.0) +
-    facet_wrap(~ mascotScoreCutOff, ncol = 1)
-  
-  print(p)
-  
-  p <- ggplot(WU, aes(x = ssrc, y = peptide_mass)) +
-    geom_point(aes(colour = suffix),  size = 1.0) +
-    facet_wrap(~ mascotScoreCutOff, ncol = 1)
-  
-  print(p)
-  
-  dev.off()
-  message("DONE")
-}
