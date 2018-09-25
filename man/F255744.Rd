@@ -7,6 +7,11 @@
 \description{
 F255744 Mascot Search results
 }
+\examples{
+class(F255744)
+hist(F255744$RTINSECONDS)
+hist(F255744$RTINSECONDS[F255744$pep_score>20])
+}
 \author{
 Pascal Egloff \email{p.egloff@imm.uzh.ch}
 }

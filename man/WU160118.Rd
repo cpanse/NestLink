@@ -9,9 +9,13 @@ WU160118 Mascot Search results
 }
 \examples{
 data(WU160118)
+class(WU160118)
 PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 idx <- grepl(PATTERN, WU160118$pep_seq)
 WU <- WU160118[idx & WU160118$pep_score > 25,]
+
+library(lattice)
+histogram(~RTINSECONDS| datfilename, data = WU, type='count')
 }
 \references{
 \url{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118}
