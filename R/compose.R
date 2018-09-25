@@ -3,7 +3,8 @@
 
 #' Compose a FlyCode GSx7cTerm Amino Acid Sequence
 #'
-#' @description composes, out of a given input distributen, a random sampled amino acid sequence.
+#' @description composes, out of a given input distributen,
+#' a random sampled amino acid sequence.
 #' @param pool a vector of amino acids.
 #' @param cTerm a vector of a sequence suffix.
 #'
@@ -29,10 +30,10 @@
 #' @export compose_GSx7cTerm
 compose_GSx7cTerm <- 
   function(pool=c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1),
-                  rep('Q', 1), rep('D', 11), rep('E', 11), rep('V', 12), 
-                  rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
-                  rep('G', 8), rep('P', 12)), 
-           cTerm=c('WR','WLTVR','WQEGGR','WQSR','WLR')){ 
+    rep('Q', 1), rep('D', 11), rep('E', 11), rep('V', 12), 
+    rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
+    rep('G', 8), rep('P', 12)), 
+    cTerm=c('WR','WLTVR','WQEGGR','WQSR','WLR')){ 
     
     paste("GS", 
           paste(pool[sample(length(pool), 7)], collapse=''), 
@@ -55,10 +56,9 @@ compose_GSx7cTerm <-
 #' @export compose_GPGx8cTerm
 compose_GPGx8cTerm <- 
   function(pool= c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12),
-                   rep('Q', 12), rep('D', 8), rep('E', 0), rep('V', 12),
-                   rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
-                   rep('G', 12), rep('P', 12)), 
-           cTerm=c('VFR','VSR','VFGIR','VSGER')){ 
+    rep('Q', 12), rep('D', 8), rep('E', 0), rep('V', 12), rep('L', 0),
+    rep('F', 0), rep('Y', 8), rep('W', 0), rep('G', 12), rep('P', 12)),
+    cTerm=c('VFR','VSR','VFGIR','VSGER')){ 
     paste("GPG", 
           paste(pool[sample(length(pool), 8)], collapse=''), 
           cTerm[sample(length(cTerm), 1)], 
@@ -103,13 +103,15 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 #' @importFrom graphics abline axis barplot legend plot
 #' @importFrom grDevices dev.off heat.colors png
 #' @importFrom gplots hist2d
-#' @details TODO(cp): consider using hexbin using ggplot2 ggplot facet_wrap aes geom_point 
+#' @details TODO(cp): consider using hexbin using ggplot2
+#' ggplot facet_wrap aes geom_point 
 #' @importFrom protViz parentIonMass ssrc
 #' @export plot_in_silico_LCMS_map
 #' @examples 
 #' set.seed(1)
 #' par(mfrow=c(2,1));
-#' rv <- plot_in_silico_LCMS_map(FlyCodes <- replicate(10000, compose_GPGx8cTerm()))
+#' FlyCodes <- replicate(10000, compose_GPGx8cTerm())
+#' rv <- plot_in_silico_LCMS_map(FlyCodes)
 #' @return gplots::hist2d a gplot 2d histogram
 plot_in_silico_LCMS_map <- function(peptides, ...){
   hyd <- unlist(lapply(peptides, function(x){ssrc(x)}))
@@ -137,7 +139,8 @@ plot_in_silico_LCMS_map <- function(peptides, ...){
   numbers_per_region <- as.numeric(names(frequency))
   
   plot(numbers_per_region, frequency, 
-       col = cm[2 + round((n.cm - 1) * (numbers_per_region / max(numbers_per_region)))], 
+       col = cm[2 + round((n.cm - 1) * 
+         (numbers_per_region / max(numbers_per_region)))], 
        xlab = 'number of peptides per region',
        ylab = 'frequency',
        axes=FALSE,
@@ -185,7 +188,8 @@ get_pool_3_8 <- function(){
 #' dim(FC)
 #' 
 #' @export getFC
-getFC <- function(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"){
+getFC <- function(
+  pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"){
   
   FC <- read.table(system.file("extdata/FC.tryptic",
                                package = "NestLink"),

@@ -217,35 +217,14 @@ head(FC)
 
 ## AA design frequency
 
-```
-A 	18.0
-S 	6.0
-T 	12.0
-N 	1.0
-Q 	1.0
-D 	11.0
-E 	11.0
-V 	12.0
-L 	2.0
-F 	1.0
-Y 	4.0
-W 	1.0
-G 	8.0
-P 	12.0
-```
 
 ```{r}
 aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1),
-                rep('Q', 1), rep('D', 11), 
-              rep('E', 11), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4),
-              rep('W', 1), 
-              rep('G', 8), rep('P', 12))
+  rep('Q', 1), rep('D', 11),  rep('E', 11), rep('V', 12), rep('L', 2),
+  rep('F', 1), rep('Y', 4), rep('W', 1), rep('G', 8), rep('P', 12))
 
-aa_pool_x7.post <- c(rep('WR', 20), 
-                     rep('WLTVR', 20), 
-                     rep('WQEGGR', 20), 
-                     rep('WLR', 20), 
-                     rep('WQSR', 20))
+aa_pool_x7.post <- c(rep('WR', 20),  rep('WLTVR', 20), rep('WQEGGR', 20), 
+  rep('WLR', 20), rep('WQSR', 20))
 
 ```
 
