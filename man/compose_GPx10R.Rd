@@ -17,6 +17,12 @@ a AA sequence
 \description{
 Compose a peptide with a defined AA sequence
 }
+\examples{
+set.seed(1)
+compose_GPx10R()
+(FlyCodes <- replicate(10, compose_GPx10R()))
+plot(parentIonMass(FlyCodes) ~ssrc(FlyCodes))
+}
 \author{
 Christian Panse <cp@fgcz.ethz.ch> 2015
 }

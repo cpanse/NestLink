@@ -28,8 +28,9 @@
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015
 #' @export compose_GSx7cTerm
 compose_GSx7cTerm <- 
-  function(pool=c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1), rep('Q', 1), rep('D', 11), 
-                  rep('E', 11), rep('V', 12), rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
+  function(pool=c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1),
+                  rep('Q', 1), rep('D', 11), rep('E', 11), rep('V', 12), 
+                  rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
                   rep('G', 8), rep('P', 12)), 
            cTerm=c('WR','WLTVR','WQEGGR','WQSR','WLR')){ 
     
@@ -46,11 +47,18 @@ compose_GSx7cTerm <-
 #' @param cTerm c-Terms
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015
 #' @return a AA sequence
-#' @export 
+#' @examples 
+#' set.seed(1)
+#' compose_GPGx8cTerm()
+#' (FlyCodes <- replicate(10, compose_GPGx8cTerm()))
+#' plot(parentIonMass(FlyCodes) ~ssrc(FlyCodes))
+#' @export compose_GPGx8cTerm
 compose_GPGx8cTerm <- 
-  function(pool= c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12), rep('Q', 12), rep('D', 8), 
-                   rep('E', 0), rep('V', 12), rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
-                   rep('G', 12), rep('P', 12)), cTerm=c('VFR','VSR','VFGIR','VSGER')){ 
+  function(pool= c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12),
+                   rep('Q', 12), rep('D', 8), rep('E', 0), rep('V', 12),
+                   rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
+                   rep('G', 12), rep('P', 12)), 
+           cTerm=c('VFR','VSR','VFGIR','VSGER')){ 
     paste("GPG", 
           paste(pool[sample(length(pool), 8)], collapse=''), 
           cTerm[sample(length(cTerm), 1)], 
@@ -61,9 +69,13 @@ compose_GPGx8cTerm <-
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015 
 #' @param aa_pool1 AA distributen.
 #' @param aa_pool2 AA distributen.
-#' 
+#' @examples 
+#' set.seed(1)
+#' compose_GPx10R()
+#' (FlyCodes <- replicate(10, compose_GPx10R()))
+#' plot(parentIonMass(FlyCodes) ~ssrc(FlyCodes))
 #' @return a AA sequence
-#' @export 
+#' @export compose_GPx10R
 compose_GPx10R <- function(aa_pool1, aa_pool2){ 
   paste("GP", paste(aa_pool1[sample(length(aa_pool1), 2)], collapse=''), 
         paste(aa_pool2[sample(length(aa_pool2), 6)], collapse=''),
@@ -85,6 +97,9 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 #' @importFrom gplots hist2d
 # ggplot2 ggplot facet_wrap aes geom_point 
 #' @importFrom protViz parentIonMass ssrc
+#' @examples 
+#' set.seed(1)
+#' plot_in_silico_LCMS_map(FlyCodes <- replicate(10, compose_GPx10R()))
 #' @return gplots::hist2d a gplot 2d histogram
 plot_in_silico_LCMS_map <- function(peptides, ...){
   hyd <- unlist(lapply(peptides, function(x){ssrc(x)}))
@@ -126,21 +141,24 @@ plot_in_silico_LCMS_map <- function(peptides, ...){
 
 
 get_pool_x8 <- function(){
-  aa_pool_x8 <- c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12), rep('Q', 12), rep('D', 8), 
-                rep('E', 0), rep('V', 12), rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
+  aa_pool_x8 <- c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12),
+                  rep('Q', 12), rep('D', 8), rep('E', 0), rep('V', 12),
+                  rep('L', 0), rep('F', 0), rep('Y', 8), rep('W', 0), 
                 rep('G', 12), rep('P', 12))
 }
 
 
 get_pool_1_2_9_10 <- function(){
-  aa_pool_1_2_9_10 <- c(rep('A', 8), rep('S', 7), rep('T', 7), rep('N', 6), rep('Q', 6), rep('D', 8), 
-                      rep('E', 8), rep('V', 9), rep('L', 6), rep('F', 5), rep('Y', 9), rep('W', 6), 
+  aa_pool_1_2_9_10 <- c(rep('A', 8), rep('S', 7), rep('T', 7), rep('N', 6),
+                        rep('Q', 6), rep('D', 8),  rep('E', 8), rep('V', 9),
+                        rep('L', 6), rep('F', 5), rep('Y', 9), rep('W', 6), 
                       rep('G', 15), rep('P', 0))
 }
 
 get_pool_3_8 <- function(){
-  aa_pool_3_8 <- c(rep('A', 5), rep('S', 4), rep('T', 5), rep('N', 2), rep('Q', 2), rep('D', 8), 
-                 rep('E', 8), rep('V', 7), rep('L', 5), rep('F', 4), rep('Y', 6), rep('W', 4), 
+  aa_pool_3_8 <- c(rep('A', 5), rep('S', 4), rep('T', 5), rep('N', 2),
+                   rep('Q', 2), rep('D', 8), rep('E', 8), rep('V', 7), 
+                   rep('L', 5), rep('F', 4), rep('Y', 6), rep('W', 4), 
                  rep('G', 12), rep('P', 28))
 }
 

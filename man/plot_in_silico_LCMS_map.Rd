@@ -17,6 +17,10 @@ gplots::hist2d a gplot 2d histogram
 \description{
 plot a LC-MS map
 }
+\examples{
+set.seed(1)
+plot_in_silico_LCMS_map(FlyCodes <- replicate(10, compose_GPx10R()))
+}
 \author{
 Christian Panse
 }
