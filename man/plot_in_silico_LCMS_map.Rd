@@ -2,7 +2,7 @@
 % Please edit documentation in R/compose.R
 \name{plot_in_silico_LCMS_map}
 \alias{plot_in_silico_LCMS_map}
-\title{plot a LC-MS map}
+\title{plot a LC-MS map of a given set of amino acid sequences}
 \usage{
 plot_in_silico_LCMS_map(peptides, ...)
 }
@@ -15,11 +15,15 @@ plot_in_silico_LCMS_map(peptides, ...)
 gplots::hist2d a gplot 2d histogram
 }
 \description{
-plot a LC-MS map
+plot a LC-MS map of a given set of amino acid sequences
+}
+\details{
+TODO(cp): consider using hexbin using ggplot2 ggplot facet_wrap aes geom_point
 }
 \examples{
 set.seed(1)
-plot_in_silico_LCMS_map(FlyCodes <- replicate(10, compose_GPx10R()))
+par(mfrow=c(2,1));
+rv <- plot_in_silico_LCMS_map(FlyCodes <- replicate(10000, compose_GPGx8cTerm()))
 }
 \author{
 Christian Panse

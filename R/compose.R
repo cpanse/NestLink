@@ -96,18 +96,20 @@ compose_GPx10R <- function(aa_pool1, aa_pool2){
 }
 
 
-#' plot a LC-MS map
+#' plot a LC-MS map of a given set of amino acid sequences
 #' @author Christian Panse 
 #' @param peptides a vector of pepitdes.
 #' @param ... pass through the plot method.
 #' @importFrom graphics abline axis barplot legend plot
 #' @importFrom grDevices dev.off heat.colors png
 #' @importFrom gplots hist2d
-# ggplot2 ggplot facet_wrap aes geom_point 
+#' @details TODO(cp): consider using hexbin using ggplot2 ggplot facet_wrap aes geom_point 
 #' @importFrom protViz parentIonMass ssrc
+#' @export plot_in_silico_LCMS_map
 #' @examples 
 #' set.seed(1)
-#' plot_in_silico_LCMS_map(FlyCodes <- replicate(10, compose_GPx10R()))
+#' par(mfrow=c(2,1));
+#' rv <- plot_in_silico_LCMS_map(FlyCodes <- replicate(10000, compose_GPGx8cTerm()))
 #' @return gplots::hist2d a gplot 2d histogram
 plot_in_silico_LCMS_map <- function(peptides, ...){
   hyd <- unlist(lapply(peptides, function(x){ssrc(x)}))
