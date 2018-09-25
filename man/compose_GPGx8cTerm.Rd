@@ -20,6 +20,12 @@ a AA sequence
 \description{
 Compose a peptide with a defined AA sequence frequency
 }
+\examples{
+set.seed(1)
+compose_GPGx8cTerm()
+(FlyCodes <- replicate(10, compose_GPGx8cTerm()))
+plot(parentIonMass(FlyCodes) ~ssrc(FlyCodes))
+}
 \author{
 Christian Panse, 2015
 
