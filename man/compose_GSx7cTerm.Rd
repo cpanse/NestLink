@@ -4,10 +4,10 @@
 \alias{compose_GSx7cTerm}
 \title{Compose a FlyCode GSx7cTerm Amino Acid Sequence}
 \usage{
-compose_GSx7cTerm(pool = c(rep("A", 18), rep("S", 6), rep("T", 12),
-  rep("N", 1), rep("Q", 1), rep("D", 11), rep("E", 11), rep("V", 12),
-  rep("L", 2), rep("F", 1), rep("Y", 4), rep("W", 1), rep("G", 8), rep("P",
-  12)), cTerm = c("WR", "WLTVR", "WQEGGR", "WQSR", "WLR"))
+compose_GSx7cTerm(pool = c(rep("A", 18), rep("S", 6), rep("T", 12), rep("N",
+  1), rep("Q", 1), rep("D", 11), rep("E", 11), rep("V", 12), rep("L", 2),
+  rep("F", 1), rep("Y", 4), rep("W", 1), rep("G", 8), rep("P", 12)),
+  cTerm = c("WR", "WLTVR", "WQEGGR", "WQSR", "WLR"))
 }
 \arguments{
 \item{pool}{a vector of amino acids.}
