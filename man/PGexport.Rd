@@ -11,8 +11,49 @@ PGexport results
 filename <- system.file(
   "extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
   package = "NestLink")
-P <- read.csv(filename,
-  header = TRUE, sep=';')
+P <- read.csv(filename, header = TRUE, sep=';')
+P <- P[P$Modifications == '', ]
+P <- P[,c('Accession', 'Sequence', 
+"X20170919_05_62465_nl5idx1.3_6titratecoli", 
+"X20170919_16_62465_nl5idx1.3_6titratecoli",  
+"X20170919_09_62466_nl5idx1.3_7titratesmeg", 
+"X20170919_14_62466_nl5idx1.3_7titratesmeg")]
+names(P)<-c('Accession','Sequence','coli1', 'coli2', 'smeg1', 'smeg2')
+P<- P[grep("^P[0-9][A-Z][0-9]", P$Accession), ] 
+
+P$FCset_ng <- NA
+P$FCset_ng[P$Accession \%in\% c('P1A4', 'P1B4', 'P1C4',
+  'P1D4', 'P1E4', 'P1F4')] <- 92
+P$FCset_ng[P$Accession \%in\% c('P1A5', 'P1B5', 'P1C5',
+  'P1D5', 'P1G4', 'P1H4')] <- 295
+P$FCset_ng[P$Accession \%in\% c('P1A6', 'P1B6', 'P1E5',
+  'P1F5', 'P1G5', 'P1H5')] <- 943
+P$FCset_ng[P$Accession \%in\% c('P1C6', 'P1D6', 'P1E6', 
+  'P1F6', 'P1G6', 'P1H6')] <- 3017
+  
+ P$coli1 <- (log(P$coli1,2) - mean(log(P$coli1,2))) / sd(log(P$coli1,2))
+ P$coli2 <- (log(P$coli2,2) - mean(log(P$coli2,2))) / sd(log(P$coli2,2))
+ P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
+ P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
+ 
+  O<-P
+  
+  b <- boxplot(df<-cbind(P$coli1 - P$coli2, P$coli1 - P$smeg1, 
+  P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2 , P$smeg1 - P$smeg2),
+   ylab='normalized log2ratios', ylim = c(-1,1), axes=FALSE,
+    main=paste("ConcGr = all"))
+axis(1, 1:6, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1',
+'coli2- smeg2','smeg[12]'))
+abline(h=0, col='red')
+box()
+axis(2)
+axis(3, 1:6, b$n)
+outliers.idx <- sapply(1:length(b$group), function(i){
+  q <- df[, b$group[i]] == b$out[i];
+  text(b$group[i], b$out[i], P[q, 2], pos=4, cex=0.4);
+   text(b$group[i], b$out[i], P[q, 1], pos=2, cex=0.4);
+   which(q)}
+   )
 }
 \author{
 Pascal Egloff \email{p.egloff@imm.uzh.ch}

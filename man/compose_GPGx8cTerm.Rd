@@ -4,10 +4,10 @@
 \alias{compose_GPGx8cTerm}
 \title{Compose a peptide with a defined AA sequence frequency}
 \usage{
-compose_GPGx8cTerm(pool = c(rep("A", 12), rep("S", 0), rep("T", 12), rep("N",
-  12), rep("Q", 12), rep("D", 8), rep("E", 0), rep("V", 12), rep("L", 0),
-  rep("F", 0), rep("Y", 8), rep("W", 0), rep("G", 12), rep("P", 12)),
-  cTerm = c("VFR", "VSR", "VFGIR", "VSGER"))
+compose_GPGx8cTerm(pool = c(rep("A", 12), rep("S", 0), rep("T", 12),
+  rep("N", 12), rep("Q", 12), rep("D", 8), rep("E", 0), rep("V", 12),
+  rep("L", 0), rep("F", 0), rep("Y", 8), rep("W", 0), rep("G", 12),
+  rep("P", 12)), cTerm = c("VFR", "VSR", "VFGIR", "VSGER"))
 }
 \arguments{
 \item{pool}{AA distributen.}
