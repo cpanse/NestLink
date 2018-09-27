@@ -74,15 +74,15 @@ P<-droplevels(P)
 
 add flycode set annotation
 ```{r}
-P$FCset_ng <- NA
+P$ConcGr <- NA
 
-P$FCset_ng[P$Accession %in% c('P1A4', 'P1B4', 'P1C4', 'P1D4', 'P1E4', 'P1F4')] <- 92
+P$ConcGr[P$Accession %in% c('P1A4', 'P1B4', 'P1C4', 'P1D4', 'P1E4', 'P1F4')] <- 92
 
-P$FCset_ng[P$Accession %in% c('P1A5', 'P1B5', 'P1C5', 'P1D5', 'P1G4', 'P1H4')] <- 295
+P$ConcGr[P$Accession %in% c('P1A5', 'P1B5', 'P1C5', 'P1D5', 'P1G4', 'P1H4')] <- 295
 
-P$FCset_ng[P$Accession %in% c('P1A6', 'P1B6', 'P1E5', 'P1F5', 'P1G5', 'P1H5')] <- 943
+P$ConcGr[P$Accession %in% c('P1A6', 'P1B6', 'P1E5', 'P1F5', 'P1G5', 'P1H5')] <- 943
 
-P$FCset_ng[P$Accession %in% c('P1C6', 'P1D6', 'P1E6', 'P1F6', 'P1G6', 'P1H6')] <- 3017
+P$ConcGr[P$Accession %in% c('P1C6', 'P1D6', 'P1E6', 'P1F6', 'P1G6', 'P1H6')] <- 3017
 
 ```
 
@@ -114,8 +114,8 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 
 
 ```{r fig.retina=3}
-rv <-lapply(unique(P$FCset_ng), function(q){
-pairs(log(P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')], 2),
+rv <-lapply(unique(P$ConcGr), function(q){
+pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
       lower.panel = panel.cor,
       asp=1,
@@ -151,7 +151,7 @@ FCfill2max <- function(P, n = max(table(P$Accession))){
 P.mean <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=mean)
 P.sd <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=sd)
 
-boxplot(100*P.sd/P.mean ~ P$FCset_ng,log='y', ylab='CV%')
+boxplot(100*P.sd/P.mean ~ P$ConcGr,log='y', ylab='CV%')
 ```
 
 
@@ -169,17 +169,17 @@ P <- FCfill2max(P)
 ## define `FCstatistic` using `coli1` column
 ```{r}
 FCstatistic <- function(P){
-  PP <- aggregate(P$coli1 ~ P$Accession + P$FCset_ng, FUN=sum)
+  PP <- aggregate(P$coli1 ~ P$Accession + P$ConcGr, FUN=sum)
   
-  names(PP) <- c('Accession', 'FCset_ng', 'coli1_sum')
-  PPP <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=mean)
+  names(PP) <- c('Accession', 'ConcGr', 'coli1_sum')
+  PPP <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=mean)
 
-  P.mean <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=mean)
-  P.sd <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=sd)
-  P.cv <- aggregate(PP$coli1_sum ~ PP$FCset_ng, FUN=function(x){100*sd(x)/mean(x)})
-  P.length <- aggregate(P$coli1 ~ P$FCset_ng, FUN=length)
+  P.mean <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=mean)
+  P.sd <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=sd)
+  P.cv <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=function(x){100*sd(x)/mean(x)})
+  P.length <- aggregate(P$coli1 ~ P$ConcGr, FUN=length)
  
- rv <- data.frame(FCset_ng=P.sd[,1],cv=P.cv[,2], length=P.length[,2])
+ rv <- data.frame(ConcGr=P.sd[,1],cv=P.cv[,2], length=P.length[,2])
  rv
 }
 
@@ -212,7 +212,7 @@ S <- do.call('rbind', lapply(1:29, function(i){
   FCstatistic(FCrandom(P, i))
   }))
 
-xyplot(cv ~ length|FCset_ng, 
+xyplot(cv ~ length|ConcGr, 
        data =S, 
        layout=c(4,1),
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE)
@@ -227,7 +227,7 @@ S.rep <- do.call('rbind',
 ```
 
 ```{r}
-xyplot(cv ~ length/6 |  FCset_ng,
+xyplot(cv ~ length/6 |  ConcGr,
        data =S.rep,
        panel = function(x,y,...){
          panel.xyplot(x,y,...)
@@ -246,71 +246,99 @@ xyplot(cv ~ length/6 |  FCset_ng,
 P <- na.omit(P)
 P <- P[P$coli1 >0,]
 
-P0<-P
-P0$coli1 <- P0$coli1 / sum(P0$coli1)
-P0$coli2 <- P0$coli2 / sum(P0$coli2)
-P0$smeg1 <- P0$smeg1 / sum(P0$smeg1)
-P0$smeg2 <- P0$smeg2 / sum(P0$smeg2)
 
-P0$coli1 <- (log(P0$coli1,2) - mean(log(P0$coli1,2))) / sd(log(P0$coli1,2))
-P0$coli2 <- (log(P0$coli2,2) - mean(log(P0$coli2,2))) / sd(log(P0$coli2,2))
-P0$smeg1 <- (log(P0$smeg1,2) - mean(log(P0$smeg1,2))) / sd(log(P0$smeg1,2))
-P0$smeg2 <- (log(P0$smeg2,2) - mean(log(P0$smeg2,2))) / sd(log(P0$smeg2,2))
-
-P$coli1 <- (log(P$coli1,2) - mean(log(P$coli1,2))) / sd(log(P$coli1,2))
-P$coli2 <- (log(P$coli2,2) - mean(log(P$coli2,2))) / sd(log(P$coli2,2))
-P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
-P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
+P$coli1 <- P$coli1 / sum(P$coli1)
+P$coli2 <- P$coli2 / sum(P$coli2)
+P$smeg1 <- P$smeg1 / sum(P$smeg1)
+P$smeg2 <- P$smeg2 / sum(P$smeg2)
 ```
+
+sanity check
+```{r}
+sum(P$coli1)
+sum(P$coli2)
+sum(P$smeg1)
+sum(P$smeg2)
+```
+## define ratios
+
+```{r}
+P$ratios <- (0.5* (P$coli1 + P$coli2)) / (0.5 * (P$smeg1 + P$smeg2))
+```
+
 
 ```{r fig.retina=3}
 
-b <- boxplot(P$coli1 - P$coli2, P$coli1 - P$smeg1, P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2 , P$smeg1 - P$smeg2, 
-        ylab='log2ratios', ylim = c(-1,1))
+b <- boxplot(P$coli1 / P$coli2, P$coli1 / P$smeg1, P$coli1 / P$smeg2,P$coli2 / P$smeg1, P$coli2 / P$smeg2 , P$smeg1 / P$smeg2, P$ratios, 
+        ylab='ratios', ylim = c(0,2 ))
 axis(1, 1:6, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1', 'coli2- smeg2','smeg[12]'))
-
 ```
 
 ```{r fig.retina=3}
-op <- par(mfrow = c(2, 4))
-boxplot(P$coli1 ~ P$FCset_ng)
-boxplot(P$coli2 ~ P$FCset_ng)
-boxplot(P$smeg1 ~ P$FCset_ng)
-boxplot(P$smeg2 ~ P$FCset_ng)
+op <- par(mfrow = c(1, 4))
+boxplot(P$coli1 ~ P$ConcGr)
+boxplot(P$coli2 ~ P$ConcGr)
+boxplot(P$smeg1 ~ P$ConcGr)
+boxplot(P$smeg2 ~ P$ConcGr)
 
-boxplot(P0$coli1 ~ P0$FCset_ng, main="sum")
-boxplot(P0$coli2 ~ P0$FCset_ng, main="sum")
-boxplot(P0$smeg1 ~ P0$FCset_ng, main="sum")
-boxplot(P0$smeg2 ~ P0$FCset_ng, main="sum")
 ```
 
 
 ## determine outliers (removal)
 
-```{r fig.retina=3}
-b <- boxplot(P$coli1, P$coli2, P$smeg1, P$smeg2)
-axis(3, 1:4, names(P[3:6]))
+```{r fig.height=6}
 
-outliers.idx <- sapply(1:length(b$group), 
+op <- par(mfrow=c(1,1), mar=c(5,5,5,2) )
+
+b <- boxplot(df<-cbind(P$coli1/P$coli2, P$coli1/P$smeg1, P$coli1/P$smeg2, P$coli2/P$smeg1, P$coli2/P$smeg2, P$smeg1/P$smeg2, P$ratios),
+             log='y',
+        ylab='normalized ratios',
+        #ylim = c(0, 2),
+        axes=FALSE,
+        main=paste("ConcGr = all"))
+axis(1, 1:7, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1', 'coli2- smeg2','smeg[12]', 'ratio'))
+abline(h=1, col='red')
+box()
+axis(2)
+#axis(3, 1:7, b$n)
+outliers.idx <- sapply(1:length(b$group),
     function(i){
-      q <- P[, 2+ b$group[i]] == b$out[i];
-      text(b$group[i], b$out[i], P[q, 2], pos=4, cex=0.4); 
+      q <- df[, b$group[i]] == b$out[i];
+      text(b$group[i], b$out[i], P[q, 2], pos=4, cex=0.4);
       text(b$group[i], b$out[i], P[q, 1], pos=2, cex=0.4);
       which(q)})
 
+
+b <- boxplot(df<-cbind(P$coli1/P$coli2, P$coli1/P$smeg1, P$coli1/P$smeg2, P$coli2/P$smeg1, P$coli2/P$smeg2, P$smeg1/P$smeg2, P$ratio),
+             log='',
+        ylab='normalized ratios',
+        ylim = c(0, 2),
+        axes=FALSE,
+        main=paste("ConcGr = all"))
+axis(1, 1:7, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1', 'coli2- smeg2','smeg[12]', 'ratio'))
+abline(h=1, col='red')
+box()
+axis(2)
+axis(3, 1:length(b$n), b$n)
+outliers.idx <- sapply(1:length(b$group),
+    function(i){
+      q <- df[, b$group[i]] == b$out[i];
+      text(b$group[i], b$out[i], P[q, 2], pos=4, cex=0.4);
+      text(b$group[i], b$out[i], P[q, 1], pos=2, cex=0.4);
+      which(q)})
 ```
-```{r}
-P[unique(outliers.idx),]
-# DONT
-# P <- P[-unique(outliers.idx),]
+
+
+
+```{r kable}
+library(knitr)
+kable(P[unique(outliers.idx),])
+
 ```
-
-
-
 
 ```{r fig.retina=3}
-rv <-lapply(unique(P$FCset_ng), function(q){
-pairs((P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
+rv <-lapply(unique(P$ConcGr), function(q){
+pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
       lower.panel = panel.cor,
       asp=1,
@@ -319,59 +347,54 @@ pairs((P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
 ```
 
 
-## define log2 ratios
-
-```{r}
-P$log2ratios <- 0.5* (P$coli1 + P$coli2) - 0.5 * (P$smeg1 + P$smeg2)
-```
 
 
 
 ```{r}
-bwplot(log2ratios ~ Accession | FCset_ng,
+bwplot(ratios ~ Accession | ConcGr,
        data = P,
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
        panel = function(...){
          
-         panel.abline(h=0, col='red')
+         panel.abline(h=1, col='red')
          panel.bwplot(...)
        },
-        ylim=c(-1,1),
+        ylim=c(-0,2),
        scales = list(x = list(relation = "free", rot=45)),
        layout = c(4,1))
 
-bwplot(log2ratios ~ FCset_ng,
+bwplot(ratios ~ ConcGr,
        data = P,
        horizontal = FALSE,
        panel = function(...){
          
-         panel.abline(h=0, col='red')
+         panel.abline(h=1, col='red')
          panel.bwplot(...)
        },
-       ylim=c(-1,1),
+       ylim=c(0,2),
        scales = list(x = list(relation = "free", rot=45)),
        layout = c(1,1))
 ```
 
 ```{r}
 
-boxplot(log2ratios ~ FCset_ng,data=P,ylim=c(-1,1))
-abline(h=0, col=rgb(1,0,0,alpha=0.4))
+boxplot(ratios ~ ConcGr,data=P,ylim=c(0,2))
+abline(h=1, col=rgb(1,0,0,alpha=0.4))
 ```
 
 ```{r}
 P<-na.omit(P)
-xyplot(log2ratios ~ Accession |  FCset_ng,
+xyplot(ratios ~ Accession |  ConcGr,
        data = P,
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
        panel = function(x,y){
-         panel.abline(h=0, col='red')
+         panel.abline(h=1, col='red')
           panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
           panel.points(x, mean(y))
           panel.points(x, mean(y) + sd(y), pch='-', col='red')
            panel.points(x, mean(y) - sd(y), pch='-', col='red')
          },
-        ylim=c(-1,1),
+        ylim=c(0,2),
        scales = list(x = list(relation = "free", rot=45)),
        layout = c(4,1))
 ```
@@ -379,19 +402,19 @@ xyplot(log2ratios ~ Accession |  FCset_ng,
 ## compute CVs
 
 ```{r}
-P.cv <- aggregate(P$log2ratios ~ P$Accession, FUN=function(x){sd(x)/mean(x)})
+P.cv <- aggregate(P$ratios ~ P$Accession, FUN=function(x){100*sd(x)/mean(x)})
 ```
 
 
-```{r fig.retina=3, fig.cap="measured log2 ratios were plotted; red represents the sd and blue points the mean."}
+```{r fig.retina=3, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
 P<-na.omit(P)
 trellis.par.set("strip.background",t)
 
-xyplot(log2ratios ~ FCset_ng|FCset_ng,
+xyplot(ratios ~ ConcGr | ConcGr,
        data = P,
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
        panel = function(x,y){
-         panel.abline(h=0, col='red')
+         panel.abline(h=1, col='red')
           panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
           panel.points(x, mean(y))
          #   panel.points(x, median(y),col='green')
@@ -400,55 +423,9 @@ xyplot(log2ratios ~ FCset_ng|FCset_ng,
          
            panel.points(x, mean(y) - sd(y), pch='-', col='red',cex=5)
          },
-        ylim=c(-2,2),
+        #ylim=c(-1,3),
        scales = list(x = list(relation = "free", rot=45)),
        layout = c(4,1))
-```
-
-## Volcano 
-
-compute p-values using `t.test`.
-```{r}
-P.test <- P[P$coli1>0 & P$coli2>0, ]
-
-
-P.test$pvalue <- apply(P.test[, c('coli1', 'coli2', 'smeg1', 'smeg2')], 1, 
-  function(x){
-    t.test(x[1:2], x[3:4],
-           alternative="two.side",
-           paired = FALSE)$p.value
-    }
-  )
-```
-
-```{r fig.retina=3}
-xyplot(-log10(pvalue) ~ log2ratios| FCset_ng, 
-        panel = function(...){
-         panel.abline(v=c(-1,1,0),
-                      col=c('lightgray', 'lightgray', rgb(0.9,0.1,0.1,0.4)))
-         panel.abline(h=-log(0.05,10), col='lightgray')
-         panel.xyplot(...,
-                      pch=16,
-                      col=rgb(0.5, 0.5 ,0.5, alpha = 0.5))
-       },
-       data = P.test, 
-       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       layout=c(4,1))
-
-xyplot(-log10(p.adjust(pvalue, method="BH")) ~ log2ratios | FCset_ng, 
-        panel = function(...){
-         panel.abline(v=c(-1,1,0),
-                      col=c('lightgray', 'lightgray', rgb(0.9,0.1,0.1,0.4)))
-         panel.abline(h=-log(0.05,10), col='lightgray')
-         panel.xyplot(...,
-                      pch=16,
-                      col=rgb(0.5, 0.5 ,0.5, alpha = 0.5))
-       },
-       data = P.test, 
-       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       layout=c(4,1),
-       sub="applies Benjamini & Hochberg p-value adjustment")
-
 ```
 
 
@@ -458,25 +435,25 @@ xyplot(-log10(p.adjust(pvalue, method="BH")) ~ log2ratios | FCset_ng,
 P <- FCfill2max(P)
 
 FCstatistics <- function(P){
-  if(!"log2ratios" %in% names(P)){
-    P$log2ratios <- (log(0.5 * (P$coli1 + P$coli2), 2) - log(0.5 * (P$smeg1 + P$smeg2), 2))
-    warning("define log2ratios.")
+  if(!"ratios" %in% names(P)){
+    P$ratios <- ((0.5 * (P$coli1 + P$coli2)) / (0.5 * (P$smeg1 + P$smeg2)))
+    warning("define ratios.")
   }
-  P.length <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=length)
-  names(P.length) <- c('FCset_ng', 'length')
+  P.length <- aggregate(P$ratios ~ P$ConcGr, FUN=length)
+  names(P.length) <- c('ConcGr', 'length')
   
   P <- na.omit(P)
   
-  P.mean <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=mean)
-  names(P.mean) <- c('FCset_ng', 'mean')
+  P.mean <- aggregate(P$ratios ~ P$ConcGr, FUN=mean)
+  names(P.mean) <- c('ConcGr', 'mean')
   
-  P.median <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=median)
-  names(P.median) <- c('FCset_ng', 'median')
+  P.median <- aggregate(P$ratios ~ P$ConcGr, FUN=median)
+  names(P.median) <- c('ConcGr', 'median')
   
-  P.sd <- aggregate(P$log2ratios ~ P$FCset_ng, FUN=sd)
-  names(P.sd) <- c('FCset_ng', 'sd')
+  P.sd <- aggregate(P$ratios ~ P$ConcGr, FUN=sd)
+  names(P.sd) <- c('ConcGr', 'sd')
   
- rv <- data.frame(FCset_ng=P.mean$FCset_ng, mean=P.mean$mean, sd=P.sd$sd, cv=P.sd$sd/P.mean$mean, length=P.length$length, median=P.median$median)
+ rv <- data.frame(ConcGr=P.mean$ConcGr, mean=P.mean$mean, sd=P.sd$sd, cv=P.sd$sd/P.mean$mean, length=P.length$length, median=P.median$median)
  rv
 }
 ```
@@ -502,38 +479,54 @@ P.replicate <- do.call('rbind',
 
 ```{r fig.retina=3, fig.cap='the grey point cloud represents the means of 200 conducted random experiments (removals) with a different number of FlyCodes.'}
 
-xyplot(mean ~ length/6 | FCset_ng, 
+xyplot(mean ~ length/6 | ConcGr, 
        data=P.replicate,
        panel = function(...){
          
          panel.xyplot(...)
-         panel.abline(h=0, col='red')
+         panel.abline(h=1, col='red')
        },
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
      
-      ylim=c(-1,1),
+      ylim=c(0,2),
        pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
        layout = c(4,1),
        xlab= 'number of FlyCodes',
-       ylab ='mean of random log2ratios'
+       #ylab ='mean of random ratios'
        )
 
+xyplot(sd ~ length/6 | ConcGr, 
+       data=P.replicate,
+       panel = function(...){
+         
+         panel.xyplot(...)
+         # panel.abline(h=0, col='red')
+       },
+         strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+     
+     # ylim=c(0,2),
+       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
+       layout = c(4,1),
+       xlab= 'number of FlyCodes',
+       #ylab ='mean of random ratios'
+       )
+
+
+xyplot(cv ~ length/6 | ConcGr, 
+       data=P.replicate,
+       panel = function(...){
+         
+         panel.xyplot(...)
+         # panel.abline(h=0, col='red')
+       },
+         strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+     
+     # ylim=c(0,2),
+       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
+       layout = c(4,1),
+       xlab= 'number of FlyCodes',
+       #ylab ='mean of random ratios'
+       )
 ```
 TODO(cp): rename FGset to ConcGr
-
-
-```{r}
-op <- par(mfrow=c(1,4))
-lapply(unique(P.replicate$FCset_ng), function(FCset_ng){
-  S <- P.replicate[P.replicate$FCset_ng == FCset_ng,]
-  nFlyCodes <- S$length / 6
-  plot(S$mean ~  nFlyCodes, pch=16,col=rgb(0.1,0.1,0.9,alpha=0.2), main=FCset_ng, ylim=c(-2,2), xlim=c(0,30))
-  col.sd <- rgb(0.9,0.0,0.3,alpha=0.1)
-  points(nFlyCodes, S$mean + S$sd, col=col.sd, pch=16)
-  points(nFlyCodes, S$mean - S$sd, col=col.sd, pch=16)
-  
- 
-})
-```
-
 

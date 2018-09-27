@@ -4,6 +4,16 @@
 \name{PGexport}
 \alias{PGexport}
 \title{PGexport results}
+\source{
+\url{https://fgcz-bfabric.uzh.ch}
+\itemize{ 
+\item{Workunit : 158716 - QEXACTIVEHF_1
+	20170919_16_62465_nl5idx1-3_6titratecoli.raw
+	20170919_05_62465_nl5idx1-3_6titratecoli.raw}
+\item{Workunit : 158717 - QEXACTIVEHF_1
+	20170919_14_62466_nl5idx1-3_7titratesmeg.raw
+	20170919_09_62466_nl5idx1-3_7titratesmeg.raw}}
+}
 \description{
 PGexport results
 }
@@ -37,7 +47,6 @@ P$FCset_ng[P$Accession \%in\% c('P1C6', 'P1D6', 'P1E6',
  P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
  
   O<-P
-  
   b <- boxplot(df<-cbind(P$coli1 - P$coli2, P$coli1 - P$smeg1, 
   P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2 , P$smeg1 - P$smeg2),
    ylab='normalized log2ratios', ylim = c(-1,1), axes=FALSE,
