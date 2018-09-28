@@ -24,15 +24,12 @@ Depends: R (>= 3.5.0),
   ShortRead
 Imports: grDevices, graphics, stats, utils
 Maintainer: Christian Panse <cp@fgcz.ethz.ch>, Lennart Opitz <Lennart.Opitz@fgcz.uzh.ch>
-Description: provides mass spectrometry data and solutions for deriving the
-  proteins of interest. 
-  The peptides are engineered to contain only a subset of amino acids of the
-  pre-defined composition. Individual peptides should differ from each other
-  in mass, sequence, and hydrophobicity, so those large mixtures of such peptide
-  can be efficiently separated by reversed phase 
-  chromatography and unambiguously detected by mass spectrometry due to their
-  mass and sequence.
-  The data were acquired at the Functional Genomics Center Zurich.
+Description: Provides next-generation sequencing (NGS) and mass spectrometry (MS) sample
+  data, code snippets and replication material used for developing NestLink. 
+  The NestLink approach is a protein binder selection and identification technology
+  able to biophysically characterize thousands of library members at once without
+  handling individual clones at any stage of the process. Data were mainly acquired on
+  the NGS and MS platforms at the Functional Genomics Center Zurich core facility.
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr

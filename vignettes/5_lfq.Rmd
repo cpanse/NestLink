@@ -8,7 +8,7 @@ author:
   email: cp@fgcz.ethz.ch
 - name: Markus Seeger, 
   affiliation: Institute of Medical Microbiology, University of Zurich
-date: '2018-09-18, 2018-09-22'
+date: '2018-09-18, 2018-09-22, 2018-09-27, 2018-09-28'
 output:
   BiocStyle::html_document
 abstract: |
@@ -229,6 +229,7 @@ S.rep <- do.call('rbind',
 ```{r}
 xyplot(cv ~ length/6 |  ConcGr,
        data =S.rep,
+       ylab='cv [in %]',
        panel = function(x,y,...){
          panel.xyplot(x,y,...)
          panel.loess(x,y)},
@@ -387,22 +388,44 @@ P<-na.omit(P)
 xyplot(ratios ~ Accession |  ConcGr,
        data = P,
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       panel = function(x,y){
-         panel.abline(h=1, col='red')
+       panel =function(x,y, ...){
+         panel.abline(h=mean(y), col='red')
           panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
-          panel.points(x, mean(y))
-          panel.points(x, mean(y) + sd(y), pch='-', col='red')
-           panel.points(x, mean(y) - sd(y), pch='-', col='red')
-         },
+          xy.mean <- (aggregate(y, by=list(x), FUN=mean, na.rm = T))
+           xy.sd <- (aggregate(y, by=list(x), FUN=sd, na.rm = T))
+          panel.points( xy.mean[,1], xy.mean[,2])
+          panel.points( xy.mean[,1], xy.mean[,2] + xy.sd[,2] , pch='-', col='red', cex=4)
+           panel.points( xy.mean[,1], xy.mean[,2] - xy.sd[,2] , pch='-', col='red', cex=4)},
         ylim=c(0,2),
        scales = list(x = list(relation = "free", rot=45)),
        layout = c(4,1))
 ```
 
-## compute CVs
+```{r}
+P <- na.omit(P)
+xyplot(ratios ~ Accession |  ConcGr,
+       data = P,
+       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       panel = function(x,y, ...){
+         panel.abline(h=mean(y), col='red')
+          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
+          xy.mean <- (aggregate(y, by=list(x), FUN=mean, na.rm = T))
+           xy.sd <- (aggregate(y, by=list(x), FUN=sd, na.rm = T))
+          panel.points( xy.mean[,1], xy.mean[,2])
+          panel.points( xy.mean[,1], xy.mean[,2] + xy.sd[,2] , pch='-', col='red', cex=4)
+           panel.points( xy.mean[,1], xy.mean[,2] - xy.sd[,2] , pch='-', col='red', cex=4)
+           ltext(xy.mean[,1], (xy.mean[,2] + xy.sd[,2]) , round(xy.sd[,2],2), pos=3, cex=0.5)
+           },
+        
+       layout = c(4,1),
+       scales = list(y=list(log=TRUE),
+                     x = list(relation = "free", rot=45)),
+       )
+```
+## detect outlier
 
 ```{r}
-P.cv <- aggregate(P$ratios ~ P$Accession, FUN=function(x){100*sd(x)/mean(x)})
+# P.cv <- aggregate(P$ratios ~ P$Accession, FUN=function(x){100*sd(x)/mean(x)})
 ```
 
 
@@ -429,6 +452,35 @@ xyplot(ratios ~ ConcGr | ConcGr,
 ```
 
 
+
+
+```{r}
+outlier.idx <- which(P$ratios > 2)
+P[outlier.idx, ]
+
+P <- P[-outlier.idx,]
+```
+```{r fig.retina=3, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
+P<-na.omit(P)
+trellis.par.set("strip.background",t)
+
+xyplot(ratios ~ ConcGr | ConcGr,
+       data = P,
+         strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       panel = function(x,y){
+         panel.abline(h=1, col='red')
+          panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
+          panel.points(x, mean(y))
+         #   panel.points(x, median(y),col='green')
+          panel.points(x, mean(y) + sd(y), pch='-', col='red',cex=5)
+          ltext(x, mean(y) + sd(y), round(sd(y),3), pos=4)
+         
+           panel.points(x, mean(y) - sd(y), pch='-', col='red',cex=5)
+         },
+        #ylim=c(-1,3),
+       scales = list(x = list(relation = "free", rot=45)),
+       layout = c(4,1))
+```
 ## define `FCstatistics`
 
 ```{r}
@@ -453,7 +505,11 @@ FCstatistics <- function(P){
   P.sd <- aggregate(P$ratios ~ P$ConcGr, FUN=sd)
   names(P.sd) <- c('ConcGr', 'sd')
   
- rv <- data.frame(ConcGr=P.mean$ConcGr, mean=P.mean$mean, sd=P.sd$sd, cv=P.sd$sd/P.mean$mean, length=P.length$length, median=P.median$median)
+ rv <- data.frame(ConcGr=P.mean$ConcGr,
+                  mean=P.mean$mean,
+                  sd=P.sd$sd, cv=100 * P.sd$sd / P.mean$mean,
+                  length=P.length$length, 
+                  median=P.median$median)
  rv
 }
 ```
@@ -464,69 +520,68 @@ FCstatistics <- function(P){
 library(parallel)
 
 set.seed(1)
-
+n.simulation <- 100
 P.replicate <- do.call('rbind',
-                 mclapply(1:200, function(run){
-                   do.call('rbind', lapply(1:29,
-                                           function(i) {
-                                             rv <- FCstatistics(FCrandom(P, i))
-                                             rv$run = run
-                                             rv
-                                           }))
-                 }))
+                       mclapply(1:n.simulation, function(run){
+                         do.call('rbind', lapply(1:28,
+                                                 function(i) {
+                                                   rv <- FCstatistics(FCrandom(P, i))
+                                                   rv$run = run
+                                                   rv
+                                                 }))
+                       }, mc.cores = 4))
 
 ```
 
-```{r fig.retina=3, fig.cap='the grey point cloud represents the means of 200 conducted random experiments (removals) with a different number of FlyCodes.'}
+```{r fig.retina=3, fig.cap='the grey point cloud represents the means, sd, and cv of `n.simulation` conducted random experiments (removals) with a different number of FlyCodes.'}
 
 xyplot(mean ~ length/6 | ConcGr, 
        data=P.replicate,
        panel = function(...){
-         
-         panel.xyplot(...)
          panel.abline(h=1, col='red')
+         panel.xyplot(...)
        },
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-     
-      ylim=c(0,2),
+       ylim=c(0,2),
        pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
        layout = c(4,1),
        xlab= 'number of FlyCodes',
-       #ylab ='mean of random ratios'
        )
 
 xyplot(sd ~ length/6 | ConcGr, 
        data=P.replicate,
        panel = function(...){
-         
          panel.xyplot(...)
-         # panel.abline(h=0, col='red')
        },
          strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-     
-     # ylim=c(0,2),
        pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
        layout = c(4,1),
        xlab= 'number of FlyCodes',
-       #ylab ='mean of random ratios'
        )
 
 
 xyplot(cv ~ length/6 | ConcGr, 
        data=P.replicate,
        panel = function(...){
-         
          panel.xyplot(...)
-         # panel.abline(h=0, col='red')
        },
-         strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-     
-     # ylim=c(0,2),
-       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.1),
+       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
        layout = c(4,1),
        xlab= 'number of FlyCodes',
-       #ylab ='mean of random ratios'
+       ylab ='cv [in %]'
        )
 ```
-TODO(cp): rename FGset to ConcGr
+
+
+# Session info
+
+Here is the output of `sessionInfo()` on the system on which this
+document was compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+
+
 
