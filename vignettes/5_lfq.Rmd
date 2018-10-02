@@ -686,11 +686,11 @@ FCstatistics2(P)
 ## Camera ready plot of relative flycode simulation
 ```{r NestLink_relative_flycode_simulation, fig.retina=3, fig.height=6, fig.width=12, fig.path='Figs/'}
 SIM <- P.replicate
-SIM$type <- "Biological replicates"
-P.replicate.coli$type <- "Technical replicates"
-P.replicate.smeg$type <- "Technical replicates"
+SIM$Type <- "Biological replicates"
+P.replicate.coli$Type <- "Technical replicates"
+P.replicate.smeg$Type <- "Technical replicates"
 
-NestLink_relative_flycode_simulation <- xyplot(cv ~ i | ConcGr * type, 
+NestLink_relative_flycode_simulation <- xyplot(cv ~ i | ConcGr * Type, 
        index.cond=list(c(1,2,3,4), c(2,1)),
        data=do.call('rbind', list(SIM,P.replicate.coli,P.replicate.smeg)),
        panel = function(x,y,...){
