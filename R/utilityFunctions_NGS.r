@@ -4,33 +4,33 @@
 #' @param leftPattern 
 #' @param rightPattern 
 #' @param maxMismatch 
-#' @param previousPatternPos 
+#' @param prevPatternPos 
 #'
 #' @return list object 
 #' @importFrom Biostrings vmatchPattern
 #' @export twoPatternReadFilter
 twoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
-                                 previousPatternPos = NULL){
+                                 prevPatternPos = NULL){
   vp <- vmatchPattern(leftPattern, reads, max.mismatch = maxMismatch)
   leftStart <- vapply(startIndex(vp), 
-                      function(x){if (is.null(x)) NA else x[1]}, c('startIndex'=0))
+                      .dummyFunction, c('startIndex'=0))
   leftEnd <- vapply(endIndex(vp), 
-                    function(x){if (is.null(x)) NA else x[1]}, c('endIndex'=0))
+                    .dummyFunction, c('endIndex'=0))
   vp <- vmatchPattern(rightPattern, reads, max.mismatch=maxMismatch)
   rightStart <- vapply(startIndex(vp), 
-                       function(x){if (is.null(x)) NA else x[1]}, c('startIndex'=0))
+                       .dummyFunction, c('startIndex'=0))
   rightEnd <- vapply(endIndex(vp), 
-                     function(x){if (is.null(x)) NA else x[1]}, c('endIndex'=0))
+                     .dummyFunction, c('endIndex'=0))
   toNA <- which(rightStart < leftEnd)
   rightStart[toNA] <- NA
   patternPositions <- NULL
-  if(is.null(previousPatternPos)){
+  if(is.null(prevPatternPos)){
     patternPositions <- cbind(leftStart1 = leftStart, leftEnd1 = leftEnd, 
                               rightStart2 = rightStart, rightEnd2 = rightEnd)
   } else {
     patternPositions <- cbind(leftStart = leftStart, leftEnd = leftEnd, 
                               rightStart = rightStart, rightEnd = rightEnd, 
-                              previousPatternPos)
+                              prevPatternPos)
   }
   patternInRead <- !apply(is.na(patternPositions), 1, any)
   reads <- reads[patternInRead]
@@ -54,13 +54,15 @@ twoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
                                      relMaxLength = 1.05){
   medianWidth <- median(width(myReads))
   filteredReads <- myReads[which(width(myReads) > medianWidth * relMinLength 
-                                 & width(myReads) < medianWidth * relMaxLength)]
+                                 &width(myReads) < medianWidth * relMaxLength)]
   return(filteredReads)
 }
 
 .filterReadsWithNs <- function(mySeq){
-  readsWithNs <- unique(c(which(grepl('N', vapply(mySeq[['seqFC']], toString, c(FC='')))), 
-                          which(grepl('N', vapply(mySeq[['seqNB']], toString, c(NB=''))))))
+  readsWithNs <- unique(c(which(grepl('N', vapply(mySeq[['seqFC']], 
+                                                  toString, c(FC='')))), 
+                          which(grepl('N', vapply(mySeq[['seqNB']], 
+                                                  toString, c(NB=''))))))
   if(length(readsWithNs) > 0){
     mySeq[['seqFC']] <- mySeq[['seqFC']][-readsWithNs]
     mySeq[['seqNB']] <- mySeq[['seqNB']][-readsWithNs]
@@ -73,19 +75,23 @@ twoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
   width_seqFC <- width(mySeq[['seqFC']])
   width_seqNB <- width(mySeq[['seqNB']])
   mySeq[['seqFC']] <- mySeq[['seqFC']][(width_seqFC %% 3 == 0 
-                                        & width_seqFC >= minFlycodeLength & width_seqNB %% 3 == 0 
+                                        & width_seqFC >= minFlycodeLength 
+                                        & width_seqNB %% 3 == 0 
                                         & width_seqNB >= minNanobodyLength)]
   mySeq[['seqNB']] <- mySeq[['seqNB']][(width_seqFC %% 3 == 0 
-                                        & width_seqFC >= minFlycodeLength & width_seqNB %% 3 == 0 
+                                        & width_seqFC >= minFlycodeLength 
+                                        & width_seqNB %% 3 == 0 
                                         & width_seqNB >= minNanobodyLength)]
   return(mySeq)
 }
 
 .filterForStopCodons <- function(mySeqAS){
   readsWithStops <- unique(c(which(grepl('\\*', 
-                                         vapply(mySeqAS[['seqAS_FC']], toString, c(FC='')))),
+                                         vapply(mySeqAS[['seqAS_FC']], 
+                                                toString, c(FC='')))),
                              which(grepl('\\*', 
-                                         vapply(mySeqAS[['seqAS_NB']], toString, c(NB=''))))))
+                                         vapply(mySeqAS[['seqAS_NB']],
+                                                toString, c(NB=''))))))
   mySeqAS[['seqAS_FC']] <- mySeqAS[['seqAS_FC']][-readsWithStops]
   mySeqAS[['seqAS_NB']] <- mySeqAS[['seqAS_NB']][-readsWithStops]
   return(mySeqAS)
@@ -93,13 +99,14 @@ twoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
 
 .filterForStartEndPattern <- function(mySeqAS, myFCPattern = '^GS.*R$'){
   readsWithCorrectFlyCodeEnds <- which(grepl(myFCPattern, 
-                                             vapply(mySeqAS[['seqAS_FC']], toString, c(FC=''))))
+                                             vapply(mySeqAS[['seqAS_FC']], 
+                                                    toString, c(FC=''))))
   mySeqAS[['seqAS_FC']] <- mySeqAS[['seqAS_FC']][readsWithCorrectFlyCodeEnds]
   mySeqAS[['seqAS_NB']] <- mySeqAS[['seqAS_NB']][readsWithCorrectFlyCodeEnds]
   return(mySeqAS)
 }
 
-.filterForMinFlycodeFrequency <- function(mySeqAS, minFreq, file, knownFC = c()){
+.filterForMinFlycodeFrequency <- function(mySeqAS, minFreq, file, knownFC=c()){
   FCReads <- vapply(mySeqAS[['seqAS_FC']], toString, c(FC=''))
   tmp <- sort(table(FCReads), decreasing = TRUE)
   tmp <- tmp[tmp >= minFreq]
@@ -118,7 +125,8 @@ twoPatternReadFilter <- function(reads, leftPattern, rightPattern, maxMismatch,
   write.table(top_FC, top_FCFile, sep = '\t', quote = FALSE, row.names = FALSE)
   mySeqAS[['seqAS_FC']] <- AAStringSet(names(tmp))
   names(mySeqAS[['seqAS_FC']]) <- paste('read', 
-                                        seq(1, length(mySeqAS[['seqAS_FC']]), 1), sep='_')
+                                        seq(1,length(mySeqAS[['seqAS_FC']]),1),
+                                        sep='_')
   return(mySeqAS)
 }
 
@@ -177,3 +185,5 @@ getConsensusNBs <- function(uniqFCReads, bigTable){
   }
   return(top_NB)
 }
+
+.dummyFunction <- function(x){if (is.null(x)) NA else x[1]}

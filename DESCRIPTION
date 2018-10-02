@@ -6,7 +6,7 @@ Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "c
   person("Fabian M.", "Arnold", role = "ctb"),
   person("Cedric A.J.", "Hutter", role = "ctb"), 
   person("Damien", "Morger", role = "ctb"), 
-  person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.uzh.ch", role = "ctb"),
+  person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.ethz.ch", role = "ctb"),
   person("Lucy", "Poveda", role = "ctb"), 
   person("Hans-Anton", "Keserue", role = "ctb"), 
   person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
