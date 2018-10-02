@@ -5,6 +5,28 @@
 #' @export runNGSAnalysis
 #' @import ShortRead
 #' @import Biostrings
+#' @examples
+#' dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
+#' expFile <- list.files(dataFolder,pattern='*.fastq.gz', full.names = TRUE)
+#' knownNB_File <- list.files(dataFolder, pattern='knownNB.txt', full.names = TRUE)
+#' knownNB_data <- read.table(knownNB_File, sep='\t', header = TRUE, row.names = 1, stringsAsFactors = FALSE)
+#' knownNB <- Biostrings::translate(DNAStringSet(knownNB_data$Sequence))
+#' names(knownNB) <- rownames(knownNB_data)
+#' knownNB <- sapply(knownNB, toString)
+#' param <- list()
+#' param[['NB_Linker1']] <- "GGCCggcggGGCC"
+#' param[['NB_Linker2']] <- "GCAGGAGGA"
+#' param[['ProteaseSite']] <- "TTAGTCCCAAGA"
+#' param[['FC_Linker']] <- "GGCCaaggaggcCGG"
+#' param[['knownNB']] <- knownNB
+#' param[['nReads']] <- 10000 
+#' param[['minRelBestHitFreq']] <- 0.8 
+#' param[['minConsensusScore']] <- 0.9
+#' param[['maxMismatch']] <- 1
+#' param[['minNanobodyLength']] <- 348
+#' param[['minFlycodeLength']] <- 33
+#' param[['FCminFreq']] <- 1
+#' runNGSAnalysis(file = expFile[1], param)
 runNGSAnalysis <- function(file, param){
   message(paste0('Read file ', basename(file)))
   myReads <- .getReadsFromFastq(file)

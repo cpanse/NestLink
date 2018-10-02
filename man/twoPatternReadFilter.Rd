@@ -5,7 +5,7 @@
 \title{filter input sequences for two patterns}
 \usage{
 twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
-  previousPatternPos = NULL)
+  prevPatternPos = NULL)
 }
 \arguments{
 \item{reads}{}
@@ -16,11 +16,18 @@ twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
 
 \item{maxMismatch}{}
 
-\item{previousPatternPos}{}
+\item{prevPatternPos}{}
 }
 \value{
 list object
 }
 \description{
 filter input sequences for two patterns
+}
+\examples{
+reads <- DNAStringSet(c('ACTGGGTTT','ACCCTGGGTTT'))
+leftPattern <- 'CT'
+rightPattern <- 'TTT'
+maxMismatch <- 0
+twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch)
 }

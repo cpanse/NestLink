@@ -58,5 +58,5 @@ param[['FCminFreq']] <- 1
 
 #Run Workflow
 ```{r workflow_chunk4}
-runNGSAnalysis(param, file = expFile[1])
+runNGSAnalysis(file = expFile[1], param)
 ```
