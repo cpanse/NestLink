@@ -5,7 +5,12 @@
 #' @param rightPattern 
 #' @param maxMismatch 
 #' @param prevPatternPos 
-#'
+#' @examples
+#' reads <- DNAStringSet(c('ACTGGGTTT','ACCCTGGGTTT'))
+#' leftPattern <- 'CT'
+#' rightPattern <- 'TTT'
+#' maxMismatch <- 0
+#' twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch)
 #' @return list object 
 #' @importFrom Biostrings vmatchPattern
 #' @export twoPatternReadFilter
