@@ -89,7 +89,7 @@ P$ConcGr[P$Accession %in% c('P1C6', 'P1D6', 'P1E6', 'P1F6', 'P1G6', 'P1H6')] <- 
 ## sanity check
 
 ```{r}
-table(P$FCset)
+table(P$ConcGr)
 
 Pabs <- P
 ```
@@ -109,7 +109,6 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
     if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
     text(0.5, 0.5, txt, cex = cex.cor * r)
 }
-
 ```
 
 
@@ -124,6 +123,8 @@ pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
 ```
 
 ## define `FCfill2max`
+
+to complete `data.frame` for random experiment
 ```{r}
 FCfill2max <- function(P, n = max(table(P$Accession))){
    for (i in unique(P$Accession)){
@@ -458,7 +459,8 @@ xyplot(ratios ~ ConcGr | ConcGr,
 outlier.idx <- which(P$ratios > 2)
 P[outlier.idx, ]
 
-P <- P[-outlier.idx,]
+# We do not remove outliers.
+# P <- P[-outlier.idx,]
 ```
 ```{r fig.retina=3, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
 P<-na.omit(P)
@@ -483,9 +485,16 @@ xyplot(ratios ~ ConcGr | ConcGr,
 ```
 ## define `FCstatistics`
 
+
+
+
+to make the random experiment fair!
 ```{r}
 P <- FCfill2max(P)
+```
 
+
+```{r}
 FCstatistics <- function(P){
   if(!"ratios" %in% names(P)){
     P$ratios <- ((0.5 * (P$coli1 + P$coli2)) / (0.5 * (P$smeg1 + P$smeg2)))
@@ -513,6 +522,58 @@ FCstatistics <- function(P){
  rv
 }
 ```
+```{r}
+
+FCstatistics2 <- function(P,i=NA, mode='bio'){
+  
+  P.sum.coli1 <- aggregate(P$coli1 ~ P$Accession + P$ConcGr, FUN=sum)
+  P.sum.coli2 <- aggregate(P$coli2 ~ P$Accession + P$ConcGr, FUN=sum)
+  P.sum.smeg1 <- aggregate(P$smeg1 ~ P$Accession + P$ConcGr, FUN=sum)
+  P.sum.smeg2 <- aggregate(P$smeg2 ~ P$Accession + P$ConcGr, FUN=sum)
+  
+  PP <- P.sum.coli1
+  
+  names(PP) <- c('Accession', 'ConcGr', 'coli1')
+  PP$coli2 <- P.sum.coli2$`P$coli2`
+  PP$smeg1 <- P.sum.smeg1$`P$smeg1`
+  PP$smeg2 <- P.sum.smeg2$`P$smeg2`
+  
+  P <- PP
+  if(!"ratios" %in% names(P)){
+    if (mode == 'tech_smeg'){
+      P$ratios <- P$smeg1 / P$smeg2
+    }
+    else if(mode == 'tech_coli'){
+      P$ratios <- P$coli1 / P$coli2
+    }else{
+      # bio
+      P$ratios <- ((0.5 * (P$coli1 + P$coli2)) / (0.5 * (P$smeg1 + P$smeg2)))
+    }
+   
+    #warning("define ratios.")
+  }
+  P.length <- aggregate(P$ratios ~ P$ConcGr, FUN=length)
+  names(P.length) <- c('ConcGr', 'length')
+  
+  P <- na.omit(P)
+  
+  P.mean <- aggregate(P$ratios ~ P$ConcGr, FUN=mean)
+  names(P.mean) <- c('ConcGr', 'mean')
+  
+  P.median <- aggregate(P$ratios ~ P$ConcGr, FUN=median)
+  names(P.median) <- c('ConcGr', 'median')
+  
+  P.sd <- aggregate(P$ratios ~ P$ConcGr, FUN=sd)
+  names(P.sd) <- c('ConcGr', 'sd')
+  
+ rv <- data.frame(ConcGr=P.mean$ConcGr,
+                  mean=P.mean$mean,
+                  sd=P.sd$sd, cv=100 * P.sd$sd / P.mean$mean,
+                  length=P.length$length, 
+                  median=P.median$median, i=rep(i,length(P.median$median)))
+ rv
+}
+```
 
 
 ## perform the random experiment
@@ -523,9 +584,35 @@ set.seed(1)
 n.simulation <- 100
 P.replicate <- do.call('rbind',
                        mclapply(1:n.simulation, function(run){
-                         do.call('rbind', lapply(1:28,
+                         do.call('rbind', lapply(1:29,
                                                  function(i) {
-                                                   rv <- FCstatistics(FCrandom(P, i))
+                                                   rv <- FCstatistics2(FCrandom(P, i), 29-i)
+                                                   rv$run = run
+                                                   rv
+                                                 }))
+                       }, mc.cores = 4))
+```
+
+```{r}
+set.seed(1)
+n.simulation <- 100
+P.replicate.smeg <- do.call('rbind',
+                       mclapply(1:n.simulation, function(run){
+                         do.call('rbind', lapply(1:29,
+                                                 function(i) {
+                                                   rv <- FCstatistics2(FCrandom(P, i), 29-i, mode='tech_smeg')
+                                                   rv$run = run
+                                                   rv
+                                                 }))
+                       }, mc.cores = 4))
+
+set.seed(1)
+n.simulation <- 100
+P.replicate.coli <- do.call('rbind',
+                       mclapply(1:n.simulation, function(run){
+                         do.call('rbind', lapply(1:29,
+                                                 function(i) {
+                                                   rv <- FCstatistics2(FCrandom(P, i), 29-i, mode='tech_coli')
                                                    rv$run = run
                                                    rv
                                                  }))
@@ -535,7 +622,7 @@ P.replicate <- do.call('rbind',
 
 ```{r fig.retina=3, fig.cap='the grey point cloud represents the means, sd, and cv of `n.simulation` conducted random experiments (removals) with a different number of FlyCodes.'}
 
-xyplot(mean ~ length/6 | ConcGr, 
+xyplot(mean ~ i | ConcGr, 
        data=P.replicate,
        panel = function(...){
          panel.abline(h=1, col='red')
@@ -548,7 +635,7 @@ xyplot(mean ~ length/6 | ConcGr,
        xlab= 'number of FlyCodes',
        )
 
-xyplot(sd ~ length/6 | ConcGr, 
+xyplot(sd ~ i | ConcGr, 
        data=P.replicate,
        panel = function(...){
          panel.xyplot(...)
@@ -560,7 +647,7 @@ xyplot(sd ~ length/6 | ConcGr,
        )
 
 
-xyplot(cv ~ length/6 | ConcGr, 
+xyplot(cv ~ i | ConcGr, 
        data=P.replicate,
        panel = function(...){
          panel.xyplot(...)
@@ -568,6 +655,38 @@ xyplot(cv ~ length/6 | ConcGr,
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
        pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
        layout = c(4,1),
+       xlab= 'number of FlyCodes',
+       ylab ='cv [in %]'
+       )
+```
+
+
+```{r}
+FCstatistics2(P)
+```
+
+
+```{r fig.retina=3, fig.height=5}
+SIM <- P.replicate
+SIM$type <- "bio"
+P.replicate.coli$type <- "tech"
+P.replicate.smeg$type <- "tech"
+
+xyplot(cv ~ i | ConcGr * type, 
+       data=do.call('rbind', list(SIM,P.replicate.coli,P.replicate.smeg)),
+       panel = function(x,y,...){
+         panel.abline(h=10, col='red')
+         panel.xyplot(x,y,...)
+         xy.mean <- (aggregate(y, by=list(x), FUN=median, na.rm = T))
+           
+          panel.points( xy.mean[,1], xy.mean[,2],pch=16)
+         #points(x[1], median(y))
+         #panel.loess(...)
+       },
+       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
+       layout = c(4,2),
+       ylim = c(0,50),
        xlab= 'number of FlyCodes',
        ylab ='cv [in %]'
        )
