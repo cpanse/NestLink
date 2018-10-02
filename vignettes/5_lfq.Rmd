@@ -1,5 +1,5 @@
 ---
-title: "FlyCode Lable-Free-Quantification based analysis"
+title: "Flycode Lable-Free-Quantification based analysis"
 author:
 - name: Pascal Egloff
   affiliation: Institute of Medical Microbiology, University of Zurich
@@ -32,6 +32,7 @@ trellis.par.set("strip.background",t)
 ```
 
 ```{r}
+n.simulation <- 10
 filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
                         package = "NestLink")
 P <- read.csv(filename,
@@ -223,20 +224,35 @@ xyplot(cv ~ length|ConcGr,
 
 ```{r}
 S.rep <- do.call('rbind', 
-              lapply(1:50, function(s){
+              lapply(1:n.simulation, function(s){
                 set.seed(s); S <- do.call('rbind', lapply(1:29, function(i){FCstatistic(FCrandom(P, i))}))}))
 ```
 
-```{r}
-xyplot(cv ~ length/6 |  ConcGr,
-       data =S.rep,
-       ylab='cv [in %]',
-       panel = function(x,y,...){
-         panel.xyplot(x,y,...)
-         panel.loess(x,y)},
-        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       pch=16, col=rgb(0.5,0.5,0.5,0.2), layout = c(4,1))
+```{r fig.retina=3, fig.height=3}
 
+NestLink_absolute_flycode_simulation <- xyplot(cv ~ length/6 |  ConcGr,
+       data =S.rep,
+       panel = function(x,y,...){
+         panel.abline(h=c(10, 50), col='red')
+         panel.xyplot(x,y,...)
+         xy.median <- (aggregate(y, by=list(x), FUN=median, na.rm = T))
+         panel.points( xy.median[,1], xy.median[,2], pch=16)
+         
+         #panel.xyplot(x,y,...)
+         #panel.loess(x,y)
+       },
+       xlab= 'Number of flycodes',
+       ylab ='CV [%]',
+       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       pch=16,
+       col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
+       layout = c(4,1))
+
+print(NestLink_absolute_flycode_simulation)
+
+png("NestLink_absolute_flycode_simulation.png", 1200,800)
+print(NestLink_absolute_flycode_simulation)
+dev.off()
 ```
 
 
@@ -581,7 +597,7 @@ FCstatistics2 <- function(P,i=NA, mode='bio'){
 library(parallel)
 
 set.seed(1)
-n.simulation <- 100
+
 P.replicate <- do.call('rbind',
                        mclapply(1:n.simulation, function(run){
                          do.call('rbind', lapply(1:29,
@@ -595,9 +611,9 @@ P.replicate <- do.call('rbind',
 
 ```{r}
 set.seed(1)
-n.simulation <- 100
+
 P.replicate.smeg <- do.call('rbind',
-                       mclapply(1:n.simulation, function(run){
+                       mclapply(1:n.simulation/2, function(run){
                          do.call('rbind', lapply(1:29,
                                                  function(i) {
                                                    rv <- FCstatistics2(FCrandom(P, i), 29-i, mode='tech_smeg')
@@ -607,9 +623,9 @@ P.replicate.smeg <- do.call('rbind',
                        }, mc.cores = 4))
 
 set.seed(1)
-n.simulation <- 100
+
 P.replicate.coli <- do.call('rbind',
-                       mclapply(1:n.simulation, function(run){
+                       mclapply(1:n.simulation/2, function(run){
                          do.call('rbind', lapply(1:29,
                                                  function(i) {
                                                    rv <- FCstatistics2(FCrandom(P, i), 29-i, mode='tech_coli')
@@ -668,28 +684,31 @@ FCstatistics2(P)
 
 ```{r fig.retina=3, fig.height=5}
 SIM <- P.replicate
-SIM$type <- "bio"
-P.replicate.coli$type <- "tech"
-P.replicate.smeg$type <- "tech"
+SIM$type <- "Biological replicates"
+P.replicate.coli$type <- "Technical replicates"
+P.replicate.smeg$type <- "Technical replicates"
 
-xyplot(cv ~ i | ConcGr * type, 
+NestLink_relative_flycode_simulation <- xyplot(cv ~ i | ConcGr * type, 
+       index.cond=list(c(1,2,3,4),c(2,1)),
        data=do.call('rbind', list(SIM,P.replicate.coli,P.replicate.smeg)),
        panel = function(x,y,...){
          panel.abline(h=10, col='red')
          panel.xyplot(x,y,...)
-         xy.mean <- (aggregate(y, by=list(x), FUN=median, na.rm = T))
-           
-          panel.points( xy.mean[,1], xy.mean[,2],pch=16)
-         #points(x[1], median(y))
-         #panel.loess(...)
+         xy.median <- (aggregate(y, by=list(x), FUN=median, na.rm = T))
+         panel.points( xy.median[,1], xy.median[,2], pch=16)
        },
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       pch=16, col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
+       pch=16,
+       col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
        layout = c(4,2),
        ylim = c(0,50),
-       xlab= 'number of FlyCodes',
-       ylab ='cv [in %]'
+       xlab= 'Number of flycodes',
+       ylab ='CV [%]'
        )
+print(NestLink_relative_flycode_simulation)
+png("NestLink_relative_flycode_simulation.png", 1200,800)
+print(NestLink_relative_flycode_simulation)
+dev.off()
 ```
 
 
