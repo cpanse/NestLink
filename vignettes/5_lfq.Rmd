@@ -8,7 +8,7 @@ author:
   email: cp@fgcz.ethz.ch
 - name: Markus Seeger, 
   affiliation: Institute of Medical Microbiology, University of Zurich
-date: '2018-09-18, 2018-09-22, 2018-09-27, 2018-09-28, 2018-10-02'
+date: '2018-09-18, 2018-09-22, 2018-09-27, 2018-09-28, 2018-10-02, 2018-10-03'
 output:
   BiocStyle::html_document
 abstract: |
@@ -23,7 +23,7 @@ vignette: |
 
 ```{r echo=FALSE}
 library(lattice)
-
+library(knitr)
 
 cv <- 1 - 1:7 / 10
 t <- trellis.par.get("strip.background")
@@ -32,7 +32,7 @@ trellis.par.set("strip.background",t)
 ```
 
 ```{r}
-n.simulation <- 1000
+n.simulation <- 10
 filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
                         package = "NestLink")
 P <- read.csv(filename,
@@ -181,11 +181,18 @@ FCstatistic <- function(P){
   P.cv <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=function(x){100*sd(x)/mean(x)})
   P.length <- aggregate(P$coli1 ~ P$ConcGr, FUN=length)
  
- rv <- data.frame(ConcGr=P.sd[,1],cv=P.cv[,2], length=P.length[,2])
+ rv <- data.frame(ConcGr=P.sd[,1],
+                  mean=P.mean[,2],
+                  sd=P.sd[,2],
+                  cv=P.cv[,2], 
+                  length=P.length[,2])
  rv
 }
+```
 
-FCstatistic(P)
+## Camera ready absolute table
+```{r}
+kable(FCstatistic(P))
 ```
 
 ## Define `FCrandom`
@@ -213,19 +220,27 @@ set.seed(8)
 S <- do.call('rbind', lapply(1:29, function(i){
   FCstatistic(FCrandom(P, i))
   }))
+```
 
-xyplot(cv ~ length|ConcGr, 
-       data =S, 
-       layout=c(4,1),
+```{r}
+xyplot(cv ~ length | ConcGr, 
+       data = S, 
+       layout = c(4, 1),
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE)
        )
 ```
 
 
-```{r}
+```{r sim1}
+set.seed(1)
+
 S.rep <- do.call('rbind', 
-              lapply(1:n.simulation, function(s){
-                set.seed(s); S <- do.call('rbind', lapply(1:29, function(i){FCstatistic(FCrandom(P, i))}))}))
+    lapply(1:n.simulation, function(s){
+       S <- do.call('rbind', 
+           lapply(1:29, function(i){
+                FCstatistic(FCrandom(P, i))
+             }))
+       }))
 ```
 
 ## Camera ready plot of absolute flycode simulation
@@ -353,7 +368,6 @@ outliers.idx <- sapply(1:length(b$group),
 
 
 ```{r kable}
-library(knitr)
 kable(P[unique(outliers.idx),])
 
 ```
@@ -595,7 +609,7 @@ FCstatistics2 <- function(P,i=NA, mode='bio'){
 
 
 ## Conduct the random experiment
-```{r}
+```{r sim2}
 library(parallel)
 
 set.seed(1)
@@ -679,9 +693,7 @@ xyplot(cv ~ i | ConcGr,
 ```
 
 
-```{r}
-FCstatistics2(P)
-```
+
 
 ## Camera ready plot of relative flycode simulation
 ```{r NestLink_relative_flycode_simulation, fig.retina=3, fig.height=6, fig.width=12, fig.path='Figs/'}
@@ -714,6 +726,22 @@ print(NestLink_relative_flycode_simulation)
 #dev.off()
 ```
 
+
+## Camera ready relative table
+
+`length` corresponds to the number accessions. `i` indicates the number of removed Flycodes in each accession group and can be ignored.
+
+```{r}
+kable(FCstatistics2(P, mode = 'bio'))
+```
+
+```{r}
+kable(FCstatistics2(P, mode = 'tech_coli'))
+```
+
+```{r}
+kable(FCstatistics2(P, mode = 'tech_smeg'))
+```
 
 # Session info
 
