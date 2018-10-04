@@ -1,21 +1,31 @@
 Package: NestLink
 Type: Package
 Title: NestLink an R data package to guide through Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
-Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = "ctb"),
+Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = c("ctb","aut")),
   person("Iwan", "Zimmermann", role = "ctb"), 
   person("Fabian M.", "Arnold", role = "ctb"),
   person("Cedric A.J.", "Hutter", role = "ctb"), 
   person("Damien", "Morger", role = "ctb"), 
-  person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.ethz.ch", role = "ctb"),
+  person("Lennart", "Opitz", email = "Lennart.Opitz@fgcz.ethz.ch", role = c("aut", "cre")),
   person("Lucy", "Poveda", role = "ctb"), 
   person("Hans-Anton", "Keserue", role = "ctb"), 
   person("Christian", "Panse", email = "cp@fgcz.ethz.ch", role = c("aut", "cre"),
           comment = c(ORCID = "0000-0003-1975-3064")),
-  person("Bernd", "Roschitzki", role = "ctb"),
+  person("Bernd", "Roschitzki", role = c("ctb", "aut")),
   person("Markus", "Seeger", email = "cp@fgcz.ethz.ch", role = c("aut", "ctb"),
           comment = c(ORCID = "0000-0003-1761-8571"))
         )
-Author: Christian Panse, Lennart Opitz, Bernd Roschitzki, Pascal Egloff
+Author: Pascal Egloff [ctb, aut],
+  Iwan Zimmermann [ctb],
+  Fabian M. Arnold [ctb],
+  Cedric A.J. Hutter [ctb],
+  Damien Morger [ctb],
+  Lennart Opitz [aut, cre],
+  Lucy Poveda  [ctb],
+  Hans-Anto Keserue  [ctb],
+  Christian Panse  [aut, cre] (0000-0003-1975-3064),
+  Bernd Roschitzki  [ctb, aut],
+  Markus Seeger [ctb, aut] (0000-0003-1761-8571)
 Version: 0.99.50
 Depends: R (>= 3.5.0),
   Biostrings,
