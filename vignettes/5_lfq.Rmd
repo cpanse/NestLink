@@ -1,5 +1,5 @@
 ---
-title: "Flycode Lable-Free-Quantification based analysis"
+title: "5. Postvalidation of Quantitative Flycode Results"
 author:
 - name: Pascal Egloff
   affiliation: Institute of Medical Microbiology, University of Zurich
@@ -8,7 +8,7 @@ author:
   email: cp@fgcz.ethz.ch
 - name: Markus Seeger, 
   affiliation: Institute of Medical Microbiology, University of Zurich
-date: '2018-09-18, 2018-09-22, 2018-09-27, 2018-09-28'
+date: '2018-09-18, 2018-09-22, 2018-09-27, 2018-09-28, 2018-10-02, 2018-10-03'
 output:
   BiocStyle::html_document
 abstract: |
@@ -23,7 +23,7 @@ vignette: |
 
 ```{r echo=FALSE}
 library(lattice)
-
+library(knitr)
 
 cv <- 1 - 1:7 / 10
 t <- trellis.par.get("strip.background")
@@ -40,7 +40,7 @@ P <- read.csv(filename,
 dim(P)
 ```
 
-## clean 
+## Clean 
 
 
 remove modificatio
@@ -87,7 +87,7 @@ P$ConcGr[P$Accession %in% c('P1C6', 'P1D6', 'P1E6', 'P1F6', 'P1G6', 'P1H6')] <- 
 
 ```
 
-## sanity check
+## Sanity check
 
 ```{r}
 table(P$ConcGr)
@@ -123,7 +123,7 @@ pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
 })
 ```
 
-## define `FCfill2max`
+## Define `FCfill2max`
 
 to complete `data.frame` for random experiment
 ```{r}
@@ -147,7 +147,7 @@ FCfill2max <- function(P, n = max(table(P$Accession))){
 }
 ```
 
-## plot compute CVs for each row
+## Plot compute CVs for each row
 
 ```{r}
 P.mean <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=mean)
@@ -168,7 +168,7 @@ P <- FCfill2max(P)
 
 # Absolute Quantification
 
-## define `FCstatistic` using `coli1` column
+## Define `FCstatistic` using `coli1` column
 ```{r}
 FCstatistic <- function(P){
   PP <- aggregate(P$coli1 ~ P$Accession + P$ConcGr, FUN=sum)
@@ -181,14 +181,21 @@ FCstatistic <- function(P){
   P.cv <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=function(x){100*sd(x)/mean(x)})
   P.length <- aggregate(P$coli1 ~ P$ConcGr, FUN=length)
  
- rv <- data.frame(ConcGr=P.sd[,1],cv=P.cv[,2], length=P.length[,2])
+ rv <- data.frame(ConcGr=P.sd[,1],
+                  mean=P.mean[,2],
+                  sd=P.sd[,2],
+                  cv=P.cv[,2], 
+                  length=P.length[,2])
  rv
 }
-
-FCstatistic(P)
 ```
 
-## define `FCrandom`
+## Camera ready absolute table
+```{r}
+kable(FCstatistic(P))
+```
+
+## Define `FCrandom`
 
 ```{r}
 # TODO(cp); make it work for n = 0
@@ -205,7 +212,7 @@ FCrandom <- function(P, n = 1){
 ```
   
 
-## start a random experiment
+## Conduct the random experiment
 
 
 ```{r}
@@ -213,25 +220,34 @@ set.seed(8)
 S <- do.call('rbind', lapply(1:29, function(i){
   FCstatistic(FCrandom(P, i))
   }))
+```
 
-xyplot(cv ~ length|ConcGr, 
-       data =S, 
-       layout=c(4,1),
+```{r}
+xyplot(cv ~ length | ConcGr, 
+       data = S, 
+       layout = c(4, 1),
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE)
        )
 ```
 
 
-```{r}
+```{r sim1}
+set.seed(1)
+
 S.rep <- do.call('rbind', 
-              lapply(1:n.simulation, function(s){
-                set.seed(s); S <- do.call('rbind', lapply(1:29, function(i){FCstatistic(FCrandom(P, i))}))}))
+    lapply(1:n.simulation, function(s){
+       S <- do.call('rbind', 
+           lapply(1:29, function(i){
+                FCstatistic(FCrandom(P, i))
+             }))
+       }))
 ```
 
-```{r fig.retina=3, fig.height=3}
+## Camera ready plot of absolute flycode simulation
 
+```{r NestLink_absolute_flycode_simulation, fig.retina=3, fig.height=6, fig.width=12, fig.path='Figs/'}
 NestLink_absolute_flycode_simulation <- xyplot(cv ~ length/6 |  ConcGr,
-       data =S.rep,
+       data = S.rep,
        panel = function(x,y,...){
          panel.abline(h=c(10, 50), col='red')
          panel.xyplot(x,y,...)
@@ -244,6 +260,8 @@ NestLink_absolute_flycode_simulation <- xyplot(cv ~ length/6 |  ConcGr,
        xlab= 'Number of flycodes',
        ylab ='CV [%]',
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       scales=list(y=list(at=c(0,10,50,100,150,200))),
+       ylim=c(0,175),
        pch=16,
        col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
        layout = c(4,1))
@@ -278,7 +296,7 @@ sum(P$coli2)
 sum(P$smeg1)
 sum(P$smeg2)
 ```
-## define ratios
+## Define ratios
 
 ```{r}
 P$ratios <- (0.5* (P$coli1 + P$coli2)) / (0.5 * (P$smeg1 + P$smeg2))
@@ -302,9 +320,9 @@ boxplot(P$smeg2 ~ P$ConcGr)
 ```
 
 
-## determine outliers (removal)
+## Determine outliers (removal)
 
-```{r fig.height=6}
+```{r NestLink_boxplot_techrep_biorep, fig.retina=3, fig.height=12, fig.width=12, fig.path='Figs/'}
 
 op <- par(mfrow=c(1,1), mar=c(5,5,5,2) )
 
@@ -325,8 +343,9 @@ outliers.idx <- sapply(1:length(b$group),
       text(b$group[i], b$out[i], P[q, 2], pos=4, cex=0.4);
       text(b$group[i], b$out[i], P[q, 1], pos=2, cex=0.4);
       which(q)})
+```
 
-
+```{r}
 b <- boxplot(df<-cbind(P$coli1/P$coli2, P$coli1/P$smeg1, P$coli1/P$smeg2, P$coli2/P$smeg1, P$coli2/P$smeg2, P$smeg1/P$smeg2, P$ratio),
              log='',
         ylab='normalized ratios',
@@ -349,7 +368,6 @@ outliers.idx <- sapply(1:length(b$group),
 
 
 ```{r kable}
-library(knitr)
 kable(P[unique(outliers.idx),])
 
 ```
@@ -439,7 +457,7 @@ xyplot(ratios ~ Accession |  ConcGr,
                      x = list(relation = "free", rot=45)),
        )
 ```
-## detect outlier
+## Detect outlier
 
 ```{r}
 # P.cv <- aggregate(P$ratios ~ P$Accession, FUN=function(x){100*sd(x)/mean(x)})
@@ -499,9 +517,7 @@ xyplot(ratios ~ ConcGr | ConcGr,
        scales = list(x = list(relation = "free", rot=45)),
        layout = c(4,1))
 ```
-## define `FCstatistics`
-
-
+## Define `FCstatistics`
 
 
 to make the random experiment fair!
@@ -592,8 +608,8 @@ FCstatistics2 <- function(P,i=NA, mode='bio'){
 ```
 
 
-## perform the random experiment
-```{r}
+## Conduct the random experiment
+```{r sim2}
 library(parallel)
 
 set.seed(1)
@@ -677,23 +693,21 @@ xyplot(cv ~ i | ConcGr,
 ```
 
 
-```{r}
-FCstatistics2(P)
-```
 
 
-```{r fig.retina=3, fig.height=5}
+## Camera ready plot of relative flycode simulation
+```{r NestLink_relative_flycode_simulation, fig.retina=3, fig.height=6, fig.width=12, fig.path='Figs/'}
 SIM <- P.replicate
-SIM$type <- "Biological replicates"
-P.replicate.coli$type <- "Technical replicates"
-P.replicate.smeg$type <- "Technical replicates"
+SIM$Type <- "Biological replicates"
+P.replicate.coli$Type <- "Technical replicates"
+P.replicate.smeg$Type <- "Technical replicates"
 
-NestLink_relative_flycode_simulation <- xyplot(cv ~ i | ConcGr * type, 
-       index.cond=list(c(1,2,3,4),c(2,1)),
+NestLink_relative_flycode_simulation <- xyplot(cv ~ i | ConcGr * Type, 
+       index.cond=list(c(1,2,3,4), c(2,1)),
        data=do.call('rbind', list(SIM,P.replicate.coli,P.replicate.smeg)),
        panel = function(x,y,...){
          panel.abline(h=10, col='red')
-         panel.xyplot(x,y,...)
+         panel.xyplot(x, y,...)
          xy.median <- (aggregate(y, by=list(x), FUN=median, na.rm = T))
          panel.points( xy.median[,1], xy.median[,2], pch=16)
        },
@@ -706,11 +720,28 @@ NestLink_relative_flycode_simulation <- xyplot(cv ~ i | ConcGr * type,
        ylab ='CV [%]'
        )
 print(NestLink_relative_flycode_simulation)
-png("NestLink_relative_flycode_simulation.png", 1200,800)
-print(NestLink_relative_flycode_simulation)
-dev.off()
+#imgsize <- 1000 
+#png("NestLink_relative_flycode_simulation.png", 1.5 * imgsize, imgsize, pointsize = 58)
+#print(NestLink_relative_flycode_simulation)
+#dev.off()
 ```
 
+
+## Camera ready relative table
+
+`length` corresponds to the number accessions. `i` indicates the number of removed Flycodes in each accession group and can be ignored.
+
+```{r}
+kable(FCstatistics2(P, mode = 'bio'))
+```
+
+```{r}
+kable(FCstatistics2(P, mode = 'tech_coli'))
+```
+
+```{r}
+kable(FCstatistics2(P, mode = 'tech_smeg'))
+```
 
 # Session info
 
