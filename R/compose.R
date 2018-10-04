@@ -34,12 +34,12 @@ compose_GSx7cTerm <-
     rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
     rep('G', 8), rep('P', 12)), 
     cTerm=c('WR','WLTVR','WQEGGR','WQSR','WLR')){ 
-    
-    paste("GS", 
-          paste(pool[sample(length(pool), 7)], collapse=''), 
-          cTerm[sample(length(cTerm), 1)], 
-          sep='') 
-  }
+  
+  paste("GS", 
+        paste(pool[sample(length(pool), 7)], collapse=''), 
+        cTerm[sample(length(cTerm), 1)], 
+        sep='') 
+}
 
 
 #' Compose a peptide with a defined AA sequence frequency
@@ -207,8 +207,8 @@ getFC <- function(
   
   FC <- FC[nchar(FC$peptide) > 2, ]
   
-  FC$ssrc <- sapply(FC$peptide, ssrc)
-  
+  FC$ssrc <- ssrc(FC$peptide)
+  # FC$ssrc <- vapply(FC$peptide, FUN=ssrc, FUN.VALUE = ssrc("ELVISR"))
   FC$peptideLength <- nchar(as.character(FC$peptide))
   
   unique(FC[idx,])
@@ -232,7 +232,7 @@ getNB <- function(){
   NB$peptide <- (as.character(NB$peptide))
   NB$pim <- parentIonMass(NB$peptide)
   NB <- NB[nchar(NB$peptide) >2, ]
-  NB$ssrc <- sapply(NB$peptide, ssrc)
+  NB$ssrc <- ssrc(NB$peptide)
   NB$peptideLength <- nchar(as.character(NB$peptide))
   NB
 }
@@ -321,11 +321,11 @@ NULL
 #' \url{https://fgcz-bfabric.uzh.ch}
 #' \itemize{ 
 #' \item{Workunit : 158716 - QEXACTIVEHF_1
-#' 	20170919_16_62465_nl5idx1-3_6titratecoli.raw
-#' 	20170919_05_62465_nl5idx1-3_6titratecoli.raw}
+#'  20170919_16_62465_nl5idx1-3_6titratecoli.raw
+#'  20170919_05_62465_nl5idx1-3_6titratecoli.raw}
 #' \item{Workunit : 158717 - QEXACTIVEHF_1
-#' 	20170919_14_62466_nl5idx1-3_7titratesmeg.raw
-#' 	20170919_09_62466_nl5idx1-3_7titratesmeg.raw}}
+#'  20170919_14_62466_nl5idx1-3_7titratesmeg.raw
+#'  20170919_09_62466_nl5idx1-3_7titratesmeg.raw}}
 #' @author Pascal Egloff \email{p.egloff@imm.uzh.ch}
 #' @keywords data
 #' @examples 
