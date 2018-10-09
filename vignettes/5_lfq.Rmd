@@ -24,6 +24,7 @@ vignette: |
 ```{r echo=FALSE}
 library(lattice)
 library(knitr)
+library(parallel)
 
 cv <- 1 - 1:7 / 10
 t <- trellis.par.get("strip.background")
@@ -248,16 +249,16 @@ xyplot(cv ~ nFCAccession | ConcGr,
 ```
 
 
-```{r sim1}
+```{r simulation1}
 set.seed(1)
 
 S.rep <- do.call('rbind', 
-    lapply(1:n.simulation, function(s){
+    mclapply(1:n.simulation, function(s){
        S <- do.call('rbind', 
            lapply(1:29, function(i){
                 FlycodeAbsoluteStatistics(FCrandom(P, i))
              }))
-       }))
+       }, mc.cores = 8))
 ```
 
 ## Camera ready plot of absolute flycode simulation
@@ -612,8 +613,8 @@ FlycodeRelativeStatistics <- function(X, mode='bio'){
 
 ## Conduct the random experiment
 
-```{r sim2}
-library(parallel)
+```{r simulation2}
+
 message(paste("Number of simulations =", n.simulation))
 set.seed(1)
 
@@ -626,7 +627,7 @@ P.replicate <- do.call('rbind',
                                                    rv$run = run
                                                    rv
                                                  }))
-                       }, mc.cores = 4))
+                       }, mc.cores = 8))
 ```
 
 ```{r}
@@ -640,7 +641,7 @@ P.replicate.smeg <- do.call('rbind',
                                                    rv$run = run
                                                    rv
                                                  }))
-                       }, mc.cores = 4))
+                       }, mc.cores = 8))
 ```
 
 ```{r}
@@ -654,7 +655,7 @@ P.replicate.coli <- do.call('rbind',
                                                    rv$run = run
                                                    rv
                                                  }))
-                       }, mc.cores = 4))
+                       }, mc.cores = 8))
 
 ```
 
@@ -722,11 +723,12 @@ NestLink_relative_flycode_simulation <- xyplot(cv ~ length | ConcGr * Type,
          panel.points( xy.quantile[,1],(xy.quantile[,2])[,3], pch='-')
        },
        strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       scales=list(x=list(at=c(1,5,10,15,20,25,30))),
+       scales=list(x=list(at=c(1,5,10,15,20,25,30)),
+                   y=list(at=c(0, 10,20,30,40,50))),
        pch=16,
        col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
-       layout = c(4,2),
-       ylim = c(0,50),
+       layout = c(4, 2),
+       ylim = c(0, 50),
        xlab= 'Number of flycodes',
        ylab ='CV [%]'
        )
