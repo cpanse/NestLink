@@ -137,7 +137,9 @@ pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
 
 ## Define `FCfill2max`
 
-to complete `data.frame` for random experiment
+to conduct a fair random experiment we add *dummy flycodes*
+to the input `data.frame`.
+
 ```{r}
 FCfill2max <- function(P, n = max(table(P$Accession))){
    for (i in unique(P$Accession)){
@@ -191,13 +193,14 @@ FlycodeAbsoluteStatistics <- function(P){
 
   P.mean <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=mean)
   P.sd <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=sd)
-  P.cv <- aggregate(PP$coli1_sum ~ PP$ConcGr, FUN=function(x){100*sd(x)/mean(x)})
+  P.cv <- aggregate(PP$coli1_sum ~ PP$ConcGr,
+      FUN = function(x){ 100 * sd(x) / mean(x) })
   P.length <- max(aggregate(P$coli1 ~ P$Accession, FUN=length)[,2])
  
  rv <- data.frame(ConcGr=P.sd[,1],
                   mean=P.mean[,2],
                   sd=P.sd[,2],
-                  cv=P.cv[,2])
+                  cv=round(P.cv[,2],2))
  rv$nFCAccession <-  P.length
  rv
 }
@@ -322,6 +325,7 @@ sum(P$coli2)
 sum(P$smeg1)
 sum(P$smeg2)
 ```
+
 ## Define ratios
 
 ```{r}
@@ -344,7 +348,6 @@ boxplot(P$smeg1 ~ P$ConcGr)
 boxplot(P$smeg2 ~ P$ConcGr)
 
 ```
-
 
 ## Determine outliers (removal)
 
@@ -730,11 +733,8 @@ NestLink_relative_flycode_simulation <- xyplot(cv ~ length | ConcGr * Type,
        xlab= 'Number of flycodes',
        ylab ='CV [%]'
        )
+
 print(NestLink_relative_flycode_simulation)
-#imgsize <- 1000 
-#png("NestLink_relative_flycode_simulation.png", 1.5 * imgsize, imgsize, pointsize = 58)
-#print(NestLink_relative_flycode_simulation)
-#dev.off()
 ```
 
 
