@@ -10,5 +10,5 @@
 
 cat $1 \
   | awk '{print ">"$1"\n"$2}' \
-  | fgcz_cut60.bash  
+  | fgcz_cut60.bash \
   | tee p1875_db11.fasta
