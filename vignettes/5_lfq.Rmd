@@ -14,7 +14,7 @@ output:
 abstract: |
   Description of your vignette
 vignette: |
-  %\VignetteIndexEntry{5. 5. Control experiment to assess robustness of protein detection via flycodes}
+  %\VignetteIndexEntry{5. Control experiment to assess robustness of protein detection via flycodes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -638,7 +638,7 @@ set.seed(1)
 
 P.replicate.smeg <- do.call('rbind',
                        mclapply(1:n.simulation/2, function(run){
-                         do.call('rbind', lapply(0:29,
+                         do.call('rbind', lapply(1:29,
                                                  function(i) {
                                                    rv <- FlycodeRelativeStatistics(FCrandom(P, i), mode='tech_smeg')
                                                    rv$run = run
@@ -703,18 +703,18 @@ xyplot(cv ~  length | ConcGr,
 ```
 
 
-
-
 ## Camera ready plot of relative flycode simulation
-```{r NestLink_relative_flycode_simulation, fig.retina=3, fig.height=6, fig.width=12, fig.path='Figs/'}
+
+```{r NestLink_relative_flycode_simulation, fig.retina=3, fig.height=4, fig.width=12, fig.path='Figs/'}
 SIM <- P.replicate
 SIM$Type <- "Biological replicates"
 P.replicate.coli$Type <- "Technical replicates"
 P.replicate.smeg$Type <- "Technical replicates"
 
-NestLink_relative_flycode_simulation <- xyplot(cv ~ length | ConcGr * Type, 
-       index.cond=list(c(1,2,3,4), c(2,1)),
+NestLink_relative_flycode_simulation <- xyplot(cv ~ length | ConcGr, 
+       index.cond=list(c(1,2,3,4)),
        data=do.call('rbind', list(SIM, P.replicate.coli, P.replicate.smeg)),
+       subset = Type == "Biological replicates",
        panel = function(x,y,...){
          panel.abline(h=10, col='red')
          panel.xyplot(x, y, ...)
@@ -730,7 +730,34 @@ NestLink_relative_flycode_simulation <- xyplot(cv ~ length | ConcGr * Type,
                    y=list(at=c(0, 10,20,30,40,50))),
        pch=16,
        col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
-       layout = c(4, 2),
+       layout = c(4, 1),
+       ylim = c(0, 50),
+       xlab= 'Number of flycodes',
+       ylab ='CV [%]'
+       )
+
+print(NestLink_relative_flycode_simulation)
+
+NestLink_relative_flycode_simulation <- xyplot(cv ~ length | ConcGr, 
+       index.cond=list(c(1,2,3,4)),
+       data=do.call('rbind', list(SIM, P.replicate.coli, P.replicate.smeg)),
+       subset = Type == "Technical replicates",
+       panel = function(x,y,...){
+         panel.abline(h=10, col='red')
+         panel.xyplot(x, y, ...)
+         xy.median <- (aggregate(y, by=list(x), FUN=median, na.rm = TRUE))
+         xy.quantile <- aggregate(y, by=list(x), FUN=function(d){quantile(d, c(0.05, 0.5, 0.95), na.rm = TRUE)})
+         panel.points( xy.median[,1], xy.median[,2], pch=16, cex=0.5)
+         # print((xy.quantile[,2])[,3])
+         panel.points( xy.quantile[,1],(xy.quantile[,2])[,1], pch='-')
+         panel.points( xy.quantile[,1],(xy.quantile[,2])[,3], pch='-')
+       },
+       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
+       scales=list(x=list(at=c(1,5,10,15,20,25,30)),
+                   y=list(at=c(0, 10,20,30,40,50))),
+       pch=16,
+       col=rgb(0.5, 0.5, 0.5, alpha = 0.01),
+       layout = c(4, 1),
        ylim = c(0, 50),
        xlab= 'Number of flycodes',
        ylab ='CV [%]'

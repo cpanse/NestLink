@@ -293,6 +293,27 @@ ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) +
 ```
 
 
+
+```{r AAFreqPercent, fig.retina=3, fig.path='Figs/'}
+ggplot(data=AAfreq[AAfreq$cond != 'WU', ], aes(x=AA, y=freq, fill=cond)) + 
+  geom_bar(stat="identity", position="dodge") + 
+  labs(title = "Amino acid frequency plot [%]") +
+  theme_light()
+```
+
+
+
+```{r FCAAfreqAbsolut, fig.retina=3, fig.path='Figs/'}
+FCfreq <- data.frame(table(unlist(strsplit(substr(FC$peptide, 3, 9), ""))))
+colnames(FCfreq) <- c('AA', 'freq')
+
+ggplot(data=FCfreq, aes(x=AA, y=freq)) + 
+  geom_bar(stat="identity", position="dodge") + 
+  labs(title = "Amino acid frequency plot") +
+  theme_light()
+```
+
+
 ```{r fig.retina=3}
 ggplot(data=AAfreq.post, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
