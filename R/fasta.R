@@ -1,10 +1,6 @@
 #R
 
 
-FF <- c('~/__projects/2018/20181030-p1875/NL7-1.extendedFrags_uniqNB2FC.txt', 
-        '~/__projects/2018/20181030-p1875/NL7-2.extendedFrags_uniqNB2FC.txt')
-
-
 
 #' write FASTA
 #'
