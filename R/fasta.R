@@ -13,8 +13,9 @@ FF <- c('~/__projects/2018/20181030-p1875/NL7-1.extendedFrags_uniqNB2FC.txt',
 #' @param ... 
 #'
 #' @return
-#' @export
+#' @export 
 #'
+#' @author Lennart Opitz, Christian Panse 2018
 #' @examples
 #' \dontrun{
 #' FF <- c('~/__projects/2018/20181030-p1875/NL7-1.extendedFrags_uniqNB2FC.txt', 
