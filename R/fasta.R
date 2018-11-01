@@ -22,5 +22,5 @@
 #' }
 xxx.as.fasta <- function(x, file = tempfile(fileext=".fasta"), ...){
   idx<-1:nrow(x)
-  sprintf(">NB%04d_NL7Idx1 FC%d %s\n%s\n", idx, X$FlycodeCount[idx], X$NB[idx], gsub(",", "", X$AssociatedFlycodes[idx]))
+  sprintf(">NB%04d_NL7Idx1 FC%d %s\n%s\n", idx, x$FlycodeCount[idx], x$NB[idx], gsub(",", "", x$AssociatedFlycodes[idx]))
 }
