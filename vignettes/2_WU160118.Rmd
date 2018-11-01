@@ -127,6 +127,7 @@ filtering
 
 ```{r}
 PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+
 idx <- grepl(PATTERN, WU$pep_seq)
 WU <- WU[idx & WU$pep_score > 25,]
 ```
@@ -217,7 +218,6 @@ head(FC)
 
 ## AA design frequency
 
-
 ```{r}
 aa_pool_x7 <- c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1),
   rep('Q', 1), rep('D', 11),  rep('E', 11), rep('V', 12), rep('L', 2),
@@ -230,19 +230,19 @@ aa_pool_x7.post <- c(rep('WR', 20),  rep('WLTVR', 20), rep('WQEGGR', 20),
 
 ```{r}
 FC.pep_seq.freq <- table(unlist(strsplit(substr(FC$peptide, 3, 9), "")))
-FC.freq <- round(FC.pep_seq.freq / sum(FC.pep_seq.freq) * 100)
+FC.freq <- round(FC.pep_seq.freq / sum(FC.pep_seq.freq) * 100, 3)
 
 
 FC.pep_seq.freq.post <- table(unlist((substr(FC$peptide, 10, 100))))
-FC.freq.post <- round(FC.pep_seq.freq.post / sum(FC.pep_seq.freq.post) * 100)
+FC.freq.post <- round(FC.pep_seq.freq.post / sum(FC.pep_seq.freq.post) * 100, 3)
 
 
 WU.pep_seq.freq <- table(unlist(strsplit(substr(WU$pep_seq, 3, 9), "")))
-WU.freq <- round(WU.pep_seq.freq / sum(WU.pep_seq.freq) * 100)
+WU.freq <- round(WU.pep_seq.freq / sum(WU.pep_seq.freq) * 100,3)
 
 
 WU.pep_seq.freq.post <- table(unlist(substr(WU$pep_seq, 10, 100)))
-WU.freq.post <- round(WU.pep_seq.freq.post / sum(WU.pep_seq.freq.post) *100)
+WU.freq.post <- round(WU.pep_seq.freq.post / sum(WU.pep_seq.freq.post) *100,3)
 ```
 
 ```{r}
@@ -265,7 +265,27 @@ AAfreq3 <- data.frame(aa=WU.freq)
 names(AAfreq3) <- c('AA', 'freq')
 AAfreq3$cond <- "WU"
 
-AAfreq <- do.call('rbind', list(AAfreq1, AAfreq2, AAfreq3))
+FC.all <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"),
+                 header = TRUE)
+PATTERN.all <- "^GS[A-Z]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+FC.all <- as.character(FC.all$peptide)[grep(PATTERN.all, as.character(FC.all$peptide))]
+
+FC.all.pep_seq.freq <- table(unlist(strsplit(substr(FC.all, 3, 9), "")))
+FC.all.freq <- round(FC.all.pep_seq.freq / sum(FC.all.pep_seq.freq) * 100, 3)
+AAfreq4 <- data.frame(aa=FC.all.freq)
+AAfreq4[20,] <- c('R', 0)
+names(AAfreq4) <- c('AA', 'freq')
+AAfreq4$cond <- "allX7.db10.fasta"
+
+AAfreq <- do.call('rbind', list(AAfreq1, AAfreq2, AAfreq3, AAfreq4))
+AAfreq$freq <- as.numeric(AAfreq$freq)
+```
+
+```{r fig.retina=3}
+ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) + 
+  geom_bar(stat="identity", position="dodge") + 
+  labs(title = "amino acid frequency plot") +
+  theme_light()
 ```
 
 ```{r}
@@ -282,20 +302,13 @@ names(AAfreq3.post) <- c('AA', 'freq')
 AAfreq3.post$cond <- "WU"
 
 AAfreq.post <- do.call('rbind', list(AAfreq1.post, AAfreq2.post, AAfreq3.post))
-
 ```
-
-```{r fig.retina=3}
-ggplot(data=AAfreq, aes(x=AA, y=freq, fill=cond)) + 
-  geom_bar(stat="identity", position="dodge") + 
-  labs(title = "amino acid frequency plot") +
-  theme_light()
-```
-
 
 
 ```{r NestLink_AAFreqPercent, fig.retina=3, fig.path='Figs/'}
-ggplot(data=AAfreq[AAfreq$cond != 'WU', ], aes(x=AA, y=freq, fill=cond)) + 
+df<-AAfreq[(AAfreq$cond != 'WU' & AAfreq$cond != 'db10.fasta'), ]
+df$freq<- as.numeric(df$freq)
+ggplot(data=df, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
   labs(title = "Amino acid frequency plot [%]") +
   theme_light()
