@@ -255,7 +255,12 @@ WU.freq
 ```{r}
 AAfreq1 <- data.frame(aa = table(aa_pool_x7))
 names(AAfreq1) <- c('AA', 'freq')
-AAfreq1$cond <- 'aa_pool_x7'
+
+AAfreq1 <-rbind(AAfreq1, df<-data.frame(AA=c('C','H','I','M','K','R'), freq=rep(0,6)))
+
+AAfreq1$cond <- 'theoretical frequency'
+
+
 
 AAfreq2 <- data.frame(aa=FC.freq)
 names(AAfreq2) <- c('AA', 'freq')
@@ -272,10 +277,11 @@ FC.all <- as.character(FC.all$peptide)[grep(PATTERN.all, as.character(FC.all$pep
 
 FC.all.pep_seq.freq <- table(unlist(strsplit(substr(FC.all, 3, 9), "")))
 FC.all.freq <- round(FC.all.pep_seq.freq / sum(FC.all.pep_seq.freq) * 100, 3)
-AAfreq4 <- data.frame(aa=FC.all.freq)
-AAfreq4[20,] <- c('R', 0)
-names(AAfreq4) <- c('AA', 'freq')
-AAfreq4$cond <- "allX7.db10.fasta"
+FC.all.freq[20] <- 0
+names(FC.all.freq) <- c(names(FC.all.freq)[1:19], "K")
+AAfreq4 <- data.frame(AA=names(FC.all.freq), freq=as.numeric(FC.all.freq))
+
+AAfreq4$cond <- "sequenced frequency"
 
 AAfreq <- do.call('rbind', list(AAfreq1, AAfreq2, AAfreq3, AAfreq4))
 AAfreq$freq <- as.numeric(AAfreq$freq)
@@ -310,7 +316,8 @@ df<-AAfreq[(AAfreq$cond != 'WU' & AAfreq$cond != 'db10.fasta'), ]
 df$freq<- as.numeric(df$freq)
 ggplot(data=df, aes(x=AA, y=freq, fill=cond)) + 
   geom_bar(stat="identity", position="dodge") + 
-  labs(title = "Amino acid frequency plot [%]") +
+  labs(title = "Amino acid frequency plot") +
+  ylab("Frequency [%]") +
   theme_light()
 ```
 
