@@ -8,11 +8,11 @@
 \url{https://fgcz-bfabric.uzh.ch}
 \itemize{ 
 \item{Workunit : 158716 - QEXACTIVEHF_1
-	20170919_16_62465_nl5idx1-3_6titratecoli.raw
-	20170919_05_62465_nl5idx1-3_6titratecoli.raw}
+ 20170919_16_62465_nl5idx1-3_6titratecoli.raw
+ 20170919_05_62465_nl5idx1-3_6titratecoli.raw}
 \item{Workunit : 158717 - QEXACTIVEHF_1
-	20170919_14_62466_nl5idx1-3_7titratesmeg.raw
-	20170919_09_62466_nl5idx1-3_7titratesmeg.raw}}
+ 20170919_14_62466_nl5idx1-3_7titratesmeg.raw
+ 20170919_09_62466_nl5idx1-3_7titratesmeg.raw}}
 }
 \description{
 PGexport results
