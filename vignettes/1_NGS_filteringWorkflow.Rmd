@@ -56,15 +56,21 @@ param[['minFlycodeLength']] <- 33
 param[['FCminFreq']] <- 1
 ```
 
-#Run NGS Workflow
+# Run NGS Workflow
+
 ```{r workflow_chunk4}
-uniqNB2FC <- runNGSAnalysis(file = expFile[1], param)
+NB2FC <- runNGSAnalysis(file = expFile[1], param)
 ```
 
-#Create Input Fasta File for Proteomics Analysis
+# Create Input Fasta File for Proteomics Analysis
+
 ```{r workflow_chunk5}
-head(uniqNB2FC)
-sampleName <- sub('.fastq.gz', '', basename(expFile[1]))
-cat(uniqNB2FC.as.fasta(uniqNB2FC), file = paste0(sampleName, '.fasta'))
-head(uniqNB2FC)
+head(NB2FC,2)
+#sampleName <- sub('.fastq.gz', '', basename(expFile[1]))
+#cat(uniqNB2FC.as.fasta(uniqNB2FC), file = paste0(sampleName, '.fasta'))
+#head(uniqNB2FC)
+```
+
+```{r workflow_chunk6}
+head(nanobodyFlycodeLinking.as.fasta(NB2FC))
 ```
