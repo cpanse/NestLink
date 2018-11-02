@@ -58,12 +58,13 @@ param[['FCminFreq']] <- 1
 
 #Run NGS Workflow
 ```{r workflow_chunk4}
-runNGSAnalysis(file = expFile[1], param)
+uniqNB2FC <- runNGSAnalysis(file = expFile[1], param)
 ```
 
 #Create Input Fasta File for Proteomics Analysis
 ```{r workflow_chunk5}
-sampleName <- sub('.fastq.gz$', '', basename(expFile[1]))
-uniqNB2FC <- read.table(paste0(sampleName, 'uniqNB2FC.txt'), header = T, sep = '\t')
-cat(xxx.as.fasta(uniqNB2FC), file = paste0(sampleName, '.fasta'))
+head(uniqNB2FC)
+sampleName <- sub('.fastq.gz', '', basename(expFile[1]))
+cat(uniqNB2FC.as.fasta(uniqNB2FC), file = paste0(sampleName, '.fasta'))
+head(uniqNB2FC)
 ```

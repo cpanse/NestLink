@@ -12,7 +12,7 @@ runNGSAnalysis(file, param)
 \item{param}{- list of input parameters}
 }
 \value{
-character
+uniqNB2FC dataframe
 }
 \description{
 run NGS workflow

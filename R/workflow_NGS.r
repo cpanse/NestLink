@@ -1,7 +1,7 @@
 #' run NGS workflow
 #' @param file - sequence file path 
 #' @param param - list of input parameters
-#' @return character
+#' @return uniqNB2FC dataframe
 #' @export runNGSAnalysis
 #' @import ShortRead
 #' @import Biostrings
@@ -217,5 +217,5 @@ runNGSAnalysis <- function(file, param){
   write.table(uniqFC_Summary,basename(sub('.fastq.gz','_uniqFC2NB.txt',file)),
               sep = '\t', row.names = FALSE, quote = FALSE)
   message('...done')
-  return('success')
+  return(uniqNB_Summary)
 }
