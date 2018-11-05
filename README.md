@@ -37,7 +37,7 @@ install_github('cpanse/NestLink', build_vignettes = TRUE)
 
 alternative code snippets in case the line above fails.
 ```{r}
-https://git.bioconductor.org/packages/specL
+# https://git.bioconductor.org/packages/specL
 #
 source("https://bioconductor.org/biocLite.R")
 biocLite("specL")
