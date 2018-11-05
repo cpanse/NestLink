@@ -35,6 +35,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("specL", version = "3.8")
 BiocManager::install("ShortRead", version = "3.8")
+BiocManager::install("GenomeInfoDb", version = "3.8")
 
 install.package('devtools')
 library(devtools)
