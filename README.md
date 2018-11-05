@@ -7,7 +7,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 
 ### Software dependencies
-- install R (> 3.4.0)
+- install R (> 3.5.1)
 
 - pandoc (for exporting markdown files to other formats).
 
@@ -15,7 +15,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - install required R packages
 
-**Whatsoever for a clean install, I recommend using the current R version 3.5 and the current Bioconductor 3.7.**
+**Whatsoever for a clean install, I recommend using the current R version 3.5.1 and the current Bioconductor 3.8.**
 
 ### Versions the software has been tested on
 
