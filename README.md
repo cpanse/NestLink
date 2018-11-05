@@ -35,6 +35,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("specL", version = "3.8")
 
+install.package('devtools')
 library(devtools)
 install_github('cpanse/NestLink', build_vignettes = TRUE)
 ```
