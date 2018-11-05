@@ -31,21 +31,15 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 run an R session and execute the following R code snippet
 
 ```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("specL", version = "3.8")
+
 library(devtools)
 install_github('cpanse/NestLink', build_vignettes = TRUE)
 ```
 
-alternative code snippets in case the line above fails.
-```{r}
-# https://git.bioconductor.org/packages/specL
-#
-source("https://bioconductor.org/biocLite.R")
-biocLite("specL")
-biocLite("BiocStyle")
-#
-install_git('https://git.bioconductor.org/packages/specL')
 
-```
 
 **Typical install time** - 
 Expect an hour to get all the R packages (BioConductor) running. 
