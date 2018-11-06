@@ -7,7 +7,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 
 ### Software dependencies
-- install R (> 3.4.0)
+- install R (> 3.5.1)
 
 - pandoc (for exporting markdown files to other formats).
 
@@ -15,7 +15,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - install required R packages
 
-**Whatsoever for a clean install, I recommend using the current R version 3.5 and the current Bioconductor 3.7.**
+**Whatsoever for a clean install, I recommend using the current R version 3.5.1 and the current Bioconductor 3.8.**
 
 ### Versions the software has been tested on
 
@@ -31,21 +31,18 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 run an R session and execute the following R code snippet
 
 ```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("specL", version = "3.8")
+BiocManager::install("ShortRead", version = "3.8")
+BiocManager::install("GenomeInfoDb", version = "3.8")
+
+install.package('devtools')
 library(devtools)
 install_github('cpanse/NestLink', build_vignettes = TRUE)
 ```
 
-alternative code snippets in case the line above fails.
-```{r}
-https://git.bioconductor.org/packages/specL
-#
-source("https://bioconductor.org/biocLite.R")
-biocLite("specL")
-biocLite("BiocStyle")
-#
-install_git('https://git.bioconductor.org/packages/specL')
 
-```
 
 **Typical install time** - 
 Expect an hour to get all the R packages (BioConductor) running. 
