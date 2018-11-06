@@ -6,6 +6,8 @@ author:
   email: lennart.opitz@fgcz.ethz.ch
 package: NestLink
 date: '2018-08-29'
+bibliography:
+  - NestLink.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{1. NGS filtering workflow to get high quality FlyCode and Nanobody sequences}
@@ -17,37 +19,47 @@ output: BiocStyle::html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Load Package
+The following content is descibed in more detail in @NestLink, secton XXX (under review  NMETH-A35040).
+
+# Load Package
 ```{r workflow_chunk0, message=FALSE}
 library(NestLink)
 ```
 
-#Define Input & Output-Folder
-```{r workflow_chunk1}
+# Define Input & Output-Folder
+
+```{r define.input.output}
 dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
 expFile <- list.files(dataFolder,pattern='*.fastq.gz', full.names = TRUE)
 scratchFolder <- tempdir()
 setwd(scratchFolder)
 ```
 
-#Load known NanoBodies for QC Checks
+# Load known NanoBodies (NB) for QC Checks
 ```{r workflow_chunk2}
-knownNB_File <- list.files(dataFolder, pattern='knownNB.txt', full.names = TRUE)
-knownNB_data <- read.table(knownNB_File, sep='\t', header = TRUE, row.names = 1, stringsAsFactors = FALSE)
+knownNB_File <- list.files(dataFolder,
+      pattern='knownNB.txt', full.names = TRUE)
+knownNB_data <- read.table(knownNB_File, sep='\t',
+      header = TRUE, row.names = 1, stringsAsFactors = FALSE)
+
 knownNB <- Biostrings::translate(DNAStringSet(knownNB_data$Sequence))
 names(knownNB) <- rownames(knownNB_data)
 knownNB <- sapply(knownNB, toString)
 ```
 
-#Set Example Parameters
-```{r workflow_chunk3}
+# Set Example Parameters
+
+TODO: what is meant by the parameter
+
+For demons
+```{r setupParameter}
 param <- list()
 param[['NB_Linker1']] <- "GGCCggcggGGCC"
 param[['NB_Linker2']] <- "GCAGGAGGA"
 param[['ProteaseSite']] <- "TTAGTCCCAAGA"
 param[['FC_Linker']] <- "GGCCaaggaggcCGG"
 param[['knownNB']] <- knownNB
-param[['nReads']] <- 10000 
+param[['nReads']] <- 100
 param[['minRelBestHitFreq']] <- 0.8 
 param[['minConsensusScore']] <- 0.9
 param[['maxMismatch']] <- 1
@@ -58,19 +70,26 @@ param[['FCminFreq']] <- 1
 
 # Run NGS Workflow
 
-```{r workflow_chunk4}
-NB2FC <- runNGSAnalysis(file = expFile[1], param)
+- read FASTQ
+- filter
+- extract
+- translate into AA sequences
+
+```{r filterExtractTranslateSequences, message=FALSE}
+system.time(NB2FC <- runNGSAnalysis(file = expFile[1], param))
 ```
 
-# Create Input Fasta File for Proteomics Analysis
+# Create Input FASTA File for Proteomics Analysis
 
-```{r workflow_chunk5}
+```{r sanityCheck.NB.FC.linkage}
 head(NB2FC,2)
 #sampleName <- sub('.fastq.gz', '', basename(expFile[1]))
 #cat(uniqNB2FC.as.fasta(uniqNB2FC), file = paste0(sampleName, '.fasta'))
 #head(uniqNB2FC)
 ```
 
-```{r workflow_chunk6}
+```{r write.AA.FASTA}
 head(nanobodyFlycodeLinking.as.fasta(NB2FC))
 ```
+
+#References

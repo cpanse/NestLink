@@ -217,6 +217,6 @@ runNGSAnalysis <- function(file, param){
   write.table(uniqFC_Summary,basename(sub('.fastq.gz','_uniqFC2NB.txt',file)),
               sep = '\t', row.names = FALSE, quote = FALSE)
   message('...done')
-  class(uniqNB_Summary) <- c(class(uniqNB_Summary), "nbSummary")
+  class(uniqNB_Summary) <- c(class(uniqNB_Summary), "nanobodyFlycodeLinking")
   return(uniqNB_Summary)
 }
