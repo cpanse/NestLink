@@ -43,7 +43,7 @@ Description: Provides next-generation sequencing (NGS) and mass spectrometry (MS
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, shiny, testthat, specL
+Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, shiny, testthat, specL, lattice, scales
 NeedsCompilation: no
 biocViews: ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.1.0
