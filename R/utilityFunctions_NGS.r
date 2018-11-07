@@ -1,10 +1,10 @@
 #' filter input sequences for two patterns
 #'
-#' @param reads 
-#' @param leftPattern 
-#' @param rightPattern 
-#' @param maxMismatch 
-#' @param prevPatternPos 
+#' @param reads input sequences 
+#' @param leftPattern left pattern motive.
+#' @param rightPattern right pattern motive.
+#' @param maxMismatch maximal number of miss matches.
+#' @param prevPatternPos prev pattern posiotion; default is set to NULL.
 #' @examples
 #' reads <- DNAStringSet(c('ACTGGGTTT','ACCCTGGGTTT'))
 #' leftPattern <- 'CT'

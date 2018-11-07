@@ -273,12 +273,6 @@ NestLink_absolute_flycode_simulation <- xyplot(cv ~ nFCAccession |  ConcGr,
        data = S.rep,
        panel = function(x,y,...){
          panel.abline(h=c(10, 50), col='red')
-         #panel.xyplot(x,y,...)
-         #xy.median <- (aggregate(y, by=list(x), FUN=median, na.rm = T))
-         #panel.points( xy.median[,1], xy.median[,2], pch=16)
-         #panel.abline(v=1)
-         #panel.xyplot(x,y,...)
-         #panel.loess(x,y)
          panel.xyplot(x, y, ...)
          xy.median <- (aggregate(y, by=list(x), FUN=median, na.rm = TRUE))
          xy.quantile <- aggregate(y, by=list(x), FUN=function(d){quantile(d, c(0.05, 0.5, 0.95), na.rm = TRUE)})
@@ -458,8 +452,8 @@ xyplot(ratios ~ Accession |  ConcGr,
        panel =function(x,y, ...){
          panel.abline(h=mean(y), col='red')
           panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
-          xy.mean <- (aggregate(y, by=list(x), FUN=mean, na.rm = T))
-           xy.sd <- (aggregate(y, by=list(x), FUN=sd, na.rm = T))
+          xy.mean <- (aggregate(y, by=list(x), FUN=mean, na.rm = TRUE))
+           xy.sd <- (aggregate(y, by=list(x), FUN=sd, na.rm = TRUE))
           panel.points( xy.mean[,1], xy.mean[,2])
           panel.points( xy.mean[,1], xy.mean[,2] + xy.sd[,2] , pch='-', col='red', cex=4)
            panel.points( xy.mean[,1], xy.mean[,2] - xy.sd[,2] , pch='-', col='red', cex=4)},
@@ -476,8 +470,8 @@ xyplot(ratios ~ Accession |  ConcGr,
        panel = function(x,y, ...){
          panel.abline(h=mean(y), col='red')
           panel.xyplot(x,y, pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.5))
-          xy.mean <- (aggregate(y, by=list(x), FUN=mean, na.rm = T))
-           xy.sd <- (aggregate(y, by=list(x), FUN=sd, na.rm = T))
+          xy.mean <- (aggregate(y, by=list(x), FUN=mean, na.rm = TRUE))
+           xy.sd <- (aggregate(y, by=list(x), FUN=sd, na.rm = TRUE))
           panel.points( xy.mean[,1], xy.mean[,2])
           panel.points( xy.mean[,1], xy.mean[,2] + xy.sd[,2] , pch='-', col='red', cex=4)
            panel.points( xy.mean[,1], xy.mean[,2] - xy.sd[,2] , pch='-', col='red', cex=4)
