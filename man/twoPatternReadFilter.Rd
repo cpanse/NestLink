@@ -8,15 +8,15 @@ twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
   prevPatternPos = NULL)
 }
 \arguments{
-\item{reads}{}
+\item{reads}{input sequences}
 
-\item{leftPattern}{}
+\item{leftPattern}{left pattern motive.}
 
-\item{rightPattern}{}
+\item{rightPattern}{right pattern motive.}
 
-\item{maxMismatch}{}
+\item{maxMismatch}{maximal number of miss matches.}
 
-\item{prevPatternPos}{}
+\item{prevPatternPos}{prev pattern posiotion; default is set to NULL.}
 }
 \value{
 list object
