@@ -13,10 +13,6 @@ output:
   BiocStyle::html_document
 abstract: |
   Description of your vignette
-vignette: |
-  %\VignetteIndexEntry{5. FlyCode Lable-Free-Quantification based analysis}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 # Getting started

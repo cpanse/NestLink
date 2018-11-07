@@ -6,6 +6,8 @@ author:
   email: cp@fgcz.ethz.ch
 - name: Bernd Roschitzki
   affiliation: Functional Genomics Center Zurich
+bibliography:
+  - NestLink.bib
 package: NestLink
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
 vignette: |
@@ -26,8 +28,6 @@ output:
 ```{r}
 library(NestLink)
 stopifnot(require(specL))
-
-# browseVignettes("specL")
 ```
 
 # Input Pool Frequency

@@ -1,5 +1,5 @@
 ---
-title: "5. Control experiment to assess robustness of protein detection via flycodes (Supplementary Note 1)"
+title: "Control experiment to assess robustness of protein detection via flycodes"
 author:
 - name: Pascal Egloff
   affiliation: Institute of Medical Microbiology, University of Zurich
@@ -11,10 +11,12 @@ author:
 date: '2018-09-18, 2018-09-22, 2018-09-27, 2018-09-28, 2018-10-02, 2018-10-03'
 output:
   BiocStyle::html_document
+bibliography:
+  - NestLink.bib
 abstract: |
-  Description of your vignette
+  The following content was used for to compile the *Supplementary Note 1* in @NestLink (under review  NMETH-A35040).
 vignette: |
-  %\VignetteIndexEntry{5. Control experiment to assess robustness of protein detection via flycodes}
+  %\VignetteIndexEntry{4. Control experiment to assess robustness of protein detection via flycodes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -33,7 +35,7 @@ trellis.par.set("strip.background",t)
 ```
 
 ```{r}
-n.simulation <- 1000
+n.simulation <- 10
 filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
                         package = "NestLink")
 P <- read.csv(filename,
@@ -793,4 +795,5 @@ sessionInfo()
 ```
 
 
+#References
 
