@@ -4,6 +4,7 @@
 ^.*Dockerfile$
 ^.*.travis.yml$
 ^.*inst/R/.*$
+^.*inst/R.*
 ^.*LICENSE$
 ^.*R/supplements.R$
 ^.*vignettes/5_lfq_log2ratio.Rmd$
