@@ -2,7 +2,8 @@
 title: "Compare Predicted and Measured FlyCodes (F255744)"
 author: "Christian Panse"
 date: "2017-10-30"
-
+bibliography:
+  - NestLink.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{3. Compare Predicted and Measured FlyCodes (F255744).}
@@ -56,3 +57,6 @@ document was compiled:
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
+
+# References
+

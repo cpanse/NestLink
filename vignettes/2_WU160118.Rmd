@@ -70,6 +70,7 @@ The data ships with the NestLink package and can be found here: `system.file("ex
 
 ```{r message=FALSE}
 library(NestLink)
+
 stopifnot(packageVersion('NestLink') >= '0.99.15')
 ```
 
@@ -150,6 +151,7 @@ round(100 * (table(WU$chargeInt) / nrow(WU)), 1)
 as histograms 
 
 ```{r fig.retina=3, fig.height=8}
+library(scales)
 ggplot(WU, aes(x = moverz * chargeInt, fill = (query_charge),
                colour = (query_charge))) +
     facet_wrap(~ datfilename, ncol = 2) +
@@ -160,7 +162,7 @@ ggplot(WU, aes(x = moverz * chargeInt, fill = (query_charge),
       y = "Frequency [counts]",
       fill = "Charge State",
       colour = "Charge State") +
-    scale_x_continuous(breaks = scales::pretty_breaks(8)) +
+    scale_x_continuous(breaks = pretty_breaks(8)) +
     theme_light()
 ```
 

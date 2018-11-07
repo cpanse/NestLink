@@ -25,6 +25,9 @@ output:
 
 
 
+The following content is descibed in more detail in @NestLink (under review  NMETH-A35040).
+
+
 ```{r}
 library(NestLink)
 stopifnot(require(specL))

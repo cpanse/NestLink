@@ -287,6 +287,7 @@ NB.unique <- function(x){
 #' @author Christian Panse 
 #' @references \url{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118}
 #' @keywords data
+#' @import scales
 #' @examples 
 #' data(WU160118)
 #' class(WU160118)
