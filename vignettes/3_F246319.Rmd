@@ -11,6 +11,8 @@ output:
   BiocStyle::html_document
 ---
 
+The following content is descibed in more detail in @NestLink (under review  NMETH-A35040).
+
 
 # Retention Time(RT) versus SSRC
 
