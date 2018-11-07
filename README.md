@@ -41,13 +41,13 @@ library(devtools)
 install_github('cpanse/NestLink', build_vignettes = TRUE)
 ```
 
-
-
 **Typical install time** - 
 Expect an hour to get all the R packages (BioConductor) running. 
 If all dependencies are installed 
 `install_github('cpanse/NestLink', build_vignettes = TRUE)` requires 1m47.014s 
 on a Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz running Debian Linux.
+
+As alternative you can also consider the latest [release](https://github.com/cpanse/NestLink/releases).
 
 ## 3. Demonstration / Documentation
 
@@ -58,7 +58,16 @@ vignettes.
 browseVignettes('NestLink')
 ```
 
-Expected run time for the vignette build is 1 minute on a today's desktop computer.
+please study the vignettes in the following order:
+
+0. Derive Peptide FlyCodes by Conducting Random Experiment  
+1. NGS filtering workflow to get high quality FlyCode and Nanobody sequences  
+2. FASTA p1875 db10 - ESP / SSRC prediction - Summary 
+3. Compare Predicted and Measured FlyCodes (F255744).  
+4. Control experiment to assess robustness of protein detection via flycodes 
+
+
+Expected run time for the vignette build is less than 5 minutes on a today's desktop computer.
 
 ## 4. Instructions for use
 

@@ -163,7 +163,7 @@ runNGSAnalysis <- function(file, param){
   stats <- c(stats, FC_consensusFiltering = length(keepFCs))
   
   FC_faFile = file.path(basename(sub('.fastq.gz', '_uniqFC.fasta', file)))
-  writeXStringSet(mySeqAS_CS[['seqAS_FC']][keepFCs], file = FC_faFile) 
+  # writeXStringSet(mySeqAS_CS[['seqAS_FC']][keepFCs], file = FC_faFile) 
   
   stats <- c(stats, uniqNB = length(unique(bigTable[['NanoBody']])))
   stats <- data.frame(Category=names(stats),stats,stringsAsFactors = FALSE)
