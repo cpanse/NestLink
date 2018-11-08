@@ -8,7 +8,7 @@ author:
   affiliation: Functional Genomics Center Zurich
   email: cp@fgcz.ethz.ch
 package: NestLink
-date: '2018-08-29', '2018-11-08'
+date: '2018-08-29, 2018-11-08'
 bibliography:
   - NestLink.bib
 vignette: >
