@@ -13,6 +13,8 @@ output:
   BiocStyle::html_document
 abstract: |
   This vignette contains code snippets to display results of the NestLink project (p1875).
+  in particular, it analyzes the amno acid frequencies of the in-silico composed and
+  measured flycodes.
 vignette: |
   %\VignetteIndexEntry{2. FASTA p1875 db10 - ESP / SSRC prediction - Summary}
   %\VignetteEngine{knitr::rmarkdown}
@@ -24,8 +26,6 @@ date: '2017-11-02, 2017-11-03, 2017-11-04, 2017-11-06, 2017-11-08, 2018-01-30, 2
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-The following content is descibed in more detail in @NestLink (under review  NMETH-A35040).
 
 # Results Sources 
 

@@ -14,7 +14,7 @@ output:
 bibliography:
   - NestLink.bib
 abstract: |
-  The following content was used for to compile the *Supplementary Note 1* in @NestLink (under review  NMETH-A35040).
+  The following content was used to compile the *Supplementary Note 1* in @NestLink (under review  NMETH-A35040) to demonstrate the robustness of protein detection via flycodes.
 vignette: |
   %\VignetteIndexEntry{4. Control experiment to assess robustness of protein detection via flycodes}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,7 +23,7 @@ vignette: |
 
 # Getting started
 
-```{r echo=FALSE}
+```{r echo=TRUE,message=FALSE, warning=FALSE}
 library(lattice)
 library(knitr)
 library(parallel)
