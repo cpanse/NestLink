@@ -8,6 +8,11 @@ author:
   affiliation: Functional Genomics Center Zurich
 bibliography:
   - NestLink.bib
+abstract: |
+  this is a preliminary in-silico experiment to analyze the
+  detectability of a proposed flycode family. it considers
+  the mass range, hydrophobicity and the cycle time of a
+  mass spec device.
 package: NestLink
 date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
 vignette: |
@@ -18,17 +23,14 @@ output:
   BiocStyle::html_document
 ---
 
-
 <script type="text/javascript"
   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-
-
 The following content is descibed in more detail in @NestLink (under review  NMETH-A35040).
 
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(NestLink)
 stopifnot(require(specL))
 ```
@@ -37,23 +39,16 @@ stopifnot(require(specL))
 
 ```{r}
 aa_pool_x8 <- c(rep('A', 12), rep('S', 0), rep('T', 12), rep('N', 12),
-                rep('Q', 12), rep('D', 8), 
-              rep('E', 0), rep('V', 12), rep('L', 0), rep('F', 0), rep('Y', 8),
-              rep('W', 0), 
-              rep('G', 12), rep('P', 12))
-
+    rep('Q', 12), rep('D', 8),  rep('E', 0), rep('V', 12), rep('L', 0),
+    rep('F', 0), rep('Y', 8), rep('W', 0), rep('G', 12), rep('P', 12))
 
 aa_pool_1_2_9_10 <- c(rep('A', 8), rep('S', 7), rep('T', 7), rep('N', 6),
-                      rep('Q', 6), rep('D', 8), 
-                      rep('E', 8), rep('V', 9), rep('L', 6), rep('F', 5),
-                      rep('Y', 9), rep('W', 6), 
-                      rep('G', 15), rep('P', 0))
+    rep('Q', 6), rep('D', 8), rep('E', 8), rep('V', 9), rep('L', 6),
+    rep('F', 5), rep('Y', 9), rep('W', 6),  rep('G', 15), rep('P', 0))
 
 aa_pool_3_8 <- c(rep('A', 5), rep('S', 4), rep('T', 5), rep('N', 2),
-                 rep('Q', 2), rep('D', 8), 
-                 rep('E', 8), rep('V', 7), rep('L', 5), rep('F', 4),
-                 rep('Y', 6), rep('W', 4), 
-                 rep('G', 12), rep('P', 28))
+    rep('Q', 2), rep('D', 8), rep('E', 8), rep('V', 7), rep('L', 5),
+    rep('F', 4), rep('Y', 6), rep('W', 4),  rep('G', 12), rep('P', 28))
 
 ```
 
@@ -121,7 +116,8 @@ hist(pim.GPGx8cTerm, breaks=pim.breaks, probability = TRUE,
 hist(pim.GPx10R, breaks=pim.breaks,
      probability = TRUE, add=TRUE, col='#11AA1188')
 abline(v=pim.iRT, col='grey')
-legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),  fill=c('#1111AAAA', '#11AA1133', 'grey'))
+legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'), 
+     fill=c('#1111AAAA', '#11AA1133', 'grey'))
 ``` 
 
 # Hydrophobicity
@@ -129,7 +125,8 @@ legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),  fill=c('#1111AAAA', '#11AA1
 ## Compute Hydrophobicity value using SSRC 
 
 the `ssrc` model is an implementation of  
-[@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601)
+[@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601),
+[@pmid25712692](http://bioconductor.org/packages/specL/)
 
 just apply ssrc to a real world LC-MS run
 ```{r fig.retina=3}
@@ -210,8 +207,8 @@ table(table(unlist(lapply(peptides.GPx10R,
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
 ```
 
-
-```{r fig.width=10, fig.height=10, fig.retina=3}
+the plots graph a LC-MS map.
+```{r fig.width=10, fig.height=10, fig.retina=3, echo=FALSE}
 par(mfrow=c(2, 2))
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPGx8cTerm, main='GPGx8cTerm')
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPx10R, main='GPx10R')
