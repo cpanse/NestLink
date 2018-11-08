@@ -46,7 +46,7 @@ dim(P)
 ## Clean 
 
 
-remove modificatio
+remove modifications
 ```{r}
 P <- P[P$Modifications == '', ]
 dim(P)
@@ -128,7 +128,7 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 ```
 
 
-```{r fig.retina=3}
+```{r pairs, fig.retina=3}
 rv <-lapply(unique(P$ConcGr), function(q){
 pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
@@ -166,7 +166,7 @@ FCfill2max <- function(P, n = max(table(P$Accession))){
 
 ## Plot compute CVs for each row
 
-```{r}
+```{r boxplotCV}
 P.mean <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=mean)
 P.sd <- apply(P[, c('coli1', 'coli2', 'smeg1', 'smeg2')],1, FUN=sd)
 
@@ -174,9 +174,6 @@ boxplot(100*P.sd/P.mean ~ P$ConcGr,log='y', ylab='CV%')
 ```
 
 
-```{r}
-
-```
 
 
 ```{r}
@@ -258,12 +255,12 @@ xyplot(cv ~ nFCAccession | ConcGr,
 set.seed(1)
 
 S.rep <- do.call('rbind', 
-    mclapply(1:n.simulation, function(s){
+    lapply(1:n.simulation, function(s){
        S <- do.call('rbind', 
            lapply(1:29, function(i){
                 FlycodeAbsoluteStatistics(FCrandom(P, i))
              }))
-       }, mc.cores = 8))
+       }))
 ```
 
 ## Camera ready plot of absolute flycode simulation
@@ -609,7 +606,6 @@ FlycodeRelativeStatistics <- function(X, mode='bio'){
 }
 ```
 
-
 ## Conduct the random experiment
 
 ```{r simulation2}
@@ -618,7 +614,7 @@ message(paste("Number of simulations =", n.simulation))
 set.seed(1)
 
 P.replicate <- do.call('rbind',
-  mclapply(1:n.simulation, 
+  lapply(1:n.simulation, 
     function(run){
       do.call('rbind', lapply(1:29,
         function(i) {
@@ -626,35 +622,35 @@ P.replicate <- do.call('rbind',
                                                    rv$run = run
                                                    rv
                                                  }))
-                       }, mc.cores = 8))
+                       }))
 ```
 
 ```{r}
 set.seed(1)
 
 P.replicate.smeg <- do.call('rbind',
-                       mclapply(1:n.simulation/2, function(run){
+                       lapply(1:n.simulation/2, function(run){
                          do.call('rbind', lapply(1:29,
                                                  function(i) {
                                                    rv <- FlycodeRelativeStatistics(FCrandom(P, i), mode='tech_smeg')
                                                    rv$run = run
                                                    rv
                                                  }))
-                       }, mc.cores = 8))
+                       }))
 ```
 
 ```{r}
 set.seed(1)
 
 P.replicate.coli <- do.call('rbind',
-                       mclapply(1:n.simulation/2, function(run){
+                       lapply(1:n.simulation/2, function(run){
                          do.call('rbind', lapply(1:29,
                                                  function(i) {
                                                    rv <- FlycodeRelativeStatistics(FCrandom(P, i), mode='tech_coli')
                                                    rv$run = run
                                                    rv
                                                  }))
-                       }, mc.cores = 8))
+                       }))
 
 ```
 
