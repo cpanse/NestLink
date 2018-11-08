@@ -1,7 +1,5 @@
 #R
 
-
-
 #' write FASTA
 #'
 #' @param x a \code{nanobodyFlycodeLinking} class computed by \code{\link{runNGSAnalysis}}.
@@ -21,7 +19,7 @@
 #' cat(uniqNB2FC.as.fasta(X), file=tempfile(fileext=".fasta"))
 #' }
 nanobodyFlycodeLinking.as.fasta <- function(x, ...){
-  idx <- 1:nrow(x)
+  idx <- seq(1, nrow(x))
   sprintf(">NB%04d_NL7Idx1 FC%d %s\n%s\n", idx, x$FlycodeCount[idx],
           x$NB[idx], gsub(",", "", x$AssociatedFlycodes[idx]))
 }
