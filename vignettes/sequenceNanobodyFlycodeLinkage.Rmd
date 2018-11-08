@@ -4,8 +4,11 @@ author:
 - name: Lennart Opitz
   affiliation: Functional Genomics Center Zurich
   email: lennart.opitz@fgcz.ethz.ch
+- name: Christian Panse
+  affiliation: Functional Genomics Center Zurich
+  email: cp@fgcz.ethz.ch
 package: NestLink
-date: '2018-08-29'
+date: '2018-08-29', '2018-11-08'
 bibliography:
   - NestLink.bib
 vignette: >
@@ -19,7 +22,7 @@ output: BiocStyle::html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The following content is descibed in more detail in @NestLink, secton XXX (under review  NMETH-A35040).
+The following content is descibed in more detail in @NestLink, (under review  NMETH-A35040).
 
 # Load Package
 ```{r workflow_chunk0, message=FALSE}
@@ -27,6 +30,8 @@ library(NestLink)
 ```
 
 # Define Input & Output-Folder
+
+TODO(LO): do we have a reference to the entire data set?
 
 ```{r define.input.output}
 dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
@@ -36,6 +41,7 @@ setwd(scratchFolder)
 ```
 
 # Load known NanoBodies (NB) for QC Checks
+
 ```{r workflow_chunk2}
 knownNB_File <- list.files(dataFolder,
       pattern='knownNB.txt', full.names = TRUE)
@@ -51,7 +57,6 @@ knownNB <- sapply(knownNB, toString)
 
 TODO: what is meant by the parameter
 
-For demons
 ```{r setupParameter}
 param <- list()
 param[['NB_Linker1']] <- "GGCCggcggGGCC"
@@ -75,6 +80,7 @@ param[['FCminFreq']] <- 1
 - extract
 - translate into AA sequences
 
+
 ```{r filterExtractTranslateSequences, message=FALSE}
 system.time(NB2FC <- runNGSAnalysis(file = expFile[1], param))
 ```
@@ -82,14 +88,16 @@ system.time(NB2FC <- runNGSAnalysis(file = expFile[1], param))
 # Create Input FASTA File for Proteomics Analysis
 
 ```{r sanityCheck.NB.FC.linkage}
-head(NB2FC,2)
-#sampleName <- sub('.fastq.gz', '', basename(expFile[1]))
-#cat(uniqNB2FC.as.fasta(uniqNB2FC), file = paste0(sampleName, '.fasta'))
-#head(uniqNB2FC)
+head(NB2FC, 2)
 ```
 
 ```{r write.AA.FASTA}
 head(nanobodyFlycodeLinking.as.fasta(NB2FC))
 ```
+
+To analyze the expressed Flycodes mass spectrometry is used.
+the FASTA file containing the Nanobody - Flycode linkage can be written to a file using, e.g., using `cat`.
+
+the exec directory provides alternative shell scripts using command line GNU tools and AWK.
 
 # References
