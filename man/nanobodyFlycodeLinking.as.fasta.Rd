@@ -4,10 +4,13 @@
 \alias{nanobodyFlycodeLinking.as.fasta}
 \title{write FASTA}
 \usage{
-nanobodyFlycodeLinking.as.fasta(x, ...)
+nanobodyFlycodeLinking.as.fasta(x, file = NULL, ...)
 }
 \arguments{
-\item{x}{a \code{nanobodyFlycodeLinking} class computed by \code{\link{runNGSAnalysis}}.}
+\item{x}{a \code{nanobodyFlycodeLinking} S3 object computed by
+\code{\link{runNGSAnalysis}}.}
+
+\item{file}{a filename}
 
 \item{...}{just passed}
 }
@@ -18,13 +21,10 @@ sprintf stream
 write FASTA
 }
 \examples{
-\dontrun{
-FF <- c('~/__projects/2018/20181030-p1875/NL7-1.extendedFrags_uniqNB2FC.txt', 
-'~/__projects/2018/20181030-p1875/NL7-2.extendedFrags_uniqNB2FC.txt')
-
-X <- do.call('rbind', lapply(FF, read.table, header=T, sep='\\t'))
-cat(uniqNB2FC.as.fasta(X), file=tempfile(fileext=".fasta"))
-}
+f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+load(f)
+summary(nanobodyFlycodeLinkage.sample)
+nanobodyFlycodeLinking.as.fasta(nanobodyFlycodeLinkage.sample)
 }
 \author{
 Lennart Opitz, Christian Panse 2018
