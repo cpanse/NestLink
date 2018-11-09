@@ -29,7 +29,8 @@
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015
 #' @export compose_GSx7cTerm
 compose_GSx7cTerm <- 
-  function(pool=c(rep('A', 18), rep('S', 6), rep('T', 12), rep('N', 1),
+  function(pool=c(rep('A', 18), rep('S', 6), rep('T', 12),
+    rep('N', 1),
     rep('Q', 1), rep('D', 11), rep('E', 11), rep('V', 12), 
     rep('L', 2), rep('F', 1), rep('Y', 4), rep('W', 1), 
     rep('G', 8), rep('P', 12)), 
@@ -304,12 +305,12 @@ NULL
 #' @name F255744
 #' @docType data
 #' @author Pascal Egloff \email{p.egloff@imm.uzh.ch}
-#' @references \url{http://fgcz-mascot-server.uzh.ch/mascot/cgi/master_results_2.pl?file=..%2Fdata%2F20170819%2FF255744.dat}
+#' @seealso \href{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-resource.html?id=409912}{F255744}
 #' @keywords data
 #' @examples 
 #' class(F255744)
 #' hist(F255744$RTINSECONDS)
-#' hist(F255744$RTINSECONDS[F255744$pep_score>20])
+#' hist(F255744$RTINSECONDS[F255744$pep_score > 20])
 NULL
 
 

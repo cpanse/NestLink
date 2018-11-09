@@ -12,6 +12,9 @@ class(F255744)
 hist(F255744$RTINSECONDS)
 hist(F255744$RTINSECONDS[F255744$pep_score>20])
 }
+\seealso{
+\href{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-resource.html?id=409912}{F255744}
+}
 \author{
 Pascal Egloff \email{p.egloff@imm.uzh.ch}
 }

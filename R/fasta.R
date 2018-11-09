@@ -2,28 +2,42 @@
 
 #' write FASTA
 #'
-#' @param x a \code{nanobodyFlycodeLinking} class computed by \code{\link{runNGSAnalysis}}.
-
+#' @param x a \code{nanobodyFlycodeLinking} S3 object computed by
+#' \code{\link{runNGSAnalysis}}.
+#' @param file a filename
 #' @param ... just passed
-#'
 #' @return sprintf stream
 #' @export nanobodyFlycodeLinking.as.fasta
 #'
 #' @author Lennart Opitz, Christian Panse 2018
 #' @examples
-#' \dontrun{
-#' FF <- c('~/__projects/2018/20181030-p1875/NL7-1.extendedFrags_uniqNB2FC.txt', 
-#' '~/__projects/2018/20181030-p1875/NL7-2.extendedFrags_uniqNB2FC.txt')
-#' 
-#' X <- do.call('rbind', lapply(FF, read.table, header=T, sep='\t'))
-#' cat(uniqNB2FC.as.fasta(X), file=tempfile(fileext=".fasta"))
-#' }
-nanobodyFlycodeLinking.as.fasta <- function(x, ...){
+#' f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+#' load(f)
+#' summary(nanobodyFlycodeLinkage.sample)
+#' nanobodyFlycodeLinking.as.fasta(nanobodyFlycodeLinkage.sample)
+nanobodyFlycodeLinking.as.fasta <- function(x, file=NULL, ...){
+    if (!is.nanobodyFlycodeLinking(x)){
+        warning("object is not of class nanobodyFlycodeLinking")
+    }
   idx <- seq(1, nrow(x))
-  sprintf(">NB%04d_NL7Idx1 FC%d %s\n%s\n", idx, x$FlycodeCount[idx],
-          x$NB[idx], gsub(",", "", x$AssociatedFlycodes[idx]))
+  
+  fasta <- sprintf(">NB%04d FC%d %s\n%s\n", 
+                   idx, 
+                   x$FlycodeCount[idx],
+                   x$NB[idx], 
+                   gsub(",", "", x$AssociatedFlycodes[idx]))
+  
+  if(!is.null(file)){
+      cat(fasta, file, sep = '')
+      message(paste("FASTA written to", file))
+  }else{
+    return(fasta)
+  }
 }
 
+is.nanobodyFlycodeLinking <- function(object){
+    sum(object$FlycodeCount) == sum(sapply(strsplit(object$AssociatedFlycodes, ","), length))
+}
 
 #' Object Summaries of S3 class \code{nanobodyFlycodeLinking}
 #'
@@ -31,13 +45,17 @@ nanobodyFlycodeLinking.as.fasta <- function(x, ...){
 #'
 #' @return a data.frame object
 #' @export nanobodyFlycodeLinking.summary
+#' @examples
+#' f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+#' load(f)
+#' summary(nanobodyFlycodeLinkage.sample)
 nanobodyFlycodeLinking.summary <- function(object){
-  
-  # number of NB
-  # number FC
-  # number of AAs
-  # cat(length(object))
-  # cat()
-  cat ("to be implemented.")
+  if (!is.nanobodyFlycodeLinking(object)){
+      warning("object is not of class nanobodyFlycodeLinking")
+  }
+  df<-data.frame("number.Nanobodies"=nrow(object),
+             "number.Flycodes"= sum(object$FlycodeCount),
+             "number.AminoAcids"=sum(nchar(gsub(",", "", object$AssociatedFlycodes))))
+  df
 }
 

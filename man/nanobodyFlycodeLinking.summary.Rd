@@ -15,3 +15,8 @@ a data.frame object
 \description{
 Object Summaries of S3 class \code{nanobodyFlycodeLinking}
 }
+\examples{
+f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+load(f)
+summary(nanobodyFlycodeLinkage.sample)
+}
