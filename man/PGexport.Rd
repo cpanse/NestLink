@@ -6,7 +6,7 @@
 \title{PGexport results}
 \source{
 \url{https://fgcz-bfabric.uzh.ch}
-\itemize{ 
+\itemize{
 \item{Workunit : 158716 - QEXACTIVEHF_1
  20170919_16_62465_nl5idx1-3_6titratecoli.raw
  20170919_05_62465_nl5idx1-3_6titratecoli.raw}
@@ -23,13 +23,13 @@ filename <- system.file(
   package = "NestLink")
 P <- read.csv(filename, header = TRUE, sep=';')
 P <- P[P$Modifications == '', ]
-P <- P[,c('Accession', 'Sequence', 
-"X20170919_05_62465_nl5idx1.3_6titratecoli", 
-"X20170919_16_62465_nl5idx1.3_6titratecoli",  
-"X20170919_09_62466_nl5idx1.3_7titratesmeg", 
+P <- P[,c('Accession', 'Sequence',
+"X20170919_05_62465_nl5idx1.3_6titratecoli",
+"X20170919_16_62465_nl5idx1.3_6titratecoli",
+"X20170919_09_62466_nl5idx1.3_7titratesmeg",
 "X20170919_14_62466_nl5idx1.3_7titratesmeg")]
 names(P)<-c('Accession','Sequence','coli1', 'coli2', 'smeg1', 'smeg2')
-P<- P[grep("^P[0-9][A-Z][0-9]", P$Accession), ] 
+P<- P[grep("^P[0-9][A-Z][0-9]", P$Accession), ]
 
 P$FCset_ng <- NA
 P$FCset_ng[P$Accession \%in\% c('P1A4', 'P1B4', 'P1C4',
@@ -38,17 +38,18 @@ P$FCset_ng[P$Accession \%in\% c('P1A5', 'P1B5', 'P1C5',
   'P1D5', 'P1G4', 'P1H4')] <- 295
 P$FCset_ng[P$Accession \%in\% c('P1A6', 'P1B6', 'P1E5',
   'P1F5', 'P1G5', 'P1H5')] <- 943
-P$FCset_ng[P$Accession \%in\% c('P1C6', 'P1D6', 'P1E6', 
+P$FCset_ng[P$Accession \%in\% c('P1C6', 'P1D6', 'P1E6',
   'P1F6', 'P1G6', 'P1H6')] <- 3017
-  
+
  P$coli1 <- (log(P$coli1,2) - mean(log(P$coli1,2))) / sd(log(P$coli1,2))
  P$coli2 <- (log(P$coli2,2) - mean(log(P$coli2,2))) / sd(log(P$coli2,2))
  P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
  P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
- 
+
   O<-P
-  b <- boxplot(df<-cbind(P$coli1 - P$coli2, P$coli1 - P$smeg1, 
-  P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2 , P$smeg1 - P$smeg2),
+  b <- boxplot(df<-cbind(P$coli1 - P$coli2, P$coli1 - P$smeg1,
+  P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2,
+  P$smeg1 - P$smeg2),
    ylab='normalized log2ratios', ylim = c(-1,1), axes=FALSE,
     main=paste("ConcGr = all"))
 axis(1, 1:6, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1',

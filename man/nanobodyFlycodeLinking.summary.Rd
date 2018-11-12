@@ -7,7 +7,8 @@
 nanobodyFlycodeLinking.summary(object)
 }
 \arguments{
-\item{object}{a \code{nanobodyFlycodeLinking} class computed by \code{\link{runNGSAnalysis}}.}
+\item{object}{a \code{nanobodyFlycodeLinking} class computed
+by \code{\link{runNGSAnalysis}}.}
 }
 \value{
 a data.frame object

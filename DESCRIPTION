@@ -26,7 +26,7 @@ Author: Pascal Egloff [ctb, aut],
   Christian Panse  [aut, cre] (0000-0003-1975-3064),
   Bernd Roschitzki  [ctb, aut],
   Markus Seeger [ctb, aut] (0000-0003-1761-8571)
-Version: 0.99.61
+Version: 0.99.62
 Depends: R (>= 3.5.1),
   Biostrings,
   gplots,
