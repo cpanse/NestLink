@@ -22,9 +22,9 @@ output: BiocStyle::html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-TODO(LO): Define Input 
-
-The following content is descibed in more detail in @NestLink, (under review  NMETH-A35040).
+<!-- TODO(LO): Define Input -->
+This pipeline processes raw reads from NGS (fastq-format) to generate the flycode to nanobody linkage used in the proteomics analysis.
+The following content is described in more detail in @NestLink, (under review  NMETH-A35040).
 
 # Load Package
 ```{r workflow_chunk0, message=FALSE, warning=FALSE}
@@ -33,7 +33,7 @@ library(NestLink)
 
 # Define Input & Output-Folder
 
-TODO(LO): do we have a reference to the entire data set?
+<!-- TODO(LO): do we have a reference to the entire data set? -->
 
 ```{r define.input.output}
 dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
@@ -57,25 +57,25 @@ knownNB <- sapply(knownNB, toString)
 
 # Set Example Parameters
 
-TODO: what is meant by the parameter
-
 ```{r setupParameter}
 param <- list()
-param[['NB_Linker1']] <- "GGCCggcggGGCC"
-param[['NB_Linker2']] <- "GCAGGAGGA"
-param[['ProteaseSite']] <- "TTAGTCCCAAGA"
-param[['FC_Linker']] <- "GGCCaaggaggcCGG"
+param[['nReads']] <- 100 #Number of Reads to process
+param[['maxMismatch']] <- 1 #Number of accepted mismatches for all pattern search steps
+param[['NB_Linker1']] <- "GGCCggcggGGCC" #Linker Sequence left to nanobody
+param[['NB_Linker2']] <- "GCAGGAGGA" #Linker Sequence right to nanobody
+param[['ProteaseSite']] <- "TTAGTCCCAAGA" #Sequence next to flycode
+param[['FC_Linker']] <- "GGCCaaggaggcCGG" #Linker Sequence next to flycode
 param[['knownNB']] <- knownNB
-param[['nReads']] <- 100
-param[['minRelBestHitFreq']] <- 0.8 
-param[['minConsensusScore']] <- 0.9
-param[['maxMismatch']] <- 1
-param[['minNanobodyLength']] <- 348
-param[['minFlycodeLength']] <- 33
-param[['FCminFreq']] <- 1
+param[['minRelBestHitFreq']] <- 0.8 #minimal fraction of the dominant nanobody for a specific flycode
+param[['minConsensusScore']] <- 0.9 #minimal fraction per sequence position in nanabody consensus sequence calculation
+param[['minNanobodyLength']] <- 348 #minimal nanobody length in [nt]
+param[['minFlycodeLength']] <- 33  #minimal flycode length in [nt]
+param[['FCminFreq']] <- 1 #minimal number of subreads for a specific flycode to keep it in the analysis
 ```
 
 # Run NGS Workflow
+
+The following steps are included:
 
 - read FASTQ
 - filter
