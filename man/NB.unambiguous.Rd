@@ -10,8 +10,8 @@ NB.unambiguous(x)
 \item{x}{a \code{data.frame} containing a column peptide}
 }
 \value{
-a data.frame 
-a \code{data.frame} of unambiguously assignable peptides 
+a data.frame
+a \code{data.frame} of unambiguously assignable peptides
 (those, which occur only on one nanobody)
 }
 \description{
