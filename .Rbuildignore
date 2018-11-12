@@ -8,3 +8,4 @@
 ^.*LICENSE$
 ^.*R/supplements.R$
 ^.*vignettes/5_lfq_log2ratio.Rmd$
+^.*vignettes/5_lfq.Rmd$
