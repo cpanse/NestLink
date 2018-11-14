@@ -1,2 +1,3 @@
 please read
-https://github.com/cpanse/NestLink/blob/master/vignettes/SupplementaryNote1.Rmd
+
+[SupplementaryNote1.Rmd](https://github.com/cpanse/NestLink/blob/master/vignettes/SupplementaryNote1.Rmd)
