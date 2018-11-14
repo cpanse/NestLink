@@ -16,6 +16,8 @@ vignette: >
   %\VignetteIndexEntry{1. NGS filtering workflow to get high quality FlyCode and Nanobody sequences}
   %\VignetteEncoding{UTF-8}
 output: BiocStyle::html_document
+abstract: |
+  This vignette demonstrates the processing of raw reads from NGS to generate the flycode to nanobody linkage used in the proteomics data analysis. The workflow includes several filtering steps to extract high quality nanobody and flycode amino acid sequences.
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +25,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 <!-- TODO(LO): Define Input -->
-This pipeline processes raw reads from NGS (fastq-format) to generate the flycode to nanobody linkage used in the proteomics analysis.
 The following content is described in more detail in @NestLink, (under review  NMETH-A35040).
 
 # Load Package
@@ -33,7 +34,7 @@ library(NestLink)
 
 # Define Input & Output-Folder
 
-<!-- TODO(LO): do we have a reference to the entire data set? -->
+<!-- TODO(LO): do we have a reference to the entire data set? no-->
 
 ```{r define.input.output}
 dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
@@ -44,7 +45,9 @@ setwd(scratchFolder)
 
 # Load known NanoBodies (NB) for QC Checks
 
-```{r workflow_chunk2}
+For data QC some known NB can be spiked in. Here we load the NB DNA sequences and translate them to the corresponding AA sequences.
+
+```{r load.knownNB}
 knownNB_File <- list.files(dataFolder,
       pattern='knownNB.txt', full.names = TRUE)
 knownNB_data <- read.table(knownNB_File, sep='\t',
@@ -57,9 +60,11 @@ knownNB <- sapply(knownNB, toString)
 
 # Set Example Parameters
 
+The workflow uses the first 100 reads only for a rapid processing time.
+
 ```{r setupParameter}
 param <- list()
-param[['nReads']] <- 100 #Number of Reads to process
+param[['nReads']] <- 100 #Number of Reads from the start of fastq file to process
 param[['maxMismatch']] <- 1 #Number of accepted mismatches for all pattern search steps
 param[['NB_Linker1']] <- "GGCCggcggGGCC" #Linker Sequence left to nanobody
 param[['NB_Linker2']] <- "GCAGGAGGA" #Linker Sequence right to nanobody
