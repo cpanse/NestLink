@@ -26,14 +26,14 @@ Author: Pascal Egloff [ctb, aut],
   Christian Panse  [aut, cre] (0000-0003-1975-3064),
   Bernd Roschitzki  [ctb, aut],
   Markus Seeger [ctb, aut] (0000-0003-1761-8571)
-Version: 0.99.62
+Version: 0.99.63
 Depends: R (>= 3.5.1),
   Biostrings,
   gplots,
   protViz (>= 0.3.1), 
   ShortRead 
 Imports: grDevices, graphics, stats, utils
-Maintainer: Christian Panse <Christian.Panse@gmail.com>
+Maintainer: Christian Panse <Christian.Panse@gmail.com>, Lennart Opitz <Opitz.Lennart@gmail.com>
 Description: Provides next-generation sequencing (NGS) and mass spectrometry (MS) sample
   data, code snippets and replication material used for developing NestLink. 
   The NestLink approach is a protein binder selection and identification technology
