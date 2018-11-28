@@ -9,6 +9,13 @@
     }
 }
 
+#' NestLinkzzz
+#'
+#' @param libname xx
+#' @param pkgname xx
+#'
+#' @return createHubAccessors
+#' @import ExperimentHub
 .onLoad <- function(libname, pkgname) {
     fl <- system.file("extdata", "metadata.csv", package=pkgname)
     titles <- read.csv(fl, stringsAsFactors=FALSE)$Title
