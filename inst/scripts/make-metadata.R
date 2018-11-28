@@ -22,7 +22,7 @@ meta <- data.frame(
                     paste0("Flycode tryptic digested AA sequences with ESP_Prediction"),
                     paste0("Nanobody tryptic digested AA sequences with ESP_Prediction"),
                     paste0("FASTA data as ground-truth for unit testing"),
-                    paste0("known nanobodies in NC sequences"),
+                    paste0("known nanobodies as NC sequences"),
                     paste0("mass spectrometry quantitative results of nanobodies expressed in SMEG and COLI species.")
             ),
     BiocVersion = c("3.8", "3.9"),
