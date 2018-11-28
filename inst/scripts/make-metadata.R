@@ -18,7 +18,7 @@ meta <- data.frame(
                     paste0("Nanobody tryptic digested AA sequences with ESP_Prediction"),
                     paste0("FASTA data as ground-truth for unit testing"),
                     paste0("known nanobodies in NC sequences"),
-                    paste0("proteomics quantitative results of nanobodies expressed in SMEG and COLI species.")
+                    paste0("mass spectrometry quantitative results of nanobodies expressed in SMEG and COLI species.")
             ),
     BiocVersion = c("3.8"),
     Genome = NA, 
