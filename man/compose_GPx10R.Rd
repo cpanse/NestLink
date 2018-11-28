@@ -19,7 +19,7 @@ Compose a peptide with a defined AA sequence
 }
 \examples{
 set.seed(1)
-aa_pool_1_2_9_10 <- c(rep('A', 8), rep('S', 7), rep('T', 7), rep('N', 6), 
+aa_pool_1_2_9_10 <- c(rep('A', 8), rep('S', 7), rep('T', 7), rep('N', 6),
 rep('Q', 6), rep('D', 8), rep('E', 8), rep('V', 9), rep('L', 6), rep('F', 5),
 rep('Y', 9), rep('W', 6), rep('G', 15), rep('P', 0))
 
