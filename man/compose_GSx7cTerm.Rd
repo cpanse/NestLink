@@ -22,7 +22,6 @@ composes, out of a given input distributen,
 a random sampled amino acid sequence.
 }
 \examples{
- 
 
  sample.size <- 100
  #
@@ -34,7 +33,7 @@ a random sampled amino acid sequence.
  stopifnot(length(FC.GSx7cTerm) == 100)
  FC.PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
  stopifnot(
-   length(FC.GSx7cTerm[grepl(FC.PATTERN, FC.GSx7cTerm)]) 
+   length(FC.GSx7cTerm[grepl(FC.PATTERN, FC.GSx7cTerm)])
      == sample.size)
 
 }
