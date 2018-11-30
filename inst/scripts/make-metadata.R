@@ -11,21 +11,21 @@
 
 
 meta <- data.frame(
-    Title = c(paste0("Sample data NGS"),
+    Title = c(paste0("Sample NGS NB FC linkage data"),
               paste0("Flycode tryptic digested"),
               paste0("Nanobody tryptic digested"),
               paste0("FASTA as ground-truth for unit testing"),
               paste0("Known nanobodies"),
               paste0("Quantitaive results for SMEG and COLI")
               ),
-    Description = c(paste0("sample data NGS in FASTQ"),
-                    paste0("Flycode tryptic digested AA sequences with ESP_Prediction"),
-                    paste0("Nanobody tryptic digested AA sequences with ESP_Prediction"),
+    Description = c(paste0("Sample NGS demonstratig the linkage between nanobodies (NB) and flycodes (FC). data in FASTQ"),
+                    paste0("Flycode tryptic digested amino acid sequences with ESP_Prediction score."),
+                    paste0("Nanobody tryptic digested amino acid sequences with ESP_Prediction score."),
                     paste0("FASTA data as ground-truth for unit testing"),
-                    paste0("known nanobodies as NC sequences"),
-                    paste0("mass spectrometry quantitative results of nanobodies expressed in SMEG and COLI species.")
+                    paste0("Known nanobodies as nucleic acid sequences"),
+                    paste0("Mass spectrometry based quantitative results of nanobodies expressed in SMEG and COLI species.")
             ),
-    BiocVersion = c("3.8", "3.9"),
+    BiocVersion = rep("3.9", 6),
     Genome = NA, 
     SourceType = c('FASTQ', 'TXT', 'TXT', 'RData', 'TXT', 'CSV'),
     SourceUrl = c("https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-project.html?id=1644",
@@ -38,7 +38,7 @@ meta <- data.frame(
     Species = NA,
     TaxonomyId = NA,
     Coordinate_1_based = NA,
-    DataProvider = "FGCZ",
+    DataProvider = "Functional Genomics Center Zurich",
     Maintainer = c("Lennart Opitz <lopitz@fgcz.ethz.ch>",
                    "Christian Panse <cp@fgcz.ethz.ch>",
                    "Christian Panse <cp@fgcz.ethz.ch>",
@@ -55,7 +55,7 @@ meta <- data.frame(
                   "NestLink/PGexport2_normalizedAgainstSBstandards_Peptides.csv"
                   ),
     Tags = "",
-    Notes = NA
+    Notes = c(NA, NA, NA, NA, NA, "bfabric WU158716, WU158717")
 )
 
 write.csv(meta, file="inst/extdata/metadata.csv", row.names=FALSE)
