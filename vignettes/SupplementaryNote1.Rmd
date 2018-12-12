@@ -119,7 +119,7 @@ P.summary$nDetectedFlycodes <- aggregate(Sequence ~ ConcGr * Accession, data=na.
 P.summary$nTotalFlycodes <- 30
 P.summary$coverage <- round(100 * P.summary$nDetectedFlycodes  / P.summary$nTotalFlycodes)
 kable(P.summary[order(P.summary$ConcGr),], row.names = FALSE)
-write.csv(P.summary, file='Figs/FigureS6b.csv')
+# write.csv(P.summary, file='Figs/FigureS6b.csv')
 ```
 
 
