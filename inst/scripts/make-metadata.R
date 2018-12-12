@@ -46,7 +46,7 @@ meta <- data.frame(
                    "Lennart Opitz <lopitz@fgcz.ethz.ch>",
                    "Christian Panse <cp@fgcz.ethz.ch>"),
     RDataClass = c("DNAStringSet", "data.frame", "data.frame", "data.frame","data.frame","data.frame"),
-    DispatchClass = c("DNAStringSet", "data.frame", "data.frame", "data.frame","data.frame","data.frame"),
+    DispatchClass = rep("FilePath", 6),
     RDataPath = c("NestLink/NL42_100K.fastq.gz",
                   "NestLink/FC.tryptic",
                   "NestLink/NB.tryptic",
