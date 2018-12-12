@@ -10,7 +10,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - pandoc (for exporting markdown files to other formats).
 
-- install https://CRAN.R-project.org/package=devtools
+- install (https://CRAN.R-project.org/package=devtools)
 
 - install required R packages
 
@@ -81,6 +81,6 @@ browseVignettes('NestLink')
 
 - [project p1875 at the Functional Genomics Center Zurich](https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-project.html?id=1875)
 
-- https://www.biorxiv.org/content/early/2018/03/23/287813
+- [bioRxiv 2018/03/23/287813](https://www.biorxiv.org/content/early/2018/03/23/287813)
 
 
