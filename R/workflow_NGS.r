@@ -1,6 +1,7 @@
 #' run NGS workflow
 #' @param file - sequence file path
 #' @param param - list of input parameters
+#' @param sampleDir sample directory
 #' @return uniqNB2FC dataframe
 #' @export runNGSAnalysis
 #' @import ShortRead
@@ -29,11 +30,11 @@
 #' param[['minFlycodeLength']] <- 33
 #' param[['FCminFreq']] <- 1
 #' runNGSAnalysis(file = expFile[1], param)
-runNGSAnalysis <- function(file, param) {
+runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     message(paste0('Read file ', basename(file)))
     myReads <- .getReadsFromFastq(file)
     knownNB <- param[['knownNB']]
-    message('...done')
+    message('... done')
     if (param[['nReads']] > 0 & length(myReads) > param[['nReads']]) {
         myReads <- myReads[seq_len(param[['nReads']])]
     }
@@ -59,16 +60,13 @@ runNGSAnalysis <- function(file, param) {
     mySeq <- list()
     mySeq[['seqFC']] <- subseq(
         resultNB$reads,
-        start = resultNB$patternPositions[['leftEnd1']] +
-            1,
-        end = resultNB$patternPositions[['rightStart2']] -
-            1
+        start = resultNB$patternPositions[['leftEnd1']] + 1,
+        end = resultNB$patternPositions[['rightStart2']] - 1
     )
     mySeq[['seqNB']] <- subseq(
         resultNB$reads,
         start = resultNB$patternPositions[['leftEnd']] + 1,
-        end = resultNB$patternPositions[['rightStart']] -
-            1
+        end = resultNB$patternPositions[['rightStart']] - 1
     )
     names(mySeq[['seqFC']]) <- paste('read',
                                     seq(1, length(mySeq[['seqFC']]), 1), sep =
@@ -82,12 +80,13 @@ runNGSAnalysis <- function(file, param) {
     #Filter reads containing Ns:
     mySeq <- .filterReadsWithNs(mySeq)
     stats <- c(stats, readsWithoutNs = length(mySeq[['seqNB']]))
-    message('...done')
+    message('... done')
     #Filter by width : in frame and flycode >10AS (>32nt)
     
     sampleName <- gsub('.extendedFrags.fastq.gz', '', basename(file))
     nb_width <- sort(table(width(mySeq[['seqNB']])),
                     decreasing = TRUE)[seq_len(10)]
+    
     png(paste0('Barplot_NB_Length_', sampleName, '.png'), 600, 400)
     barplot(nb_width[order(names(nb_width))],
             xlab = 'NB length in [nt]',
@@ -140,12 +139,12 @@ runNGSAnalysis <- function(file, param) {
     uniqFCReads <-
         vapply(mySeqAS_CS[['seqAS_FC']], toString, c(FC = ''))
     stats <- c(stats, uniqFC = length(mySeqAS_CS[['seqAS_FC']]))
-    message('...done')
+    message('... done')
     
-    ###Export Results:
+    ### Export Results:
     message(paste0('Export Result: ', basename(file)))
     
-    sampleDir <- sub('.fastq.gz', '', basename(file))
+    # sampleDir <- sub('.fastq.gz', '', basename(file))
     if (!file.exists(sampleDir)) {
         dir.create(sampleDir, recursive = TRUE)
     }
@@ -201,6 +200,7 @@ runNGSAnalysis <- function(file, param) {
                     stats,
                     stringsAsFactors = FALSE)
     statsFileName <- basename(sub('.fastq.gz', '_stats.txt', file))
+    
     write.table(
         stats,
         statsFileName,
@@ -267,7 +267,7 @@ runNGSAnalysis <- function(file, param) {
     }
     
     orderedNB <- order(uniqFC_Summary$NB_Name, decreasing = TRUE)
-    uniqFC_Summary <- uniqFC_Summary[orderedNB,]
+    uniqFC_Summary <- uniqFC_Summary[orderedNB, ]
     write.table(
         uniqFC_Summary,
         basename(sub('.fastq.gz', '_uniqFC2NB.txt', file)),
@@ -275,7 +275,7 @@ runNGSAnalysis <- function(file, param) {
         row.names = FALSE,
         quote = FALSE
     )
-    message('...done')
+    message('... done')
     class(uniqNB_Summary) <-
         c(class(uniqNB_Summary), "nanobodyFlycodeLinking")
     return(uniqNB_Summary)

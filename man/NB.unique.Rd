@@ -4,7 +4,7 @@
 \alias{NB.unique}
 \title{make NB table unique}
 \usage{
-NB.unique(x)
+NB.unique(x = getNB())
 }
 \arguments{
 \item{x}{a data.frame}

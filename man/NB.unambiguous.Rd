@@ -4,7 +4,7 @@
 \alias{NB.unambiguous}
 \title{Determine unambiguous NBs}
 \usage{
-NB.unambiguous(x)
+NB.unambiguous(x = getNB())
 }
 \arguments{
 \item{x}{a \code{data.frame} containing a column peptide}

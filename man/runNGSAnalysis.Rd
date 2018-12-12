@@ -4,12 +4,14 @@
 \alias{runNGSAnalysis}
 \title{run NGS workflow}
 \usage{
-runNGSAnalysis(file, param)
+runNGSAnalysis(file, param, sampleDir = tempdir())
 }
 \arguments{
 \item{file}{- sequence file path}
 
 \item{param}{- list of input parameters}
+
+\item{sampleDir}{sample directory}
 }
 \value{
 uniqNB2FC dataframe

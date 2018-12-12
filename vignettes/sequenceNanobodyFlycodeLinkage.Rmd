@@ -32,13 +32,25 @@ The following content is described in more detail in @NestLink, (under review  N
 library(NestLink)
 ```
 
+# Load Data
+
+```{r}
+library(ExperimentHub)
+
+eh <- ExperimentHub()
+
+query(eh, "NestLink")
+```
+
 # Define Input & Output-Folder
 
 <!-- TODO(LO): do we have a reference to the entire data set? no-->
 
 ```{r define.input.output}
-dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
-expFile <- list.files(dataFolder,pattern='*.fastq.gz', full.names = TRUE)
+# dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
+# expFile <- list.files(dataFolder, pattern='*.fastq.gz', full.names = TRUE)
+
+expFile <- query(eh, c("NestLink", "NL42_100K.fastq.gz"))[[1]]
 scratchFolder <- tempdir()
 setwd(scratchFolder)
 ```
@@ -48,8 +60,10 @@ setwd(scratchFolder)
 For data QC some known NB can be spiked in. Here we load the NB DNA sequences and translate them to the corresponding AA sequences.
 
 ```{r load.knownNB}
-knownNB_File <- list.files(dataFolder,
-      pattern='knownNB.txt', full.names = TRUE)
+# knownNB_File <- list.files(dataFolder,
+#      pattern='knownNB.txt', full.names = TRUE)
+knownNB_File <- query(eh, c("NestLink", "knownNB.txt"))[[1]]
+
 knownNB_data <- read.table(knownNB_File, sep='\t',
       header = TRUE, row.names = 1, stringsAsFactors = FALSE)
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/compose.R
 \name{getFC}
 \alias{getFC}
-\title{Read FlyCodes (FC)}
+\title{Read FlyCodes (FCs)}
 \usage{
 getFC(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$")
 }
@@ -13,7 +13,7 @@ getFC(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$")
 a data.frame of FlyCodes
 }
 \description{
-Read FlyCodes (FC)
+Read FlyCodes (FCs)
 }
 \examples{
 FC <- getFC()
@@ -21,5 +21,5 @@ dim(FC)
 
 }
 \author{
-Christian Panse <cp@fgcz.ethz.ch> 2015
+Christian Panse <cp@fgcz.ethz.ch> 2015, 2018
 }
