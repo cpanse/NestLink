@@ -12,6 +12,7 @@
 ^.*inst/extdata/FC.tryptic$
 ^.*inst/extdata/NB.tryptic$
 ^.*inst/extdata/NL42_100K.fastq$
+^.*inst/extdata/NestLink_NL42_100K.RData$
 ^.*inst/extdata/NL42_100K.fastq.gz$
 ^.*inst/extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv$
 ^.*inst/extdata/knownNB.txt$

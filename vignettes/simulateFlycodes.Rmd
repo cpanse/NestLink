@@ -86,7 +86,7 @@ set.seed(2)
 (sample.size <- 3E+04)
 peptides.GPGx8cTerm <- replicate(sample.size, compose_GPGx8cTerm(pool=aa_pool_x8))
 peptides.GPx10R <- replicate(sample.size, compose_GPx10R(aa_pool_1_2_9_10, aa_pool_3_8))
-#write.table(peptides.GPGx8cTerm, file='/tmp/pp.txt')
+# write.table(peptides.GPGx8cTerm, file='/tmp/pp.txt')
 ```
 
 # Peptide mass
@@ -202,7 +202,7 @@ sample.size
 
 table(table(tt<-unlist(lapply(peptides.GPGx8cTerm, 
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
-write.table(tt, file='/tmp/tt.txt')
+# write.table(tt, file='/tmp/tt.txt')
 table(table(unlist(lapply(peptides.GPx10R, 
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
 ```
