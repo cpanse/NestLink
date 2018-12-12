@@ -4,7 +4,13 @@ context("Test NGS")
 
 test_that("NGS ground truth", {
   
-  f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+  library(ExperimentHub)
+  
+  eh <- ExperimentHub()
+  
+  f <- query(eh, c("NestLink", "nanobodyFlycodeLinkage.RData"))[[1]]
+  
+  # f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
   expect_true(file.exists(f))
   load(f)
   expect_true(NestLink:::is.nanobodyFlycodeLinking(nanobodyFlycodeLinkage.sample))
@@ -13,21 +19,26 @@ test_that("NGS ground truth", {
 
 
 test_that("NGS pipeline", {
-    
-    f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+  library(ExperimentHub)
+  
+  eh <- ExperimentHub()
+  
+  f <- query(eh, c("NestLink", "nanobodyFlycodeLinkage.RData"))[[1]]
+  
+   # f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
     expect_true(file.exists(f))
     load(f)
     expect_true(NestLink:::is.nanobodyFlycodeLinking(nanobodyFlycodeLinkage.sample))
     
-    expFile <-system.file("extdata/NL42_100K.fastq.gz", package="NestLink")
+    # expFile <-system.file("extdata/NL42_100K.fastq.gz", package="NestLink")
+    expFile <- query(eh, c("NestLink", "NL42_100K.fastq.gz"))[[1]]
     expect_true(file.exists(expFile))
     scratchFolder <- tempdir()
     setwd(scratchFolder)
     
     
-    knownNB_File <- system.file("extdata/knownNB.txt", package="NestLink")
-    
-    
+    # knownNB_File <- system.file("extdata/knownNB.txt", package="NestLink")
+    knownNB_File <- query(eh, c("NestLink", "knownNB.txt"))[[1]]
     knownNB_data <- read.table(knownNB_File,
                                sep='\t',
                                header = TRUE,

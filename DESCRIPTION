@@ -46,4 +46,4 @@ VignetteBuilder: knitr
 Suggests: ExperimentHub (>= 0.99.6), BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, shiny, testthat, specL, lattice, scales
 NeedsCompilation: no
 biocViews: ExperimentHub, ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

@@ -16,7 +16,7 @@ The following content is descibed in more detail in @NestLink
 (under review  NMETH-A35040).
 
 
-# Retention Time(RT) versus SSRC
+# Retention Time (RT) versus Sequence-specific retention calculator (SSRC)
 
 ```{r fig.retina=3, fig.height=16}
 library(NestLink)

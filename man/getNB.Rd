@@ -2,7 +2,7 @@
 % Please edit documentation in R/compose.R
 \name{getNB}
 \alias{getNB}
-\title{Read NanoBodies (NB)}
+\title{Read NanoBodies (NBs)}
 \usage{
 getNB()
 }
@@ -10,9 +10,12 @@ getNB()
 a data.frame of NBs
 }
 \description{
-Read NanoBodies (NB)
+Read NanoBodies (NBs)
 }
 \examples{
 NB <- getNB()
 dim(NB)
+}
+\author{
+Christian Panse <cp@fgcz.ethz.ch> 2015, 2018
 }

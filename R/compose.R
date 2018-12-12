@@ -245,23 +245,26 @@ get_pool_3_8 <- function() {
 }
 
 
-#' Read FlyCodes (FC)
+#' Read FlyCodes (FCs)
 #'
 #' @return a data.frame of FlyCodes
 #' @param pattern a regular expression FlyCode pattern
-#' @author Christian Panse <cp@fgcz.ethz.ch> 2015
+#' @author Christian Panse <cp@fgcz.ethz.ch> 2015, 2018
 #' @importFrom protViz parentIonMass
 #' @importFrom utils read.table write.table
 #' @examples
 #' FC <- getFC()
 #' dim(FC)
 #'
+#' @importFrom ExperimentHub ExperimentHub 
+#' @importFrom AnnotationHub query
 #' @export getFC
 getFC <-
     function(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$") {
-        FC <- read.table(
-            system.file("extdata/FC.tryptic",
-                        package = "NestLink"),
+    eh <- ExperimentHub()
+    FC.filename <- query(eh, c("NestLink", "FC.tryptic"))[[1]]
+    
+    FC <- read.table(FC.filename,
             col.names = c("peptide", "ESP_Prediction"),
             header = TRUE
         )
@@ -286,17 +289,19 @@ getFC <-
 
 
 
-#' Read NanoBodies (NB)
-#'
+#' Read NanoBodies (NBs)
+#' @author Christian Panse <cp@fgcz.ethz.ch> 2015, 2018
 #' @return a data.frame of NBs
 #' @examples
 #' NB <- getNB()
 #' dim(NB)
+#' @importFrom ExperimentHub ExperimentHub 
+#' @importFrom AnnotationHub query
 #' @export getNB
 getNB <- function() {
-    NB <-
-        read.table(
-            system.file("extdata/NB.tryptic", package = "NestLink"),
+    eh <- ExperimentHub()
+    NB.filename <- query(eh, c("NestLink", "NB.tryptic"))[[1]]
+    NB <- read.table(NB.filename,
             col.names = c("peptide", "ESP_Prediction"),
             header = TRUE
         )
@@ -323,7 +328,7 @@ getNB <- function() {
 #' @importFrom grDevices pdf
 #' @importFrom stats aggregate median
 #' @importFrom utils packageVersion
-NB.unambiguous <- function(x) {
+NB.unambiguous <- function(x = getNB()) {
     stopifnot('peptide' %in% names(x))
     
     
@@ -347,7 +352,7 @@ NB.unambiguous <- function(x) {
 #' NB <- getNB()
 #' dim(NB.unique(NB))
 #' @export NB.unique
-NB.unique <- function(x) {
+NB.unique <- function(x=getNB()) {
     stopifnot('peptide' %in% names(x))
     x$cond <- "NB.unique"
     unique(x)

@@ -31,13 +31,22 @@ library(parallel)
 cv <- 1 - 1:7 / 10
 t <- trellis.par.get("strip.background")
 t$col <- (rgb(cv,cv,cv))
-trellis.par.set("strip.background",t)
+trellis.par.set("strip.background", t)
+n.simulation <- 10
 ```
 
+
+# Load data
+
 ```{r}
-n.simulation <- 10
-filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
-                        package = "NestLink")
+# filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+#                        package = "NestLink")
+
+library(ExperimentHub)
+
+eh <- ExperimentHub()
+
+filename <- query(eh, c("NestLink", "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
 P <- read.csv(filename,
               header = TRUE, sep=';')
 dim(P)
