@@ -1,0 +1,41 @@
+---
+title: "On loading NestLink data using ExperimentHub"
+author:
+- name: Christian Panse
+  affiliation: Functional Genomics Center Zurich, UZH|ETHZ
+  email: cp@fgcz.ethz.ch
+date: '2018-12-13'
+output:
+  BiocStyle::html_document
+bibliography:
+  - NestLink.bib
+vignette: |
+  %\VignetteIndexEntry{On loading NestLink data using ExperimentHub}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Getting started
+
+load metadata
+
+```{r eval=FALSE}
+
+fl <- system.file("extdata", "metadata.csv", package='NestLink')
+metadata <- read.csv(fl, stringsAsFactors=FALSE)
+```
+
+load NestLink data from aws s3
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, eval=FALSE}
+library(ExperimentHub)
+
+eh <- ExperimentHub(); 
+query(eh, "NestLink")
+
+load(query(eh, c("NestLink", "F255744.RData"))[[1]])
+dim(F255744)
+
+load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
+dim(WU160118)
+```
