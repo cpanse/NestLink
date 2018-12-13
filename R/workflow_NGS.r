@@ -1,7 +1,6 @@
 #' run NGS workflow
-#' @param file - sequence file path
-#' @param param - list of input parameters
-#' @param sampleDir sample directory
+#' @param file sequence file path
+#' @param param list of input parameters
 #' @return uniqNB2FC dataframe
 #' @export runNGSAnalysis
 #' @import ShortRead
@@ -30,7 +29,9 @@
 #' param[['minFlycodeLength']] <- 33
 #' param[['FCminFreq']] <- 1
 #' runNGSAnalysis(file = expFile[1], param)
-runNGSAnalysis <- function(file, param, sampleDir=NULL){
+runNGSAnalysis <- function(file, param){
+    #TODO
+    sampleDir <- NULL
     message(paste0('Read file ', basename(file)))
     myReads <- .getReadsFromFastq(file)
     knownNB <- param[['knownNB']]
