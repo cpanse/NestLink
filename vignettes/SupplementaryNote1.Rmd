@@ -302,9 +302,9 @@ NestLink_absolute_flycode_simulation <- xyplot(cv ~ nFCAccession |  ConcGr,
 
 print(NestLink_absolute_flycode_simulation)
 
-png("NestLink_absolute_flycode_simulation.png", 1200,800)
-print(NestLink_absolute_flycode_simulation)
-dev.off()
+# png("NestLink_absolute_flycode_simulation.png", 1200,800)
+# print(NestLink_absolute_flycode_simulation)
+# dev.off()
 ```
 
 
