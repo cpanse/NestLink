@@ -6,7 +6,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 ### Software dependencies
 
-- install R (> 3.5.1)
+- install R (>= 3.6)
 
 - pandoc (for exporting markdown files to other formats).
 
@@ -14,7 +14,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - install required R packages
 
-**Whatsoever for a clean install, I recommend using the current R version 3.5.1 and the current Bioconductor 3.8.**
+**Whatsoever for a clean install, I recommend using the current R version 3.6 and the current Bioconductor 3.9.**
 
 ### Versions the software has been tested on
 
@@ -32,9 +32,10 @@ run an R session and execute the following R code snippet
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("specL", version = "3.8")
-BiocManager::install("ShortRead", version = "3.8")
-BiocManager::install("GenomeInfoDb", version = "3.8")
+BiocManager::install("specL", version = "3.9")
+BiocManager::install("ShortRead", version = "3.9")
+BiocManager::install("GenomeInfoDb", version = "3.9")
+BiocManager::install("ExperimentalHub", version = "3.9")
 
 install.package('devtools')
 library(devtools)
@@ -47,7 +48,7 @@ If all dependencies are installed
 `install_github('cpanse/NestLink', build_vignettes = TRUE)` requires 1m47.014s 
 on a Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz running Debian Linux.
 
-As alternative you can also consider the latest [release](https://github.com/cpanse/NestLink/releases).
+As an alternative you can also consider the latest [release](https://github.com/cpanse/NestLink/releases).
 
 ## 3. Demonstration / Documentation
 
