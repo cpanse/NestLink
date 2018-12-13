@@ -42,13 +42,14 @@ library(protViz)
 # load(url("http://fgcz-ms.uzh.ch/~cpanse/p1875/F255744.RData"))
 #F255744 <- as.data.frame.mascot(F255744)
 
-# load(system.file("extdata/F255744.RData", package = "NestLink"))
-data(F255744)
+
+library(ExperimentHub)
+eh <- ExperimentHub(); 
+
+load(query(eh, c("NestLink", "F255744.RData"))[[1]])
+
 par(mfrow = c(4,1))
 .ssrc.mascot(F255744)
-
-#cor(hyd , rt)
-
 ```
 
 
