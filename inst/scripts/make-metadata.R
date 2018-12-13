@@ -67,7 +67,8 @@ meta <- data.frame(
                   "NestLink/WU160118.RData"
                   ),
     Tags = "",
-    Notes = c(NA, NA, NA, NA, NA, "bfabric WU158716, WU158717", NA, "bfabric WU160118"),
+    Notes = paste("Markus Seeger <m.seeger@imm.uzh.ch>, Pascal Egloff <p.egloff@imm.uzh.ch>", 
+                  c("", "", "", "", "", " bfabric WU158716, WU158717", "" , " bfabric WU160118"), sep=';'),
     MD5 = c("4a13c5c61a5b29f4fd8830c1c15419b6",
             "f6faa7458350ce1805bec30e9ffdeaae",
             "db85a806c5151113536b710d566d9cf3",
