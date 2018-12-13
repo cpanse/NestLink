@@ -212,16 +212,18 @@ getConsensusNBs <- function(uniqFCReads, bigTable) {
             mismatchData <-  gsub('0', '.', as.character(mismatchData))
             mismatchData <- gsub('1', '*', mismatchData)
             mismatchData <- paste(mismatchData, collapse = '')
-            fileName <-
-                paste0(names(uniqFCReads)[j], '_', uniqFCReads[j], '.txt')
-            write.table(
-                c(NBperFC[['NanoBody']], mismatchData),
-                fileName,
-                sep = '',
-                quote = FALSE,
-                row.names = FALSE,
-                col.names = FALSE
-            )
+            
+            #fileName <-
+            #    paste0(names(uniqFCReads)[j], '_', uniqFCReads[j], '.txt')
+            #
+            #write.table(
+            #    c(NBperFC[['NanoBody']], mismatchData),
+            #    fileName,
+            #    sep = '',
+            #    quote = FALSE,
+            #    row.names = FALSE,
+            #    col.names = FALSE
+            #)
         }
         
         uniq_FC2NB[['NanoBody']][j] <-
