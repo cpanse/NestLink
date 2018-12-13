@@ -8,7 +8,9 @@
 WU160118 Mascot Search results
 }
 \examples{
-data(WU160118)
+library(ExperimentHub)
+eh <- ExperimentHub(); 
+load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
 class(WU160118)
 PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 idx <- grepl(PATTERN, WU160118$pep_seq)

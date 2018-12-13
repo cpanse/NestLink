@@ -8,6 +8,8 @@
 F255744 Mascot Search results
 }
 \examples{
+library(ExperimentHub)
+eh <- ExperimentHub(); load(query(eh, c("NestLink", "F255744.RData"))[[1]])
 class(F255744)
 hist(F255744$RTINSECONDS)
 hist(F255744$RTINSECONDS[F255744$pep_score > 20])
