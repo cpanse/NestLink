@@ -55,7 +55,13 @@ meta <- data.frame(
                   "NestLink/PGexport2_normalizedAgainstSBstandards_Peptides.csv"
                   ),
     Tags = "",
-    Notes = c(NA, NA, NA, NA, NA, "bfabric WU158716, WU158717")
+    Notes = c(NA, NA, NA, NA, NA, "bfabric WU158716, WU158717"),
+    MD5 = c("4a13c5c61a5b29f4fd8830c1c15419b6",
+            "f6faa7458350ce1805bec30e9ffdeaae",
+            "db85a806c5151113536b710d566d9cf3",
+            "57b2756fb0ebcf73d4036846580cb5b2",
+            "003bf82c58f0a96a2bd945d171dc907c",
+            "0ca525d0a65d4938f0cbc785b7e0d2d3")
 )
 
 write.csv(meta, file="inst/extdata/metadata.csv", row.names=FALSE)

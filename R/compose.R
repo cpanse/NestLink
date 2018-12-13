@@ -287,8 +287,6 @@ getFC <-
         unique(FC[idx,])
     }
 
-
-
 #' Read NanoBodies (NBs)
 #' @author Christian Panse <cp@fgcz.ethz.ch> 2015, 2018
 #' @return a data.frame of NBs

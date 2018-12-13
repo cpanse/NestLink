@@ -206,8 +206,9 @@ ggplot(WU, aes(x = pep_score, fill = query_charge, colour = query_charge)) +
 read the flycodes from p1875 db10 fasta file
 
 ```{r}
-FC <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"),
-                 header = TRUE)
+# FC <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"),
+#                header = TRUE)
+FC <- getFC()
 FC$peptide <- (as.character(FC$peptide))
 idx <- grep (PATTERN, FC$peptide)
 
@@ -264,8 +265,6 @@ AAfreq1 <-rbind(AAfreq1, df<-data.frame(AA=c('C','H','I','M','K','R'), freq=rep(
 
 AAfreq1$cond <- 'theoretical frequency'
 
-
-
 AAfreq2 <- data.frame(aa=FC.freq)
 names(AAfreq2) <- c('AA', 'freq')
 AAfreq2$cond <- "db10.fasta"
@@ -274,8 +273,9 @@ AAfreq3 <- data.frame(aa=WU.freq)
 names(AAfreq3) <- c('AA', 'freq')
 AAfreq3$cond <- "WU"
 
-FC.all <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"),
-                 header = TRUE)
+#FC.all <- read.table(system.file("extdata/FC.tryptic", package = "NestLink"),
+#                 header = TRUE)
+FC.all <- getFC()
 PATTERN.all <- "^GS[A-Z]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 FC.all <- as.character(FC.all$peptide)[grep(PATTERN.all, as.character(FC.all$peptide))]
 

@@ -54,7 +54,6 @@ dim(P)
 
 ## Clean 
 
-
 remove modifications
 ```{r}
 P <- P[P$Modifications == '', ]
@@ -63,7 +62,10 @@ dim(P)
 
 select rows
 ```{r}
-P <- P[,c('Accession', 'Sequence', "X20170919_05_62465_nl5idx1.3_6titratecoli", "X20170919_16_62465_nl5idx1.3_6titratecoli",  "X20170919_09_62466_nl5idx1.3_7titratesmeg", "X20170919_14_62466_nl5idx1.3_7titratesmeg")]
+P <- P[,c('Accession', 'Sequence', "X20170919_05_62465_nl5idx1.3_6titratecoli",
+          "X20170919_16_62465_nl5idx1.3_6titratecoli", 
+          "X20170919_09_62466_nl5idx1.3_7titratesmeg",
+          "X20170919_14_62466_nl5idx1.3_7titratesmeg")]
 dim(P)
 ```
 
