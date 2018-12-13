@@ -18,9 +18,9 @@
 #' @import ExperimentHub
 .onLoad <- function(libname, pkgname) {
     fl <- system.file("extdata", "metadata.csv", package=pkgname)
-    titles <- read.csv(fl, stringsAsFactors=FALSE)
-    library(ExperimentHub)
-    eh = ExperimentHub()
-    query(eh, "NestLink")
+    metadata <- read.csv(fl, stringsAsFactors=FALSE)
+    #library(ExperimentHub)
+    #eh = ExperimentHub()
+    #query(eh, "NestLink")
     #createHubAccessors(pkgname, titles)
 }

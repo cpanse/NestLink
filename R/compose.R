@@ -407,9 +407,13 @@ NULL
 #' @author Pascal Egloff \email{p.egloff@imm.uzh.ch}
 #' @keywords data
 #' @examples
-#' filename <- system.file(
-#'   "extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
-#'   package = "NestLink")
+#' # filename <- system.file(
+#' #  "extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+#' #  package = "NestLink")
+#' library(ExperimentHub)
+#' eh <- ExperimentHub()
+#' filename <- query(eh,
+#'   c("NestLink", "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
 #' P <- read.csv(filename, header = TRUE, sep=';')
 #' P <- P[P$Modifications == '', ]
 #' P <- P[,c('Accession', 'Sequence',
@@ -435,7 +439,7 @@ NULL
 #'  P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
 #'  P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
 #'
-#'   O<-P
+#'   O <- P
 #'   b <- boxplot(df<-cbind(P$coli1 - P$coli2, P$coli1 - P$smeg1,
 #'   P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2,
 #'   P$smeg1 - P$smeg2),
