@@ -30,7 +30,7 @@
 #' param[['minFlycodeLength']] <- 33
 #' param[['FCminFreq']] <- 1
 #' runNGSAnalysis(file = expFile[1], param)
-runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
+runNGSAnalysis <- function(file, param, sampleDir=NULL){
     message(paste0('Read file ', basename(file)))
     myReads <- .getReadsFromFastq(file)
     knownNB <- param[['knownNB']]
@@ -41,7 +41,7 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     stats <- c(RawReads = length(myReads))
     message(paste0('Filter by ReadLength: ', basename(file)))
     filteredReads <- .filterByReadLengthMedian(myReads, 0.95, 1.05)
-    message('...done')
+    message('... done')
     stats <- c(stats, WidthFilter = length(filteredReads))
     message(paste0('Filter by Pattern: ', basename(file)))
     resultFC <- twoPatternReadFilter(filteredReads,
@@ -144,14 +144,18 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     ### Export Results:
     message(paste0('Export Result: ', basename(file)))
     
+    #if(!is.null(sampleDir)){
+    #    if (!file.exists(sampleDir)) {
+    #        dir.create(sampleDir, recursive = TRUE)
+    #    }
+    #    setwd(sampleDir)
+    #}
     # sampleDir <- sub('.fastq.gz', '', basename(file))
-    if (!file.exists(sampleDir)) {
-        dir.create(sampleDir, recursive = TRUE)
-    }
-    setwd(sampleDir)
+    
+   
     
     bigTable <- getConsensusNBs(uniqFCReads, bigTable)
-    setwd('..')
+    #setwd('..')
     
     bigTable[['FC_SIZE']] <- nchar(bigTable$Flycode)
     bigTable[['NB_SIZE']] <- nchar(bigTable$NanoBody)
@@ -174,51 +178,48 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     }
     
     
-    bigTableFileName <- basename(sub('.fastq.gz', '_FC2NB.tsv', file))
-    write.table(
-        bigTable,
-        bigTableFileName,
-        sep = '\t',
-        row.names = FALSE,
-        quote = FALSE
-    )
+    #bigTableFileName <- basename(sub('.fastq.gz', '_FC2NB.tsv', file))
+    #write.table(
+    #    bigTable,
+    #    bigTableFileName,
+    #    sep = '\t',
+    #    row.names = FALSE,
+    #    quote = FALSE
+    #)
     
-    passMRBHF <-
-        which(bigTable$relBestHitFreq >= param[['minRelBestHitFreq']])
-    passCS <-
-        which(bigTable$consensusScore >= param[['minConsensusScore']])
+    passMRBHF <- which(bigTable$relBestHitFreq >= param[['minRelBestHitFreq']])
+    passCS <- which(bigTable$consensusScore >= param[['minConsensusScore']])
     keepFCs <- rownames(bigTable)[intersect(passMRBHF, passCS)]
     
     stats <- c(stats, FC_consensusFiltering = length(keepFCs))
     
-    FC_faFile = file.path(basename(sub('.fastq.gz', '_uniqFC.fasta', file)))
+    # FC_faFile = file.path(basename(sub('.fastq.gz', '_uniqFC.fasta', file)))
     # writeXStringSet(mySeqAS_CS[['seqAS_FC']][keepFCs], file = FC_faFile)
     
     stats <- c(stats, uniqNB = length(unique(bigTable[['NanoBody']])))
-    stats <-
-        data.frame(Category = names(stats),
-                    stats,
-                    stringsAsFactors = FALSE)
-    statsFileName <- basename(sub('.fastq.gz', '_stats.txt', file))
+    stats <- data.frame(Category = names(stats), stats,
+                        stringsAsFactors = FALSE)
     
-    write.table(
-        stats,
-        statsFileName,
-        sep = '\t',
-        quote = FALSE,
-        row.names = FALSE
-    )
+    # statsFileName <- basename(sub('.fastq.gz', '_stats.txt', file))
     
-    top100_NBFile <- basename(sub('.fastq.gz', '_TopNB.txt', file))
-    top100_NB <-
-        .findTopNB(mySeqAS_CS[['seqAS_NB']], n = 100, knownNB)
-    write.table(
-        top100_NB,
-        top100_NBFile,
-        sep = '\t',
-        quote = FALSE,
-        row.names = FALSE
-    )
+    # write.table(
+    #    stats,
+    #    statsFileName,
+    #    sep = '\t',
+    #    quote = FALSE,
+    #    row.names = FALSE
+    #)
+    
+    # top100_NBFile <- basename(sub('.fastq.gz', '_TopNB.txt', file))
+    top100_NB <- .findTopNB(mySeqAS_CS[['seqAS_NB']], n = 100, knownNB)
+    
+    # write.table(
+    #    top100_NB,
+    #    top100_NBFile,
+    #    sep = '\t',
+    #    quote = FALSE,
+    #    row.names = FALSE
+    #)
     
     #BigTable: Nanobody2Flycode
     uniqNB <- unique(bigTable$NanoBody)
@@ -227,12 +228,12 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     uniqNB_Summary[['FlycodeCount']] <- 0
     uniqNB_Summary[['AssociatedFlycodes']] <- ''
     uniqNB_Summary[['NB_Name']] <- ''
+    
     for (j in seq_len(length(uniqNB))) {
-        flycodes <-
-            bigTable[which(bigTable$NanoBody == uniqNB[j]),][['Flycode']]
+        flycodes <- bigTable[which(bigTable$NanoBody == uniqNB[j]),][['Flycode']]
         uniqNB_Summary[['FlycodeCount']][j] <- length(flycodes)
-        uniqNB_Summary[['AssociatedFlycodes']][j] <-
-            paste(flycodes, collapse = ',')
+        uniqNB_Summary[['AssociatedFlycodes']][j] <- paste(flycodes,
+                                                           collapse = ',')
         if (uniqNB[j] %in% knownNB) {
             uniqNB_Summary[['NB_Name']][j] <- 
                 names(knownNB)[knownNB == uniqNB[j]]
@@ -240,13 +241,14 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
         uniqNB_Summary <- uniqNB_Summary[order(uniqNB_Summary$NB_Name,
                                             decreasing = TRUE),]
     }
-    write.table(
-        uniqNB_Summary,
-        basename(sub('.fastq.gz', '_uniqNB2FC.txt', file)),
-        sep = '\t',
-        row.names = FALSE,
-        quote = FALSE
-    )
+    
+    # write.table(
+    #    uniqNB_Summary,
+    #    basename(sub('.fastq.gz', '_uniqNB2FC.txt', file)),
+    #    sep = '\t',
+    #    row.names = FALSE,
+    #    quote = FALSE
+    #)
     
     uniqFC <- unique(bigTable$Flycode)
     uniqFC_Summary <-
@@ -254,6 +256,7 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     uniqFC_Summary[['NanobodyCount']] <- 0
     uniqFC_Summary[['AssociatedNanobodies']] <- ''
     uniqFC_Summary[['NB_Name']] <- ''
+    
     for (j in seq_len(length(uniqFC))) {
         nanobodies <-
             bigTable[which(bigTable$Flycode == uniqFC[j]),][['NanoBody']]
@@ -268,15 +271,16 @@ runNGSAnalysis <- function(file, param, sampleDir=tempdir()) {
     
     orderedNB <- order(uniqFC_Summary$NB_Name, decreasing = TRUE)
     uniqFC_Summary <- uniqFC_Summary[orderedNB, ]
-    write.table(
-        uniqFC_Summary,
-        basename(sub('.fastq.gz', '_uniqFC2NB.txt', file)),
-        sep = '\t',
-        row.names = FALSE,
-        quote = FALSE
-    )
+    
+    #write.table(
+    #    uniqFC_Summary,
+    #    basename(sub('.fastq.gz', '_uniqFC2NB.txt', file)),
+    #    sep = '\t',
+    #    row.names = FALSE,
+    #    quote = FALSE
+    #)
+    
     message('... done')
-    class(uniqNB_Summary) <-
-        c(class(uniqNB_Summary), "nanobodyFlycodeLinking")
+    class(uniqNB_Summary) <- c(class(uniqNB_Summary), "nanobodyFlycodeLinking")
     return(uniqNB_Summary)
 }
