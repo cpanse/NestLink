@@ -18,9 +18,13 @@
 PGexport results
 }
 \examples{
-filename <- system.file(
-  "extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
-  package = "NestLink")
+# filename <- system.file(
+#  "extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
+#  package = "NestLink")
+library(ExperimentHub)
+eh <- ExperimentHub()
+filename <- query(eh,
+  c("NestLink", "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
 P <- read.csv(filename, header = TRUE, sep=';')
 P <- P[P$Modifications == '', ]
 P <- P[,c('Accession', 'Sequence',
