@@ -20,10 +20,10 @@ uniqNB2FC dataframe
 run NGS workflow
 }
 \examples{
-dataFolder <- file.path(path.package(package = 'NestLink'), 'extdata')
-expFile <- list.files(dataFolder,pattern='*.fastq.gz', full.names = TRUE)
-knownNB_File <- list.files(dataFolder, pattern='knownNB.txt',
-    full.names = TRUE)
+library(ExperimentHub)
+eh <- ExperimentHub()
+expFile <- query(eh, c("NestLink", "NL42_100K.fastq.gz"))[[1]]
+knownNB_File <- query(eh, c("NestLink", "knownNB.txt"))[[1]]    
 knownNB_data <- read.table(knownNB_File, sep='\\t', header = TRUE,
     row.names = 1, stringsAsFactors = FALSE)
 knownNB <- Biostrings::translate(DNAStringSet(knownNB_data$Sequence))

@@ -1,4 +1,4 @@
-#' filter input sequences for two patterns
+#' Filter input sequences for two patterns
 #'
 #' @param reads input sequences
 #' @param leftPattern left pattern motive.
