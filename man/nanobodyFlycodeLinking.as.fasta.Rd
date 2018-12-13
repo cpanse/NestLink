@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasta.R
 \name{nanobodyFlycodeLinking.as.fasta}
 \alias{nanobodyFlycodeLinking.as.fasta}
-\title{write FASTA}
+\title{Write FASTA}
 \usage{
 nanobodyFlycodeLinking.as.fasta(x, file = NULL, ...)
 }
@@ -18,10 +18,12 @@ nanobodyFlycodeLinking.as.fasta(x, file = NULL, ...)
 sprintf stream
 }
 \description{
-write FASTA
+Write FASTA
 }
 \examples{
-f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+library(ExperimentHub)
+eh <- ExperimentHub()
+f <- query(eh, c("NestLink", "nanobodyFlycodeLinkage.RData"))[[1]]
 load(f)
 summary(nanobodyFlycodeLinkage.sample)
 nanobodyFlycodeLinking.as.fasta(nanobodyFlycodeLinkage.sample)

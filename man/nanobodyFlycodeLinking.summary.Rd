@@ -17,7 +17,9 @@ a data.frame object
 Object Summaries of S3 class \code{nanobodyFlycodeLinking}
 }
 \examples{
-f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+library(ExperimentHub)
+eh <- ExperimentHub()
+f <- query(eh, c("NestLink", "nanobodyFlycodeLinkage.RData"))[[1]]
 load(f)
 summary(nanobodyFlycodeLinkage.sample)
 }

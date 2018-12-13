@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilityFunctions_NGS.r
 \name{twoPatternReadFilter}
 \alias{twoPatternReadFilter}
-\title{filter input sequences for two patterns}
+\title{Filter input sequences for two patterns}
 \usage{
 twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
   prevPatternPos = NULL)
@@ -22,7 +22,7 @@ twoPatternReadFilter(reads, leftPattern, rightPattern, maxMismatch,
 list object
 }
 \description{
-filter input sequences for two patterns
+Filter input sequences for two patterns
 }
 \examples{
 reads <- DNAStringSet(c('ACTGGGTTT','ACCCTGGGTTT'))

@@ -1,6 +1,6 @@
 #R
 
-#' write FASTA
+#' Write FASTA
 #'
 #' @param x a \code{nanobodyFlycodeLinking} S3 object computed by
 #' \code{\link{runNGSAnalysis}}.
@@ -11,7 +11,9 @@
 #'
 #' @author Lennart Opitz, Christian Panse 2018
 #' @examples
-#' f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+#' library(ExperimentHub)
+#' eh <- ExperimentHub()
+#' f <- query(eh, c("NestLink", "nanobodyFlycodeLinkage.RData"))[[1]]
 #' load(f)
 #' summary(nanobodyFlycodeLinkage.sample)
 #' nanobodyFlycodeLinking.as.fasta(nanobodyFlycodeLinkage.sample)
@@ -50,7 +52,9 @@ is.nanobodyFlycodeLinking <- function(object) {
 #' @return a data.frame object
 #' @export nanobodyFlycodeLinking.summary
 #' @examples
-#' f <- system.file("extdata/nanobodyFlycodeLinkage.RData", package="NestLink")
+#' library(ExperimentHub)
+#' eh <- ExperimentHub()
+#' f <- query(eh, c("NestLink", "nanobodyFlycodeLinkage.RData"))[[1]]
 #' load(f)
 #' summary(nanobodyFlycodeLinkage.sample)
 nanobodyFlycodeLinking.summary <- function(object) {
