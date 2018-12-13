@@ -364,7 +364,9 @@ NB.unique <- function(x=getNB()) {
 #' @references \url{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118}
 #' @keywords data
 #' @examples
-#' data(WU160118)
+#' library(ExperimentHub)
+#' eh <- ExperimentHub(); 
+#' load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
 #' class(WU160118)
 #' PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 #' idx <- grepl(PATTERN, WU160118$pep_seq)
@@ -383,6 +385,8 @@ NULL
 #' @seealso \href{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-resource.html?id=409912}{F255744}
 #' @keywords data
 #' @examples
+#' library(ExperimentHub)
+#' eh <- ExperimentHub(); load(query(eh, c("NestLink", "F255744.RData"))[[1]])
 #' class(F255744)
 #' hist(F255744$RTINSECONDS)
 #' hist(F255744$RTINSECONDS[F255744$pep_score > 20])

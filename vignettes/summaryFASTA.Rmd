@@ -122,7 +122,9 @@ table(ESP$cond)
 ## Load workunit 160118 
 
 ```{r}
-data(WU160118)
+library(ExperimentHub)
+eh <- ExperimentHub(); 
+load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
 WU <- WU160118
 ```
 
