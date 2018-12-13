@@ -8,13 +8,7 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - install R (>= 3.6)
 
-- pandoc (for exporting markdown files to other formats).
-
-- install (https://CRAN.R-project.org/package=devtools)
-
-- install required R packages
-
-**Whatsoever for a clean install, I recommend using the current R version 3.6 and the current Bioconductor 3.9.**
+- install Bioconductor (>=3.9)
 
 ### Versions the software has been tested on
 
