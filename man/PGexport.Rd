@@ -50,7 +50,7 @@ P$FCset_ng[P$Accession \%in\% c('P1C6', 'P1D6', 'P1E6',
  P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
  P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
 
-  O<-P
+  O <- P
   b <- boxplot(df<-cbind(P$coli1 - P$coli2, P$coli1 - P$smeg1,
   P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2,
   P$smeg1 - P$smeg2),

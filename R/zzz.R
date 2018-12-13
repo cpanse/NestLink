@@ -16,6 +16,7 @@
 #'
 #' @return createHubAccessors
 #' @import ExperimentHub
+#' @importFrom utils read.csv
 .onLoad <- function(libname, pkgname) {
     fl <- system.file("extdata", "metadata.csv", package=pkgname)
     metadata <- read.csv(fl, stringsAsFactors=FALSE)
