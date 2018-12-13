@@ -18,11 +18,11 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 ### Versions the software has been tested on
 
-|platform|platform version|R version|note|
-| :------- |:---------------| :-------|:------- |
-|Linux     | Debian 10 ([buster](https://www.debian.org/releases/testing/releasenotes)) | R 3.5.1, Bioconductor version 3.8| CP |
-|Microsoft |Server 2012 R2 x64| R 3.5.0, Bioconductor version 3.7||
-| macOS High| Sierra 10.13.4| R 3.4.2||
+|platform|NestLink version|platform version|R version|note|
+| :------- |:---------------|:---------------| :-------|:------- |
+|Linux     | 0.99.51 | Debian 10 ([buster](https://www.debian.org/releases/testing/releasenotes)) | R 3.5.1, Bioconductor version 3.8| CP |
+|Microsoft | 0.99.51 | Server 2012 R2 x64| R 3.5.0, Bioconductor version 3.7||
+| macOS High| 0.99.51 | Sierra 10.13.4| R 3.4.2||
 
 
 ## 2. Installation guide
