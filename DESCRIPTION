@@ -29,7 +29,7 @@ Author: Pascal Egloff [ctb, aut],
 Version: 0.99.71
 Depends: R (>= 3.5.1),
   AnnotationHub,
-  ExperimentHub,
+  ExperimentHub (>= 0.99.6),
   Biostrings,
   gplots,
   protViz (>= 0.3.1), 
@@ -45,7 +45,7 @@ Description: Provides next-generation sequencing (NGS) and mass spectrometry (MS
 License: GPL
 LazyData: TRUE
 VignetteBuilder: knitr
-Suggests: ExperimentHub (>= 0.99.6), BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, shiny, testthat, specL, lattice, scales
+Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, shiny, testthat, specL, lattice, scales
 NeedsCompilation: no
 biocViews: ExperimentHub, ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
 RoxygenNote: 6.1.1
