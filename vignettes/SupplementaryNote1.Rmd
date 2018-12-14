@@ -27,6 +27,7 @@ vignette: |
 library(lattice)
 library(knitr)
 library(parallel)
+library(NestLink)
 
 cv <- 1 - 1:7 / 10
 t <- trellis.par.get("strip.background")
