@@ -33,22 +33,26 @@
 }
 
 
-#' NestLink getExperimentHubFilename
+#' getExperimentHubFilename
 #'
 #' @param filename
-#' @return ehubfilename
+#' @return character
 #' 
 #' @export getExperimentHubFilename
 #' @importFrom AnnotationHub query
 #' @importFrom ExperimentHub ExperimentHub
 #' 
 #' @examples 
-#' (filename <- getExperimentHubFilename("WU160118.RData))
+#' fl <- system.file("extdata", "metadata.csv", package="NestLink")   
+#' metadata <- read.csv(fl, stringsAsFactors=FALSE)
+#'      metadata$Title     
+#'      
+#' lapply(metadata$RDataPath, getExperimentHubFilename)
 getExperimentHubFilename <- function(filename){
-    eh = ExperimentHub()
     suppressMessages({
-        filename <- load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
-
+        eh = ExperimentHub()
+    
+        filename <- query(eh, c("NestLink", filename))[[1]]
         })
     filename
 }
