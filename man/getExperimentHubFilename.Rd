@@ -6,8 +6,11 @@
 \usage{
 getExperimentHubFilename(filename)
 }
+\arguments{
+\item{filename}{of the aws s3 blob.}
+}
 \value{
-character
+the file name of the local ExperimentHub.
 }
 \description{
 getExperimentHubFilename
