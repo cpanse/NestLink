@@ -35,8 +35,8 @@
 
 #' getExperimentHubFilename
 #'
-#' @param filename
-#' @return character
+#' @param filename of the aws s3 blob.
+#' @return the file name of the local ExperimentHub.
 #' 
 #' @export getExperimentHubFilename
 #' @importFrom AnnotationHub query
