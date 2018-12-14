@@ -9,19 +9,25 @@
     }
 }
 
-#' NestLinkzzz
+#' NestLink zzz .onLoad
 #'
 #' @param libname xx
 #' @param pkgname xx
 #'
-#' @return createHubAccessors
-#' @import ExperimentHub
+#' @importFrom AnnotationHub query
+#' @importFrom ExperimentHub ExperimentHub
 #' @importFrom utils read.csv
 .onLoad <- function(libname, pkgname) {
     fl <- system.file("extdata", "metadata.csv", package=pkgname)
     metadata <- read.csv(fl, stringsAsFactors=FALSE)
-    #library(ExperimentHub)
-    #eh = ExperimentHub()
+
+    eh = ExperimentHub()
+    load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
+
+    filename <- query(eh, c("NestLink",
+        "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
+
+    PGexport2_normalizedAgainstSBstandards_Peptides <- read.csv(filename, header = TRUE, sep=';')
     #query(eh, "NestLink")
     #createHubAccessors(pkgname, titles)
 }
