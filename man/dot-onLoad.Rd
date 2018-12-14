@@ -2,7 +2,7 @@
 % Please edit documentation in R/zzz.R
 \name{.onLoad}
 \alias{.onLoad}
-\title{NestLinkzzz}
+\title{NestLink zzz .onLoad}
 \usage{
 .onLoad(libname, pkgname)
 }
@@ -11,9 +11,6 @@
 
 \item{pkgname}{xx}
 }
-\value{
-createHubAccessors
-}
 \description{
-NestLinkzzz
+NestLink zzz .onLoad
 }
