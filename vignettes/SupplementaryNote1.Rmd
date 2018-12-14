@@ -139,7 +139,7 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 ```
 
 
-```{r pairs, fig.retina=3}
+```{r pairs, fig.retina=1}
 rv <-lapply(unique(P$ConcGr), function(q){
 pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
@@ -276,7 +276,7 @@ S.rep <- do.call('rbind',
 
 ## Camera ready plot of absolute flycode simulation
 
-```{r NestLink_absolute_flycode_simulation, fig.retina=3, fig.height=6, fig.width=12, fig.path='Figs/'}
+```{r NestLink_absolute_flycode_simulation, fig.retina=1, fig.height=6, fig.width=12, fig.path='Figs/'}
 NestLink_absolute_flycode_simulation <- xyplot(cv ~ nFCAccession |  ConcGr,
        data = S.rep,
        panel = function(x,y,...){
@@ -338,14 +338,14 @@ P$ratios <- (0.5* (P$coli1 + P$coli2)) / (0.5 * (P$smeg1 + P$smeg2))
 ```
 
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 
 b <- boxplot(P$coli1 / P$coli2, P$coli1 / P$smeg1, P$coli1 / P$smeg2,P$coli2 / P$smeg1, P$coli2 / P$smeg2 , P$smeg1 / P$smeg2, P$ratios, 
         ylab='ratios', ylim = c(0,2 ))
 axis(1, 1:6, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1', 'coli2- smeg2','smeg[12]'))
 ```
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 op <- par(mfrow = c(1, 4))
 boxplot(P$coli1 ~ P$ConcGr)
 boxplot(P$coli2 ~ P$ConcGr)
@@ -356,7 +356,7 @@ boxplot(P$smeg2 ~ P$ConcGr)
 
 ## Determine outliers (removal)
 
-```{r NestLink_boxplot_techrep_biorep, fig.retina=3, fig.height=12, fig.width=12, fig.path='Figs/'}
+```{r NestLink_boxplot_techrep_biorep, fig.retina=1, fig.height=12, fig.width=12, fig.path='Figs/'}
 
 op <- par(mfrow=c(1,1), mar=c(5,5,5,2) )
 
@@ -406,7 +406,7 @@ kable(P[unique(outliers.idx),])
 
 ```
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 rv <-lapply(unique(P$ConcGr), function(q){
 pairs((P[P$ConcGr == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
@@ -498,7 +498,7 @@ xyplot(ratios ~ Accession |  ConcGr,
 ```
 
 
-```{r fig.retina=3, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
+```{r fig.retina=1, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
 P<-na.omit(P)
 trellis.par.set("strip.background",t)
 
@@ -530,7 +530,7 @@ P[outlier.idx, ]
 # We do not remove outliers.
 # P <- P[-outlier.idx,]
 ```
-```{r fig.retina=3, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
+```{r fig.retina=1, fig.cap="measured ratios were plotted; red represents the sd and blue points the mean."}
 P<-na.omit(P)
 trellis.par.set("strip.background",t)
 
@@ -665,7 +665,7 @@ P.replicate.coli <- do.call('rbind',
 
 ```
 
-```{r fig.retina=3, fig.cap='the grey point cloud represents the means, sd, and cv of `n.simulation` conducted random experiments (removals) with a different number of FlyCodes.'}
+```{r fig.retina=1, fig.cap='the grey point cloud represents the means, sd, and cv of `n.simulation` conducted random experiments (removals) with a different number of FlyCodes.'}
 
 xyplot(mean ~  length | ConcGr, 
        data=P.replicate,
@@ -708,7 +708,7 @@ xyplot(cv ~  length | ConcGr,
 
 ## Camera ready plot of relative flycode simulation
 
-```{r NestLink_relative_flycode_simulation, fig.retina=3, fig.height=4, fig.width=12, fig.path='Figs/'}
+```{r NestLink_relative_flycode_simulation, fig.retina=1, fig.height=4, fig.width=12, fig.path='Figs/'}
 SIM <- P.replicate
 SIM$Type <- "Biological replicates"
 P.replicate.coli$Type <- "Technical replicates"

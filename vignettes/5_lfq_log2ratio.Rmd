@@ -109,7 +109,7 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 ```
 
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 rv <-lapply(unique(P$FCset_ng), function(q){
 pairs(log(P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')], 2),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
@@ -259,7 +259,7 @@ P$smeg1 <- (log(P$smeg1,2) - mean(log(P$smeg1,2))) / sd(log(P$smeg1,2))
 P$smeg2 <- (log(P$smeg2,2) - mean(log(P$smeg2,2))) / sd(log(P$smeg2,2))
 ```
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 
 b <- boxplot(P$coli1 - P$coli2, P$coli1 - P$smeg1, P$coli1 - P$smeg2,P$coli2 - P$smeg1, P$coli2 - P$smeg2 , P$smeg1 - P$smeg2, 
         ylab='log2ratios', ylim = c(-1,1))
@@ -267,7 +267,7 @@ axis(1, 1:6, c('coli[12]', 'coli1-smeg1', 'coli1-smeg2', 'coli2-smeg1', 'coli2- 
 
 ```
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 op <- par(mfrow = c(2, 4))
 boxplot(P$coli1 ~ P$FCset_ng)
 boxplot(P$coli2 ~ P$FCset_ng)
@@ -283,7 +283,7 @@ boxplot(P0$smeg2 ~ P0$FCset_ng, main="sum")
 
 ## determine outliers (removal)
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 b <- boxplot(P$coli1, P$coli2, P$smeg1, P$smeg2)
 axis(3, 1:4, names(P[3:6]))
 
@@ -304,7 +304,7 @@ P[unique(outliers.idx),]
 
 
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 rv <-lapply(unique(P$FCset_ng), function(q){
 pairs((P[P$FCset_ng == q ,c('coli1', 'coli2', 'smeg1', 'smeg2')]),
       pch=16, col=rgb(0.5,0.5,0.5,alpha = 0.3),
@@ -379,7 +379,7 @@ P.cv <- aggregate(P$log2ratios ~ P$Accession, FUN=function(x){sd(x)/mean(x)})
 ```
 
 
-```{r fig.retina=3, fig.cap="measured log2 ratios were plotted; red represents the sd and blue points the mean."}
+```{r fig.retina=1, fig.cap="measured log2 ratios were plotted; red represents the sd and blue points the mean."}
 P<-na.omit(P)
 trellis.par.set("strip.background",t)
 
@@ -417,7 +417,7 @@ P.test$pvalue <- apply(P.test[, c('coli1', 'coli2', 'smeg1', 'smeg2')], 1,
   )
 ```
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 xyplot(-log10(pvalue) ~ log2ratios| FCset_ng, 
         panel = function(...){
          panel.abline(v=c(-1,1,0),
@@ -496,7 +496,7 @@ P.replicate <- do.call('rbind',
 
 ```
 
-```{r fig.retina=3, fig.cap='the grey point cloud represents the means of 200 conducted random experiments (removals) with a different number of FlyCodes.'}
+```{r fig.retina=1, fig.cap='the grey point cloud represents the means of 200 conducted random experiments (removals) with a different number of FlyCodes.'}
 
 xyplot(mean ~ length/6 | FCset_ng, 
        data=P.replicate,

@@ -129,7 +129,7 @@ the `ssrc` model is an implementation of
 [@pmid25712692](http://bioconductor.org/packages/specL/)
 
 just apply ssrc to a real world LC-MS run
-```{r fig.retina=3}
+```{r fig.retina=1}
 ssrc <- sapply(peptideStd, function(x){ssrc(x$peptideSequence)})
 rt <- unlist(lapply(peptideStd, function(x){x$rt}))
 plot(ssrc, rt); abline(ssrc.lm <- lm(rt ~ ssrc), col='red'); 
@@ -150,7 +150,7 @@ hyd.breaks <- seq(round(hyd.min - 1) , round(hyd.max + 1) , length=75)
 
 ## Draw hydrophobicity histogram 
 
-```{r fig.retina=3}
+```{r fig.retina=1}
 hist(hyd.GPGx8cTerm, breaks = hyd.breaks, probability = TRUE, 
      col='#1111AAAA', xlab='hydrophobicity', 
      ylim=c(0, 0.06),
@@ -208,7 +208,7 @@ table(table(unlist(lapply(peptides.GPx10R,
 ```
 
 the plots graph a LC-MS map.
-```{r fig.width=10, fig.height=10, fig.retina=3, echo=FALSE}
+```{r fig.width=10, fig.height=10, fig.retina=1, echo=FALSE}
 par(mfrow=c(2, 2))
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPGx8cTerm, main='GPGx8cTerm')
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPx10R, main='GPx10R')
