@@ -4,6 +4,7 @@
 \section{Changes until version 0.99.66 (2018-12-13)}{
   \itemize{
 	  \item use \url{http://bioconductor.org/packages/devel/bioc/html/ExperimentHub.html}.
+	  \item \code{getExperimentHubFilename}.
   }
 }
 
