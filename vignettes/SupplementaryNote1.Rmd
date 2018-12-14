@@ -41,12 +41,11 @@ n.simulation <- 10
 ```{r}
 # filename <- system.file("extdata/PGexport2_normalizedAgainstSBstandards_Peptides.csv",
 #                        package = "NestLink")
+# library(ExperimentHub)
+# eh <- ExperimentHub()
+# filename <- query(eh, c("NestLink", "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
 
-library(ExperimentHub)
-
-eh <- ExperimentHub()
-
-filename <- query(eh, c("NestLink", "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
+filename <- getExperimentHubFilename("PGexport2_normalizedAgainstSBstandards_Peptides.csv")
 P <- read.csv(filename,
               header = TRUE, sep=';')
 dim(P)
