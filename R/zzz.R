@@ -21,13 +21,34 @@
     fl <- system.file("extdata", "metadata.csv", package=pkgname)
     metadata <- read.csv(fl, stringsAsFactors=FALSE)
 
-    eh = ExperimentHub()
-    load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
+    # eh = ExperimentHub()
+    # load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
 
-    filename <- query(eh, c("NestLink",
-        "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
+    # filename <- query(eh, c("NestLink",
+    #    "PGexport2_normalizedAgainstSBstandards_Peptides.csv"))[[1]]
 
-    PGexport2_normalizedAgainstSBstandards_Peptides <- read.csv(filename, header = TRUE, sep=';')
+    #PGexport2_normalizedAgainstSBstandards_Peptides <- read.csv(filename, header = TRUE, sep=';')
     #query(eh, "NestLink")
     #createHubAccessors(pkgname, titles)
+}
+
+
+#' NestLink load data
+#'
+#' @param filename
+#' @return ehubfilename
+#' 
+#' @export getData
+#' @importFrom AnnotationHub query
+#' @importFrom ExperimentHub ExperimentHub
+#' 
+#' @examples 
+#' (filename <- getExperimentHubFilename("WU160118.RData))
+getExperimentHubFilename <- function(filename){
+    eh = ExperimentHub()
+    suppressMessages({
+        filename <- load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
+
+        })
+    filename
 }
