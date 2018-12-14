@@ -33,12 +33,12 @@
 }
 
 
-#' NestLink load data
+#' NestLink getExperimentHubFilename
 #'
 #' @param filename
 #' @return ehubfilename
 #' 
-#' @export getData
+#' @export getExperimentHubFilename
 #' @importFrom AnnotationHub query
 #' @importFrom ExperimentHub ExperimentHub
 #' 
