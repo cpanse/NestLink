@@ -52,6 +52,7 @@ meta data (no MS2).
 ```{r eval=FALSE}
 load("~/Downloads/444589.RData")
 library(protViz)
+library(NestLink)
 WU160118 <- do.call('rbind', lapply(list("F255737", "F255744", "F255747", 
   "F255749", "F255751", "F255760", "F255761", "F255762"), 
   function(datfilename){
