@@ -26,14 +26,8 @@ run an R session and execute the following R code snippet
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("specL", version = "3.9")
-BiocManager::install("ShortRead", version = "3.9")
-BiocManager::install("GenomeInfoDb", version = "3.9")
-BiocManager::install("ExperimentalHub", version = "3.9")
-
-install.package('devtools')
-library(devtools)
-install_github('cpanse/NestLink', build_vignettes = TRUE)
+    
+BiocManager::install("cpanse/NestLink", version = "3.9")  
 ```
 
 **Typical install time** - 
