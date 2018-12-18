@@ -65,7 +65,14 @@ save(WU160118, file = "../inst/extdata/WU160118.RData",
      compress = TRUE, compression_level = 9)   
 ```
 
-The data ships with the NestLink package and can be found here: `system.file("extdata/WU160118.RData", package = "NestLink")`.
+The data ships with the `r Biocpkg("NestLink")` package and can be browsed using 
+the following code snippet:
+
+```{r, eval=FALSE}
+library(ExperimentHub)
+eh <- ExperimentHub(); 
+load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
+```
 
 # Load requiered R packages
 

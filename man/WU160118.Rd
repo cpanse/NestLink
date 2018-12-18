@@ -22,6 +22,9 @@ histogram(~RTINSECONDS| datfilename, data = WU, type='count')
 \references{
 \url{https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118}
 }
+\seealso{
+please read the vignette summaryFASTA.Rmd.
+}
 \author{
 Christian Panse
 }

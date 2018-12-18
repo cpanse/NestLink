@@ -18,7 +18,14 @@ compose_GPGx8cTerm(pool = c(rep("A", 12), rep("S", 0), rep("T", 12),
 a AA sequence
 }
 \description{
-Compose a peptide with a defined AA sequence frequency
+composes, out of an as input given amino acid distribution,
+a randomly sampled amino acid sequence. \code{\link{compose_GPGx8cTerm}},
+\code{\link{compose_GSx7cTerm}}, and \code{\link{compose_GPx10R}} belong to
+three groups composing different flycode (peptide) construction.
+The construction is given in the function name. For example, GPGx8cTerm,
+composes a flycode having as prefix GPG followed by eight (x8) amino acids
+followed by a cTerm sequence. The different construction will have different
+detectability properties as mass range and hydrophobicity values.
 }
 \examples{
 set.seed(1)
@@ -27,7 +34,5 @@ compose_GPGx8cTerm()
 plot(parentIonMass(FlyCodes) ~ssrc(FlyCodes))
 }
 \author{
-Christian Panse, 2015
-
 Christian Panse <cp@fgcz.ethz.ch> 2015
 }

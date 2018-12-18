@@ -124,8 +124,10 @@ kable(P.summary[order(P.summary$ConcGr),], row.names = FALSE)
 # write.csv(P.summary, file='Figs/FigureS6b.csv')
 ```
 
+The following function defines the computation and rendering of the by the
+`paris` function called panels.
 
-```{r echo=FALSE}
+```{r echo=TRUE}
 panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 {
     usr <- par("usr"); on.exit(par(usr))
