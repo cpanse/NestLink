@@ -27,7 +27,10 @@ vignette: |
 # Make Data (replaces `make-data.R`)
 
 ## `NL42_100K.fastq.gz`
+TODO(LO)
+
 ## `knownNB.txt`
+TODO(LO)
 
 
 ## `nanobodyFlycodeLinkage.RData`
