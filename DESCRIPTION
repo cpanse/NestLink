@@ -15,17 +15,6 @@ Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = c(
   person("Markus", "Seeger", email = "cp@fgcz.ethz.ch", role = c("aut", "ctb"),
           comment = c(ORCID = "0000-0003-1761-8571"))
         )
-Author: Pascal Egloff [ctb, aut],
-  Iwan Zimmermann [ctb],
-  Fabian M. Arnold [ctb],
-  Cedric A.J. Hutter [ctb],
-  Damien Morger [ctb],
-  Lennart Opitz [aut],
-  Lucy Poveda  [ctb],
-  Hans-Anto Keserue  [ctb],
-  Christian Panse  [aut, cre] (0000-0003-1975-3064),
-  Bernd Roschitzki  [ctb, aut],
-  Markus Seeger [ctb, aut] (0000-0003-1761-8571)
 Version: 0.99.82
 Depends: R (>= 3.6),
   AnnotationHub,
@@ -43,7 +32,6 @@ Description: Provides next-generation sequencing (NGS) and mass spectrometry (MS
   handling individual clones at any stage of the process. Data were mainly acquired on
   the NGS and MS platforms at the Functional Genomics Center Zurich core facility.
 License: GPL
-LazyData: TRUE
 VignetteBuilder: knitr
 Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, testthat, specL, lattice, scales
 NeedsCompilation: no
