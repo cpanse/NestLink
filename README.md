@@ -10,15 +10,6 @@ Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
 - install Bioconductor (>=3.9)
 
-### Versions the software has been tested on
-
-|platform|NestLink version|platform version|R version|note|
-| :------- |:---------------|:---------------| :-------|:------- |
-|Linux     | 0.99.51 | Debian 10 ([buster](https://www.debian.org/releases/testing/releasenotes)) | R 3.5.1, Bioconductor version 3.8| CP |
-|Microsoft | 0.99.51 | Server 2012 R2 x64| R 3.5.0, Bioconductor version 3.7||
-| macOS High| 0.99.51 | Sierra 10.13.4| R 3.4.2||
-
-
 ## 2. Installation guide
 
 run an R session and execute the following R code snippet
@@ -31,12 +22,18 @@ BiocManager::install("cpanse/NestLink", version = "3.9")
 ```
 
 **Typical install time** - 
-Expect an hour to get all the R packages (BioConductor) running. 
-If all dependencies are installed 
-`install_github('cpanse/NestLink', build_vignettes = TRUE)` requires 1m47.014s 
-on a Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz running Debian Linux.
+based on the [Dockerfile](inst/script/Dockerfile) the install snippet above 
+took 19m46.464s on a linux server (RAID6, Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz).
 
 As an alternative you can also consider the latest [release](https://github.com/cpanse/NestLink/releases).
+
+### Versions the software has been tested on
+
+|platform|NestLink version|platform version|R version|note|
+| :------- |:---------------|:---------------| :-------|:------- |
+|Linux     | 0.99.51 | Debian 10 ([buster](https://www.debian.org/releases/testing/releasenotes)) | R 3.5.1, Bioconductor version 3.8| CP |
+|Microsoft | 0.99.51 | Server 2012 R2 x64| R 3.5.0, Bioconductor version 3.7||
+| macOS High| 0.99.51 | Sierra 10.13.4| R 3.4.2||
 
 ## 3. Demonstration / Documentation
 
