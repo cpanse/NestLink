@@ -27,17 +27,56 @@ vignette: |
 # Make Data (replaces `make-data.R`)
 
 ## `NL42_100K.fastq.gz`
-## `nanobodyFlycodeLinkage.RData`
 ## `knownNB.txt`
+
+
+## `nanobodyFlycodeLinkage.RData`
+NGS ground truth derived by appling the function `runNGSAnalysis`
+to the previous files.
 
 ## `NB.tryptic` and `FC.tryptic`
 
 * https://fgcz-gstore.uzh.ch/projects/p1644/analysis_20170609_o3040/p1644o3482-4_S4.extendedFrags_uniqNB2FC.txt
 * https://fgcz-gstore.uzh.ch/projects/p1644/analysis_20170609_o3040/p1644o3482-5_S5.extendedFrags_uniqNB2FC.txt
 
-## `F255744.RData`
+## `F255744.RData` and `WU160118.RData`
 
-## `WU160118.RData`
+the mass spec files below availbale through [ProteomeXchange PXD009301](https://www.ebi.ac.uk/pride/archive/login) 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(ExperimentHub)
+eh <- ExperimentHub(); 
+load(query(eh, c("NestLink", "WU160118.RData"))[[1]])
+class(WU160118)
+PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
+idx <- grepl(PATTERN, WU160118$pep_seq)
+WU <- WU160118[idx & WU160118$pep_score > 25,]
+
+kable(unique(unlist(lapply(strsplit(x=as.character(WU$pep_scan_title), split=";"), function(x)gsub("File:", "", gsub("\\\\", "/", x[1]))))))
+
+```
+
+were assigned to peptide sequences using the parameter listed in the table below and the Matrix Science Mascot Server version 2.5. 
+
+|Parameter|Value|
+|:---|:---|
+|COM|170819_MS1708116_NL5idx4to5_Competition2BG_db8_db10_swissprot_d_merge|
+|TOL|10|
+|TOLU|ppm|
+|ITOL|0.6| 
+|ITOLU|Da|
+|USERNAME|egloffp|
+|CHARGE|2+|
+|IT_MODS|Deamidated (NQ),Oxidation (M)|
+|INSTRUMENT|ESI-TRAP|
+|release|fgcz_swissprot_d_20140403.fasta|
+
+The results were exported as XML.
+The XML was parsed and exported as data.frame using `r CRANpkg('protViz')` function `protViz:::as.data.frame.mascot`.
+
+
+
 
 ## `PGexport2_normalizedAgainstSBstandards_Peptides.csv`
 
@@ -55,7 +94,7 @@ Two LC-MS/MS runs were aligned in Progenesis QI (Nonlinear Dynamics) with an
 alignment score of 93.1 %, followed by peak picking with an allowed ion
 charge of +2 to +5. 
 
-# uploading to S3
+# Uploading to S3
 ```
 #!/bin/bash
 
@@ -70,15 +109,15 @@ aws --profile AnnotationContributor s3 cp NestLink s3://annotation-contributor/N
 
 load metadata
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 
 fl <- system.file("extdata", "metadata.csv", package='NestLink')
-metadata <- read.csv(fl, stringsAsFactors=FALSE)
+kable(metadata <- read.csv(fl, stringsAsFactors=FALSE))
 ```
 
-load NestLink data from aws s3
+load `r Biocpkg("NestLink")` package data from aws s3
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, eval=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE}
 library(ExperimentHub)
 
 eh <- ExperimentHub(); 
