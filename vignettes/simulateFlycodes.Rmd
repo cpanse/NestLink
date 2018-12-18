@@ -14,7 +14,7 @@ abstract: |
   the mass range, hydrophobicity and the cycle time of a
   mass spec device.
 package: NestLink
-date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24'
+date: '2015-04-01, 2015-04-28,  2015-04-29, 2015-04-30, 2015-10-24, 2018-12-17'
 vignette: |
   %\VignetteIndexEntry{0. Derive Peptide FlyCodes by Conducting Random Experiment}
   %\VignetteEngine{knitr::rmarkdown}
@@ -90,9 +90,11 @@ peptides.GPx10R <- replicate(sample.size, compose_GPx10R(aa_pool_1_2_9_10, aa_po
 ```
 
 # Peptide mass
+
 ## Compute peptide mass
 
 ```{r}
+library(protViz)
 (smp.peptide <- compose_GPGx8cTerm(aa_pool_x8))
 parentIonMass(smp.peptide)
 
@@ -124,23 +126,27 @@ legend("topleft", c('GPGx8cTerm', 'GPx10R', 'iRT'),
 
 ## Compute Hydrophobicity value using SSRC 
 
-the `ssrc` model is an implementation of  
-[@pmid15238601](http://www.ncbi.nlm.nih.gov/pubmed/15238601),
-[@pmid25712692](http://bioconductor.org/packages/specL/)
+the SSRC model, see @pmid15238601, is implemented as `ssrc` function in
+`r CRANpkg("protViz")`.
 
-just apply ssrc to a real world LC-MS run
+For a sanity check we apply the `ssrc` function 
+to a real world LC-MS run `peptideStd` consits of a digest of the
+`FETUIN_BOVINE`
+protein (400 amol) shipped with `r Biocpkg("specL")` @pmid25712692.
+
 ```{r fig.retina=1}
+library(specL)
 ssrc <- sapply(peptideStd, function(x){ssrc(x$peptideSequence)})
 rt <- unlist(lapply(peptideStd, function(x){x$rt}))
 plot(ssrc, rt); abline(ssrc.lm <- lm(rt ~ ssrc), col='red'); 
 legend("topleft", paste("spearman", round(cor(ssrc, rt, method='spearman'),2)))
 ```
+here we apply `ssrc` to the simulated flycodes and iRT peptides @pmid22577012.
 
 ```{r fig.width=5, fig.height=5}
-hydrophobicity <- function(x){unlist(lapply(x, ssrc))}
-hyd.GPGx8cTerm <- hydrophobicity(peptides.GPGx8cTerm)
-hyd.GPx10R <- hydrophobicity(peptides.GPx10R)
-hyd.iRT <- hydrophobicity(as.character(iRTpeptides$peptide))
+hyd.GPGx8cTerm <- ssrc(peptides.GPGx8cTerm)
+hyd.GPx10R <- ssrc(peptides.GPx10R)
+hyd.iRT <- ssrc(as.character(iRTpeptides$peptide))
 
 (hyd.min <- min(hyd.GPGx8cTerm, hyd.GPx10R))
 (hyd.max <- max(hyd.GPGx8cTerm, hyd.GPx10R))
@@ -207,8 +213,9 @@ table(table(unlist(lapply(peptides.GPx10R,
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
 ```
 
-the plots graph a LC-MS map.
-```{r fig.width=10, fig.height=10, fig.retina=1, echo=FALSE}
+the helper function `NestLink:::.plot_in_silico_LCMS_map` graph the LC-MS maps.
+
+```{r fig.width=10, fig.height=10, fig.retina=1, echo=TRUE}
 par(mfrow=c(2, 2))
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPGx8cTerm, main='GPGx8cTerm')
 h <- NestLink:::.plot_in_silico_LCMS_map(peptides.GPx10R, main='GPx10R')
