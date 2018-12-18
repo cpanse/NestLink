@@ -116,8 +116,10 @@ table(P$Accession)
 ## Camera ready summary table
 
 ```{r}
-P.summary <- aggregate(. ~ ConcGr * Accession, data=P[,c('Accession','coli1','coli2','smeg1','smeg2','ConcGr')], FUN=sum)
-P.summary$nDetectedFlycodes <- aggregate(Sequence ~ ConcGr * Accession, data=na.omit(P), FUN=length)[,3]
+P.summary <- aggregate(. ~ ConcGr * Accession, data=P[,c('Accession', 'coli1',
+    'coli2', 'smeg1', 'smeg2', 'ConcGr')], FUN=sum)
+P.summary$nDetectedFlycodes <- aggregate(Sequence ~ ConcGr * Accession,
+    data=na.omit(P), FUN=length)[,3]
 P.summary$nTotalFlycodes <- 30
 P.summary$coverage <- round(100 * P.summary$nDetectedFlycodes  / P.summary$nTotalFlycodes)
 kable(P.summary[order(P.summary$ConcGr),], row.names = FALSE)
@@ -359,7 +361,6 @@ boxplot(P$smeg2 ~ P$ConcGr)
 ## Determine outliers (removal)
 
 ```{r NestLink_boxplot_techrep_biorep, fig.retina=1, fig.height=12, fig.width=12, fig.path='Figs/'}
-
 op <- par(mfrow=c(1,1), mar=c(5,5,5,2) )
 
 b <- boxplot(df<-cbind(P$coli1/P$coli2, P$coli1/P$smeg1, P$coli1/P$smeg2, P$coli2/P$smeg1, P$coli2/P$smeg2, P$smeg1/P$smeg2, P$ratios),

@@ -1,5 +1,5 @@
 ---
-title: "On loading NestLink data using ExperimentHub"
+title: "On making and loading NestLink data"
 author:
 - name: Christian Panse
   affiliation: Functional Genomics Center Zurich, UZH|ETHZ
@@ -9,13 +9,64 @@ output:
   BiocStyle::html_document
 bibliography:
   - NestLink.bib
+abstract: |
+    Mass spectrometry data are available via ProteomeXchange with identifier
+    [PXD009301](https://www.ebi.ac.uk/pride/archive/login). 
+    NGS datasets are available on the European Nucleotide Archive (ENA)
+    under accession number 
+    [PRJEB25673](https://www.ebi.ac.uk/ena/data/search?query=PRJEB25673). 
+    The NGS and MS data were handled and
+    annotated using the [B-Fabric](https://fgcz-bfabric.uzh.ch) 
+    information management system and are available
+    for registered users under project identifiers 1644 and 1875.
 vignette: |
   %\VignetteIndexEntry{On loading NestLink data using ExperimentHub}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+# Make Data (replaces `make-data.R`)
 
-# Getting started
+## `NL42_100K.fastq.gz`
+## `nanobodyFlycodeLinkage.RData`
+## `knownNB.txt`
+
+## `NB.tryptic` and `FC.tryptic`
+
+* https://fgcz-gstore.uzh.ch/projects/p1644/analysis_20170609_o3040/p1644o3482-4_S4.extendedFrags_uniqNB2FC.txt
+* https://fgcz-gstore.uzh.ch/projects/p1644/analysis_20170609_o3040/p1644o3482-5_S5.extendedFrags_uniqNB2FC.txt
+
+## `F255744.RData`
+
+## `WU160118.RData`
+
+## `PGexport2_normalizedAgainstSBstandards_Peptides.csv`
+
+* Workunit : 158716 - QEXACTIVEHF_1
+
+    * `20170919_16_62465_nl5idx1-3_6titratecoli.raw`
+    * `20170919_05_62465_nl5idx1-3_6titratecoli.raw`
+
+* Workunit : 158717 - QEXACTIVEHF_1
+
+    * `20170919_14_62466_nl5idx1-3_7titratesmeg.raw`
+    * `20170919_09_62466_nl5idx1-3_7titratesmeg.raw`
+
+Two LC-MS/MS runs were aligned in Progenesis QI (Nonlinear Dynamics) with an
+alignment score of 93.1 %, followed by peak picking with an allowed ion
+charge of +2 to +5. 
+
+# uploading to S3
+```
+#!/bin/bash
+
+aws --profile AnnotationContributor s3 cp NestLink/F255744.RData s3://annotation-contributor/NestLink/F255744.RData --acl public-read
+
+aws --profile AnnotationContributor s3 cp NestLink/WU160118.RData s3://annotation-contributor/NestLink/WU160118.RData --acl public-read
+
+aws --profile AnnotationContributor s3 cp NestLink s3://annotation-contributor/NestLink --recursive --acl public-read
+
+```
+# Getting started using  Bioconductor ExperimentHub
 
 load metadata
 

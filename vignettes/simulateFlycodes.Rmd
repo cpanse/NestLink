@@ -208,12 +208,13 @@ sample.size
 
 table(table(tt<-unlist(lapply(peptides.GPGx8cTerm, 
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
-# write.table(tt, file='/tmp/tt.txt')
+# write.table(tt, file='GPGx8cTerm.txt')
 table(table(unlist(lapply(peptides.GPx10R, 
   function(x){paste(sort(unlist(strsplit(x, ''))), collapse='')}))))
 ```
 
-the helper function `NestLink:::.plot_in_silico_LCMS_map` graph the LC-MS maps.
+the `r Biocpkg("NestLink")` function `plot_in_silico_LCMS_map` graphs
+the LC-MS maps.
 
 ```{r fig.width=10, fig.height=10, fig.retina=1, echo=TRUE}
 par(mfrow=c(2, 2))
