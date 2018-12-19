@@ -21,9 +21,16 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("cpanse/NestLink", version = "3.9")  
 ```
 
+or using docker
+
+```
+docker push cpanse/nestlink
+```
+
+
 **Typical install time** - 
 based on the [Dockerfile](inst/scripts/Dockerfile) the install snippet above 
-took 19m46.464s on a linux server (RAID6, Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz).
+took 19m46.464s on a linux server (RAID6, Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz) and one hour on dockerhub.
 
 As an alternative you can also consider the latest [release](https://github.com/cpanse/NestLink/releases).
 
