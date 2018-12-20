@@ -44,6 +44,7 @@ the mass spec data p1875
 
 ## `NL42_100K.fastq.gz`
 
+TODO(LO): correct and complete
 Sample NGS data demonstratig the linkage between nanobodies (NB) and flycodes (FC) in FASTQ.
 
 ```{r eval=FALSE}
@@ -53,7 +54,7 @@ save(NL42_100K, file="inst/extdata/NestLink_NL42_100K.RData")
 
 ## `knownNB.txt`
 
-TODO(LO)
+TODO(LO):
 
 
 ## `nanobodyFlycodeLinkage.RData`
