@@ -30,7 +30,7 @@ vignette: |
 # Timeline Plots
 
 The package contains only a subset of the most important data generated over 
-a period of five years. To get an impression an overview of all annotated sample (S) and workuntis (W) in the bfabric system, @bfabric, is graphed in the timeline plots.
+a period of five years. To get an impression an overview of all annotated sample (S) and workunits (W) in the bfabric system, @bfabric, is graphed in the timeline plots.
 
 the NGS data p1644
 <img src='Figs/timeline_p1644.jpeg' width=800px>
@@ -44,7 +44,7 @@ the mass spec data p1875
 
 ## `NL42_100K.fastq.gz`
 
-Sample NGS data demonstratig the linkage between nanobodies (NB) and flycodes (FC) in FASTQ.
+Sample NGS data containing 100K merged MiSeq reads demonstrating the linkage between nanobodies (NB) and flycodes (FC) in FASTQ.
 
 ```{r eval=FALSE}
 NL42_100K <- NestLink:::.getReadsFromFastq("inst/extdata/NL42_100K.fastq.gz")
@@ -53,11 +53,11 @@ save(NL42_100K, file="inst/extdata/NestLink_NL42_100K.RData")
 
 ## `knownNB.txt`
 
-TODO(LO)
+An optional part of the NestLink workflow is the usage of known nanobodies in the sequencing experiment to estimate sensitity and specificity levels. This example file contains nucleotide sequences of nanobodies which should detectable in this experiment. In the later workflow these nanabodies are highlighted and labeled as known NB.
 
 
 ## `nanobodyFlycodeLinkage.RData`
-NGS ground truth derived by appling the function `runNGSAnalysis`
+NGS ground truth derived by applying the function `runNGSAnalysis`
 to the two previous files.
 
 ```{r eval=FALSE}
