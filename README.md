@@ -24,7 +24,8 @@ BiocManager::install("cpanse/NestLink", version = "3.9")
 or using docker
 
 ```
-docker push cpanse/nestlink
+docker pull cpanse/nestlink \
+  && docker run -a stdin -a stdout -i -t cpanse/nestlink /scratch/R-devel/bin/R
 ```
 
 
