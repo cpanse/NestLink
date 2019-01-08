@@ -526,7 +526,7 @@ NULL
 
 #' computes the correlation of predicted and measured retention time
 #'
-#' @param x \code{\link[protViz]{as.data.frame.mascot}} generated \code{data.frame} object.
+#' @param x \code{as,data.frame.\link[protViz]{mascot}} generated \code{data.frame} object.
 #' @param scores default is \code{c(10, 20, 40, 50)}.
 #' @description 
 #' this helper function computes a linear model between redicted and

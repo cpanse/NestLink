@@ -7,7 +7,7 @@
 .ssrc.mascot(x, scores = c(10, 20, 40, 50))
 }
 \arguments{
-\item{x}{\code{\link[protViz]{as.data.frame.mascot}} generated \code{data.frame} object.}
+\item{x}{\code{as.data.frame.\link[protViz]{mascot}} generated \code{data.frame} object.}
 
 \item{scores}{default is \code{c(10, 20, 40, 50)}.}
 }
