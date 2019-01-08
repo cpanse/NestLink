@@ -10,10 +10,15 @@
 }
 }
 \usage{
-getFC(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$")
+getFC(pattern = "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$",
+  filename = NULL)
 }
 \arguments{
 \item{pattern}{a regular expression FlyCode pattern}
+
+\item{filename}{a two column tab separated file containing a peptide
+sequence and an ESP value. default is NULL which reads the data provided
+by the package through ExperimentHub.}
 }
 \value{
 a \code{data.frame} object of Flycodes

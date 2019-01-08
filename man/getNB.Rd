@@ -10,7 +10,12 @@
 }
 }
 \usage{
-getNB()
+getNB(filename = NULL)
+}
+\arguments{
+\item{filename}{a two column tab separated file containing a peptide
+sequence and an ESP value. default is NULL which reads the data provided
+by the package through ExperimentHub.}
 }
 \value{
 a \code{data.frame} object of NBs
@@ -30,5 +35,5 @@ NB <- getNB()
 dim(NB)
 }
 \author{
-Christian Panse <cp@fgcz.ethz.ch> 2015, 2018
+Christian Panse <cp@fgcz.ethz.ch> 2015, 2018, 2019
 }

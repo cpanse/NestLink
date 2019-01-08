@@ -20,28 +20,11 @@ The following content is descibed in more detail in @NestLink
 
 ```{r fig.retina=1, fig.height=16}
 library(NestLink)
-library(protViz)
 
-.ssrc.mascot <- function(x, scores = c(10, 20, 40, 50)){
- 
-  lapply(scores, function(scorecutoff){
-    xx <- x[x$pep_score > scorecutoff  & !is.na(x$pep_score), ]
-    xx.ssrc <- sapply(as.character(xx$pep_seq), ssrc)
-    xx.lm <- lm(xx.ssrc ~ xx$RTINSECONDS)
-    plot(xx.ssrc ~ xx$RTINSECONDS,
-         pch=16, col=rgb(0.1,0.1,0.1,alpha = 0.1),
-         sub=paste("mascot score cutoff :", scorecutoff, 
-                   "r.squared: ",round(summary(xx.lm)$r.squared,2), 
-                   "spearman:", round(cor(xx.ssrc, xx$RTINSECONDS,
-                                        method = "spearman"),2)))
-    abline(xx.lm, col='cornflowerblue')
-    summary(xx.lm)
-  })
-}
 
 # load(url("http://fgcz-ms.uzh.ch/~cpanse/p1875/F255744.RData"))
-#F255744 <- as.data.frame.mascot(F255744)
-
+# F255744 <- as.data.frame.mascot(F255744) 
+# now available through ExperimentHub
 
 library(ExperimentHub)
 eh <- ExperimentHub(); 
@@ -49,7 +32,8 @@ eh <- ExperimentHub();
 load(query(eh, c("NestLink", "F255744.RData"))[[1]])
 
 par(mfrow = c(4,1))
-.ssrc.mascot(F255744)
+
+NestLink:::.ssrc.mascot(F255744, scores = c(10, 20, 40, 50))
 ```
 
 

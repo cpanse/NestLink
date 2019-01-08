@@ -129,12 +129,38 @@ kable(head(FC))
 
 ## `F255744.RData` and `WU160118.RData`
 
+### Mass spec data
+
 the mass spec files below availbale through [ProteomeXchange PXD009301](https://www.ebi.ac.uk/pride/archive/login) 
 
 
+### Compute the peptide spectrum matches
 
+the mass spectra were assigned to peptide sequences using the most  important 
+parameter listed in the table
+below and the Matrix Science's Mascot Server @pmid10612281 version 2.5.
 
-### Download data from http://fgcz-bfabric.uzh.ch
+|Parameter|Value|
+|:---|:---|
+|COM|170819_MS1708116_NL5idx4to5_Competition2BG_db8_db10_swissprot_d_merge|
+|FASTA 1|[p1875_db8_20160704.fasta](http://fgcz-ms.uzh.ch/fasta/p1875_db8_20160704.fasta)|
+|FASTA 2|[p1875_db10_20170817.fasta](http://fgcz-ms.uzh.ch/fasta/p1875_db10_20170817.fasta)|
+|TOL|10|
+|TOLU|ppm|
+|ITOL|0.6| 
+|ITOLU|Da|
+|USERNAME|egloffp|
+|CHARGE|2+|
+|IT_MODS|Deamidated (NQ),Oxidation (M)|
+|INSTRUMENT|ESI-TRAP|
+|release|fgcz_swissprot_d_20140403.fasta|
+
+The results were exported as XML.
+The XML was parsed and exported as data.frame using `r CRANpkg('protViz')` @protViz function `protViz:::as.data.frame.mascot`.
+
+### Workflow available through bfabric
+
+The above-described results and workflows are available for registered users @bfabric through https://bfabric.uzh.ch. However, for the usage of this package, it is not necessary to access bfabric.
 
 - Go through from http://fgcz-bfabric.uzh.ch
 
@@ -147,12 +173,12 @@ the mass spec files below availbale through [ProteomeXchange PXD009301](https://
 - [p1875_db10_20170817.fasta](http://fgcz-ms.uzh.ch/fasta/p1875_db10_20170817.fasta)
 
 
-### Import Data into R
+### make-data for NestLink
 
-The peptide identification was done by using Mascot [@pmid10612281].
+The following code snippet has been executed to generated the data set shiped with the
+`r Biocpkg("NestLink")` package.
 
-The following code snippet has been executed before and is only extracting the
-meta data (no MS2).
+Here only the metadata were extracted (no MS2).
 
 ```{r eval=FALSE}
 load("~/Downloads/444589.RData")
@@ -173,8 +199,7 @@ save(WU160118, file = "../inst/extdata/WU160118.RData",
 The data ships with the `r Biocpkg("NestLink")` package and can be browsed using 
 the following code snippet:
 
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
 library(ExperimentHub)
 eh <- ExperimentHub(); 
@@ -183,30 +208,11 @@ class(WU160118)
 PATTERN <- "^GS[ASTNQDEFVLYWGP]{7}(WR|WLTVR|WQEGGR|WLR|WQSR)$"
 idx <- grepl(PATTERN, WU160118$pep_seq)
 WU <- WU160118[idx & WU160118$pep_score > 25,]
-
-kable(unique(unlist(lapply(strsplit(x=as.character(WU$pep_scan_title), split=";"), function(x)gsub("File:", "", gsub("\\\\", "/", x[1]))))))
-
 ```
 
-were assigned to peptide sequences using the parameter listed in the table
-below and the Matrix Science Mascot Server @mascot version 2.5.
-
-|Parameter|Value|
-|:---|:---|
-|COM|170819_MS1708116_NL5idx4to5_Competition2BG_db8_db10_swissprot_d_merge|
-|TOL|10|
-|TOLU|ppm|
-|ITOL|0.6| 
-|ITOLU|Da|
-|USERNAME|egloffp|
-|CHARGE|2+|
-|IT_MODS|Deamidated (NQ),Oxidation (M)|
-|INSTRUMENT|ESI-TRAP|
-|release|fgcz_swissprot_d_20140403.fasta|
-
-The results were exported as XML.
-The XML was parsed and exported as data.frame using `r CRANpkg('protViz')` function `protViz:::as.data.frame.mascot`.
-
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+kable(unique(unlist(lapply(strsplit(x=as.character(WU$pep_scan_title), split=";"), function(x)gsub("File:", "", gsub("\\\\", "/", x[1]))))))
+```
 
 
 
@@ -239,7 +245,7 @@ aws --profile AnnotationContributor s3 cp NestLink/WU160118.RData s3://annotatio
 aws --profile AnnotationContributor s3 cp NestLink s3://annotation-contributor/NestLink --recursive --acl public-read
 
 ```
-# Getting started using  Bioconductor ExperimentHub
+# Overview/Getting started using Bioconductor `r Biocpkg("ExperimentHub")`
 
 load metadata
 
