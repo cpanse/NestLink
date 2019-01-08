@@ -22,5 +22,5 @@ RUN RDEVELROOT=/scratch/R-devel/ \
   && echo "install.packages(c('remotes', 'BiocManager'), repos='http://stat.ethz.ch/CRAN')" \
   | $RDEVELROOT/bin/R --no-save 
 
-RUN echo "BiocManager::install('cpanse/NestLink', version = '3.9', build_vignettes=TRUE)" \
+RUN echo "BiocManager::install('cpanse/NestLink', version = '3.9', build_vignettes=FALSE)" \
   | /scratch/R-devel/bin/R --no-save
