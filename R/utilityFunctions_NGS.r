@@ -262,3 +262,27 @@ getConsensusNBs <- function(uniqFCReads, bigTable) {
     else
         x[1]
 }
+
+.setDefaults <- function(param) {    
+    if(is.null(param[['NB_Linker1']]))
+        param[['NB_Linker1']] <- "GGCCggcggGGCC"
+    if(is.null(param[['NB_Linker2']]))
+        param[['NB_Linker2']] <- "GCAGGAGGA"
+    if(is.null(param[['ProteaseSite']]))
+        param[['ProteaseSite']] <- "TTAGTCCCAAGA"
+    if(is.null(param[['FC_Linker']]))
+        param[['FC_Linker']] <- "GGCCaaggaggcCGG"
+    if(is.null(param[['minRelBestHitFreq']]))
+        param[['minRelBestHitFreq']] <- 0.8
+    if(is.null(param[['minConsensusScore']]))
+        param[['minConsensusScore']] <- 0.9
+    if(is.null(param[['maxMismatch']]))
+        param[['maxMismatch']] <- 1
+    if(is.null(param[['minNanobodyLength']]))
+        param[['minNanobodyLength']] <- 348
+    if(is.null(param[['minFlycodeLength']]))
+        param[['minFlycodeLength']] <- 33
+    if(is.null(param[['FCminFreq']]))
+        param[['FCminFreq']] <- 1
+    return(param)
+}

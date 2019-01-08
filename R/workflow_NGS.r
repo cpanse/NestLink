@@ -1,6 +1,18 @@
 #' run NGS workflow
 #' @param file sequence file path
-#' @param param list of input parameters
+#' @param param list of input parameters, explained below
+#' @param param[['NB_Linker1']] nucleotide sequence of the linker left to the nanobody
+#' @param param[['NB_Linker2']] nucleotide sequence of the linker right to the nanobody
+#' @param param[['ProteaseSite']] nucleotide sequence left to the flycode
+#' @param param[['FC_Linker']] nucleotide sequence right to the flycode
+#' @param param[['knownNB']] known nanobody sequences in the experiment
+#' @param param[['nReads']] number of Reads from the start of fastq file to process
+#' @param param[['minRelBestHitFreq']] minimal fraction of the dominant nanobody for a specific flycode
+#' @param param[['minConsensusScore']] minimal fraction per sequence position in nanabody consensus sequence calculation
+#' @param param[['maxMismatch']] number of accepted mismatches for all pattern search steps
+#' @param param[['minNanobodyLength']] minimal nanobody length in [nt]
+#' @param param[['minFlycodeLength']] minimal flycode length in [nt]
+#' @param param[['FCminFreq']] minimal number of subreads for a specific flycode to keep it in the analysis
 #' @return uniqNB2FC dataframe
 #' @export runNGSAnalysis
 #' @import ShortRead
@@ -30,7 +42,7 @@
 #' param[['FCminFreq']] <- 1
 #' runNGSAnalysis(file = expFile[1], param)
 runNGSAnalysis <- function(file, param){
-    #TODO
+    param <- .setDefaults(param)
     sampleDir <- NULL
     message(paste0('Read file ', basename(file)))
     myReads <- .getReadsFromFastq(file)

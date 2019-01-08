@@ -9,7 +9,31 @@ runNGSAnalysis(file, param)
 \arguments{
 \item{file}{sequence file path}
 
-\item{param}{list of input parameters}
+\item{param}{list of input parameters, explained below}
+
+\item{param[['NB_Linker1']]}{nucleotide sequence of the linker left to the nanobody}
+
+\item{param[['NB_Linker2']]}{nucleotide sequence of the linker right to the nanobody}
+
+\item{param[['ProteaseSite']]}{nucleotide sequence left to the flycode}
+
+\item{param[['FC_Linker']]}{nucleotide sequence right to the flycode}
+
+\item{param[['knownNB']]}{known nanobody sequences in the experiment}
+
+\item{param[['nReads']]}{number of Reads from the start of fastq file to process}
+
+\item{param[['minRelBestHitFreq']]}{minimal fraction of the dominant nanobody for a specific flycode}
+
+\item{param[['minConsensusScore']]}{minimal fraction per sequence position in nanabody consensus sequence calculation}
+
+\item{param[['maxMismatch']]}{number of accepted mismatches for all pattern search steps}
+
+\item{param[['minNanobodyLength']]}{minimal nanobody length in [nt]}
+
+\item{param[['minFlycodeLength']]}{minimal flycode length in [nt]}
+
+\item{param[['FCminFreq']]}{minimal number of subreads for a specific flycode to keep it in the analysis}
 }
 \value{
 uniqNB2FC dataframe
