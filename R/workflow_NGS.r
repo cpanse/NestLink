@@ -1,18 +1,26 @@
-#' run NGS workflow
+#' NGS linkage workflow
+#' @description  performs the NGS filtering workflow to get high quality FlyCode and Nanobody sequences linkage
 #' @param file sequence file path
-#' @param param list of input parameters, explained below
-#' @param param[['NB_Linker1']] nucleotide sequence of the linker left to the nanobody
-#' @param param[['NB_Linker2']] nucleotide sequence of the linker right to the nanobody
-#' @param param[['ProteaseSite']] nucleotide sequence left to the flycode
-#' @param param[['FC_Linker']] nucleotide sequence right to the flycode
-#' @param param[['knownNB']] known nanobody sequences in the experiment
-#' @param param[['nReads']] number of Reads from the start of fastq file to process
-#' @param param[['minRelBestHitFreq']] minimal fraction of the dominant nanobody for a specific flycode
-#' @param param[['minConsensusScore']] minimal fraction per sequence position in nanabody consensus sequence calculation
-#' @param param[['maxMismatch']] number of accepted mismatches for all pattern search steps
-#' @param param[['minNanobodyLength']] minimal nanobody length in [nt]
-#' @param param[['minFlycodeLength']] minimal flycode length in [nt]
-#' @param param[['FCminFreq']] minimal number of subreads for a specific flycode to keep it in the analysis
+#' @param param list of input parameters, explained in details paragraph below.
+#' @author Lennart Opitz <lopitz@fgcz.ethz.ch>, 2019
+#' @details 
+#' The elements of the parameter list object is described as follows:
+#' \itemize{
+#' \item{\code{NB_Linker1}} {nucleotide sequence of the linker left to the nanobody.}
+#' \item{\code{NB_Linker2}} {nucleotide sequence of the linker right to the nanobody.}
+#' \item{\code{ProteaseSite}} {nucleotide sequence left to the flycode.}
+#' \item{\code{FC_Linker}} {nucleotide sequence right to the flycode.}
+#' \item{\code{knownNB}} {known nanobody sequences in the experiment.}
+#' \item{\code{nReads}} {number of Reads from the start of fastq file to process.}
+#' \item{\code{minRelBestHitFreq}} {minimal fraction of the dominant nanobody for a specific flycode.}
+#' \item{\code{minConsensusScore}} {minimal fraction per sequence position in nanabody consensus sequence calculation.}
+#' \item{\code{maxMismatch}} {number of accepted mismatches for all pattern search steps.}
+#' \item{\code{minNanobodyLength}} {minimal nanobody length in [nt].}
+#' \item{\code{minFlycodeLength}} { minimal flycode length in [nt].}
+#' \item{\code{FCminFreq}} {minimal number of subreads for a specific flycode to keep it in the analysis.}
+#' }
+#' missing elements are replace by the example provided values.
+#' 
 #' @return uniqNB2FC dataframe
 #' @export runNGSAnalysis
 #' @import ShortRead

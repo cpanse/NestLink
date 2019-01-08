@@ -2,44 +2,38 @@
 % Please edit documentation in R/workflow_NGS.r
 \name{runNGSAnalysis}
 \alias{runNGSAnalysis}
-\title{run NGS workflow}
+\title{NGS linkage workflow}
 \usage{
 runNGSAnalysis(file, param)
 }
 \arguments{
 \item{file}{sequence file path}
 
-\item{param}{list of input parameters, explained below}
-
-\item{param[['NB_Linker1']]}{nucleotide sequence of the linker left to the nanobody}
-
-\item{param[['NB_Linker2']]}{nucleotide sequence of the linker right to the nanobody}
-
-\item{param[['ProteaseSite']]}{nucleotide sequence left to the flycode}
-
-\item{param[['FC_Linker']]}{nucleotide sequence right to the flycode}
-
-\item{param[['knownNB']]}{known nanobody sequences in the experiment}
-
-\item{param[['nReads']]}{number of Reads from the start of fastq file to process}
-
-\item{param[['minRelBestHitFreq']]}{minimal fraction of the dominant nanobody for a specific flycode}
-
-\item{param[['minConsensusScore']]}{minimal fraction per sequence position in nanabody consensus sequence calculation}
-
-\item{param[['maxMismatch']]}{number of accepted mismatches for all pattern search steps}
-
-\item{param[['minNanobodyLength']]}{minimal nanobody length in [nt]}
-
-\item{param[['minFlycodeLength']]}{minimal flycode length in [nt]}
-
-\item{param[['FCminFreq']]}{minimal number of subreads for a specific flycode to keep it in the analysis}
+\item{param}{list of input parameters, explained in details paragraph below.}
 }
 \value{
 uniqNB2FC dataframe
 }
 \description{
-run NGS workflow
+performs the NGS filtering workflow to get high quality FlyCode and Nanobody sequences linkage
+}
+\details{
+The elements of the parameter list object is described as follows:
+\itemize{
+\item{\code{NB_Linker1}} {nucleotide sequence of the linker left to the nanobody.}
+\item{\code{NB_Linker2}} {nucleotide sequence of the linker right to the nanobody.}
+\item{\code{ProteaseSite}} {nucleotide sequence left to the flycode.}
+\item{\code{FC_Linker}} {nucleotide sequence right to the flycode.}
+\item{\code{knownNB}} {known nanobody sequences in the experiment.}
+\item{\code{nReads}} {number of Reads from the start of fastq file to process.}
+\item{\code{minRelBestHitFreq}} {minimal fraction of the dominant nanobody for a specific flycode.}
+\item{\code{minConsensusScore}} {minimal fraction per sequence position in nanabody consensus sequence calculation.}
+\item{\code{maxMismatch}} {number of accepted mismatches for all pattern search steps.}
+\item{\code{minNanobodyLength}} {minimal nanobody length in [nt].}
+\item{\code{minFlycodeLength}} { minimal flycode length in [nt].}
+\item{\code{FCminFreq}} {minimal number of subreads for a specific flycode to keep it in the analysis.}
+}
+missing elements are replace by the example provided values.
 }
 \examples{
 library(ExperimentHub)
@@ -65,4 +59,7 @@ param[['minNanobodyLength']] <- 348
 param[['minFlycodeLength']] <- 33
 param[['FCminFreq']] <- 1
 runNGSAnalysis(file = expFile[1], param)
+}
+\author{
+Lennart Opitz <lopitz@fgcz.ethz.ch>, 2019
 }

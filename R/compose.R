@@ -537,6 +537,8 @@ NULL
 #' @return a plot and summary
 #' @author Christian Panse <cp@fgcz.ethz.ch>, 2017,2019
 #' @importFrom protViz ssrc
+#' @importFrom grDevices rgb
+#' @importFrom stats cor lm
 #' @export .ssrc.mascot
 .ssrc.mascot <- function(x, scores = c(10, 20, 40, 50)){
     lapply(scores, function(scorecutoff){
