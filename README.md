@@ -21,10 +21,11 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("cpanse/NestLink", version = "3.9")  
 ```
 
-or using docker
+or using [docker](https://cloud.docker.com/u/cpanse/repository/docker/cpanse/nestlink)
 
 ```
-docker push cpanse/nestlink
+docker pull cpanse/nestlink \
+  && docker run -a stdin -a stdout -i -t cpanse/nestlink /scratch/R-devel/bin/R
 ```
 
 
