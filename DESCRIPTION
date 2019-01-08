@@ -1,38 +1,44 @@
 Package: NestLink
 Type: Package
-Title: NestLink an R data package to guide through Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
-Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch", role = c("ctb","aut")),
+Title: NestLink an R data package to guide through Engineered Peptide Barcodes
+  for In-Depth Analyses of Binding Protein Ensembles
+Authors@R: c(person("Pascal", "Egloff", email = "p.egloff@imm.uzh.ch",
+    role = c("ctb","aut")),
   person("Iwan", "Zimmermann", role = "ctb"), 
   person("Fabian M.", "Arnold", role = "ctb"),
   person("Cedric A.J.", "Hutter", role = "ctb"), 
   person("Damien", "Morger", role = "ctb"), 
-  person("Lennart", "Opitz", email = "Opitz.Lennart@gmail.com", role = c("aut", "cre")),
+  person("Lennart", "Opitz", email = "Opitz.Lennart@gmail.com",
+    role = c("aut", "cre")),
   person("Lucy", "Poveda", role = "ctb"), 
   person("Hans-Anton", "Keserue", role = "ctb"), 
-  person("Christian", "Panse", email = "Christian.Panse@gmail.com", role = c("aut", "cre"),
-          comment = c(ORCID = "0000-0003-1975-3064")),
+  person("Christian", "Panse", email = "Christian.Panse@gmail.com",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0003-1975-3064")),
   person("Bernd", "Roschitzki", role = c("ctb", "aut")),
   person("Markus", "Seeger", email = "cp@fgcz.ethz.ch", role = c("aut", "ctb"),
-          comment = c(ORCID = "0000-0003-1761-8571"))
-        )
+    comment = c(ORCID = "0000-0003-1761-8571")))
 Version: 0.99.83
 Depends: R (>= 3.6),
   AnnotationHub,
   ExperimentHub (>= 0.99.6),
   Biostrings,
   gplots,
-  protViz (>= 0.3.1), 
+  protViz (>= 0.4.0), 
   ShortRead 
 Imports: grDevices, graphics, stats, utils
-Description: Provides next-generation sequencing (NGS) and mass spectrometry (MS) sample
-  data, code snippets and replication material used for developing NestLink. 
-  The NestLink approach is a protein binder selection and identification technology
-  able to biophysically characterize thousands of library members at once without
-  handling individual clones at any stage of the process. Data were mainly acquired on
-  the NGS and MS platforms at the Functional Genomics Center Zurich core facility.
+Description: Provides next-generation sequencing (NGS) and mass spectrometry
+  (MS) sample data, code snippets and replication material used for developing
+  NestLink. The NestLink approach is a protein binder selection and
+  identification technology able to biophysically characterize thousands of
+  library members at once without handling individual clones at any stage of the
+  process. Data were mainly acquired on the NGS and MS platforms at the
+  Functional Genomics Center Zurich core facility.
 License: GPL
 VignetteBuilder: knitr
-Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, testthat, specL, lattice, scales
+Suggests: BiocStyle (>= 2.2.0), DT, ggplot2, knitr, rmarkdown, testthat, specL,
+  lattice, scales
 NeedsCompilation: no
-biocViews: ExperimentHub, ExperimentData, SequencingData, MassSpectrometryData, ReproducibleResearch
+biocViews: ExperimentHub, ExperimentData, SequencingData, MassSpectrometryData,
+  ReproducibleResearch
 RoxygenNote: 6.1.1

@@ -131,6 +131,49 @@ kable(head(FC))
 
 the mass spec files below availbale through [ProteomeXchange PXD009301](https://www.ebi.ac.uk/pride/archive/login) 
 
+
+
+
+### Download data from http://fgcz-bfabric.uzh.ch
+
+- Go through from http://fgcz-bfabric.uzh.ch
+
+- search for [workunit id 160118](https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118)
+
+- Download the [resource with id 444589](https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-resource.html?id=444589)
+
+- [p1875_db8_20160704.fasta](http://fgcz-ms.uzh.ch/fasta/p1875_db8_20160704.fasta)
+
+- [p1875_db10_20170817.fasta](http://fgcz-ms.uzh.ch/fasta/p1875_db10_20170817.fasta)
+
+
+### Import Data into R
+
+The peptide identification was done by using Mascot [@pmid10612281].
+
+The following code snippet has been executed before and is only extracting the
+meta data (no MS2).
+
+```{r eval=FALSE}
+load("~/Downloads/444589.RData")
+library(protViz)
+library(NestLink)
+WU160118 <- do.call('rbind', lapply(list("F255737", "F255744", "F255747", 
+  "F255749", "F255751", "F255760", "F255761", "F255762"), 
+  function(datfilename){
+      df <- as.data.frame.mascot(get(datfilename))
+      df$datfilename <- datfilename
+      df
+    }
+  ))
+save(WU160118, file = "../inst/extdata/WU160118.RData", 
+     compress = TRUE, compression_level = 9)   
+```
+
+The data ships with the `r Biocpkg("NestLink")` package and can be browsed using 
+the following code snippet:
+
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 library(ExperimentHub)
@@ -145,7 +188,8 @@ kable(unique(unlist(lapply(strsplit(x=as.character(WU$pep_scan_title), split=";"
 
 ```
 
-were assigned to peptide sequences using the parameter listed in the table below and the Matrix Science Mascot Server version 2.5. 
+were assigned to peptide sequences using the parameter listed in the table
+below and the Matrix Science Mascot Server @mascot version 2.5.
 
 |Parameter|Value|
 |:---|:---|
