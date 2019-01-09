@@ -528,6 +528,7 @@ NULL
 #'
 #' @param x \code{as,data.frame.\link[protViz]{mascot}} generated \code{data.frame} object.
 #' @param scores default is \code{c(10, 20, 40, 50)}.
+#' @param ... passed to the plot function.
 #' @description 
 #' this helper function computes a linear model between redicted and
 #' measured retention time of the as imput set given identified peptides.
@@ -540,18 +541,25 @@ NULL
 #' @importFrom grDevices rgb
 #' @importFrom stats cor lm
 #' @export .ssrc.mascot
-.ssrc.mascot <- function(x, scores = c(10, 20, 40, 50)){
+#' @examples 
+#' library(ExperimentHub)
+#' eh <- ExperimentHub(); 
+#' load(query(eh, c("NestLink", "F255744.RData"))[[1]])
+#' .ssrc.mascot(F255744, scores = 15)
+#' 
+.ssrc.mascot <- function(x, scores = c(10, 20, 40, 50), ...){
     lapply(scores, function(scorecutoff){
         xx <- x[x$pep_score > scorecutoff  & !is.na(x$pep_score), ]
-        xx.ssrc <- sapply(as.character(xx$pep_seq), ssrc)
+        xx.ssrc <- ssrc(as.character(xx$pep_seq))
         xx.lm <- lm(xx.ssrc ~ xx$RTINSECONDS)
-        plot(xx.ssrc ~ xx$RTINSECONDS,
-             pch=16, col=rgb(0.1,0.1,0.1,alpha = 0.1),
-             sub=paste("mascot score cutoff :", scorecutoff, 
-                       "r.squared: ",round(summary(xx.lm)$r.squared,2), 
-                       "spearman:", round(cor(xx.ssrc, xx$RTINSECONDS,
-                                              method = "spearman"),2)))
+        plot(xx.ssrc ~ xx$RTINSECONDS, ...)
         abline(xx.lm, col='cornflowerblue')
+        legend("topleft",
+               c(paste("mascot score cutoff :", scorecutoff), 
+                 paste("r.squared: ",round(summary(xx.lm)$r.squared,2)),
+                 paste("slope: ",round(coef(xx.lm)[2],2)), 
+                 paste("spearman:", round(cor(xx.ssrc, xx$RTINSECONDS, 
+                                              method = "spearman"),2))))
         summary(xx.lm)
     })
 }

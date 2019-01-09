@@ -1,5 +1,6 @@
 #' NGS linkage workflow
-#' @description  performs the NGS filtering workflow to get high quality FlyCode and Nanobody sequences linkage
+#' @description  performs the NGS filtering workflow to get high quality
+#' FlyCode and Nanobody sequences linkage.
 #' @param file sequence file path
 #' @param param list of input parameters, explained in details paragraph below.
 #' @author Lennart Opitz <lopitz@fgcz.ethz.ch>, 2019

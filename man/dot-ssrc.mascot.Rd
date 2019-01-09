@@ -4,12 +4,14 @@
 \alias{.ssrc.mascot}
 \title{computes the correlation of predicted and measured retention time}
 \usage{
-.ssrc.mascot(x, scores = c(10, 20, 40, 50))
+.ssrc.mascot(x, scores = c(10, 20, 40, 50), ...)
 }
 \arguments{
-\item{x}{\code{as.data.frame.\link[protViz]{mascot}} generated \code{data.frame} object.}
+\item{x}{\code{as,data.frame.\link[protViz]{mascot}} generated \code{data.frame} object.}
 
 \item{scores}{default is \code{c(10, 20, 40, 50)}.}
+
+\item{...}{passed to the plot function.}
 }
 \value{
 a plot and summary
@@ -19,6 +21,13 @@ this helper function computes a linear model between redicted and
 measured retention time of the as imput set given identified peptides.
 
 TODO(cp): consider moving this method to the protViz package.
+}
+\examples{
+library(ExperimentHub)
+eh <- ExperimentHub(); 
+load(query(eh, c("NestLink", "F255744.RData"))[[1]])
+.ssrc.mascot(F255744, scores = 15)
+
 }
 \author{
 Christian Panse <cp@fgcz.ethz.ch>, 2017,2019

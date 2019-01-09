@@ -15,7 +15,8 @@ runNGSAnalysis(file, param)
 uniqNB2FC dataframe
 }
 \description{
-performs the NGS filtering workflow to get high quality FlyCode and Nanobody sequences linkage
+performs the NGS filtering workflow to get high quality
+FlyCode and Nanobody sequences linkage.
 }
 \details{
 The elements of the parameter list object is described as follows:

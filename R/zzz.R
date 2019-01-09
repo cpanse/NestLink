@@ -27,10 +27,10 @@
 #'      
 #' lapply(metadata$RDataPath, getExperimentHubFilename)
 getExperimentHubFilename <- function(filename){
-   #  suppressMessages({
+   suppressMessages({
         eh = ExperimentHub()
     
         filename <- query(eh, c("NestLink", filename))[[1]]
-    #    })
+       })
     filename
 }

@@ -1,27 +1,32 @@
 ---
-title: "Compare Predicted and Measured FlyCodes (F255744)"
+title: "Compare Retention Time versus Sequence-specific
+  retention calculator  using (F255744)"
 author: "Christian Panse"
 date: "2017-10-30"
 bibliography:
   - NestLink.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{3. Compare Predicted and Measured FlyCodes (F255744).}
+  %\VignetteIndexEntry{3. Compare Predicted and Measured FlyCodes hydrophobicity values using  F255744.}
   %\VignetteEncoding{UTF-8}
 output:
   BiocStyle::html_document
 ---
 
-The following content is descibed in more detail in @NestLink
-(under review  NMETH-A35040).
+# Comparizon
+
+To validate our Retention Time (RT) prediction in this vignette file, we compare the predicted hydrophobicity value using the `ssrc` method @pmid15238601 implemented in the  `r CRANpkg("protViz")` package @protViz.
 
 
-# Retention Time (RT) versus Sequence-specific retention calculator (SSRC)
+The following code snippet performs the comparison on the F255744 data.
+The file contains amino acid sequences representing the designed FlyCodes.
 
-```{r fig.retina=1, fig.height=16}
+
+```{r echo=TRUE, message=FALSE}
 library(NestLink)
+```
 
-
+```{r fig.retina=1, fig.height=5, fig.width=5}
 # load(url("http://fgcz-ms.uzh.ch/~cpanse/p1875/F255744.RData"))
 # F255744 <- as.data.frame.mascot(F255744) 
 # now available through ExperimentHub
@@ -31,9 +36,12 @@ eh <- ExperimentHub();
 
 load(query(eh, c("NestLink", "F255744.RData"))[[1]])
 
-par(mfrow = c(4,1))
 
-NestLink:::.ssrc.mascot(F255744, scores = c(10, 20, 40, 50))
+.ssrc.mascot(F255744, scores = c(10, 20, 40, 50), 
+             pch = 16, 
+             col = rgb(0.1,0.1,0.1,
+                       alpha = 0.1)
+    )
 ```
 
 
