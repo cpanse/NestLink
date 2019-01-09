@@ -539,7 +539,7 @@ NULL
 #' @author Christian Panse <cp@fgcz.ethz.ch>, 2017,2019
 #' @importFrom protViz ssrc
 #' @importFrom grDevices rgb
-#' @importFrom stats cor lm
+#' @importFrom stats cor lm coef
 #' @export .ssrc.mascot
 #' @examples 
 #' library(ExperimentHub)

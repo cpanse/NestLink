@@ -15,12 +15,11 @@ output:
 
 # Comparizon
 
-To validate our Retention Time (RT) prediction in this vignette file, we compare the predicted hydrophobicity value using the `ssrc` method @pmid15238601 implemented in the  `r CRANpkg("protViz")` package @protViz.
-
+To validate our Retention Time (RT) prediction in this vignette file, we compare the predicted hydrophobicity value using the `ssrc` method @pmid15238601 implemented in the 
+`r CRANpkg("protViz")` package @protViz.
 
 The following code snippet performs the comparison on the F255744 data.
 The file contains amino acid sequences representing the designed FlyCodes.
-
 
 ```{r echo=TRUE, message=FALSE}
 library(NestLink)
@@ -36,12 +35,11 @@ eh <- ExperimentHub();
 
 load(query(eh, c("NestLink", "F255744.RData"))[[1]])
 
-
 .ssrc.mascot(F255744, scores = c(10, 20, 40, 50), 
              pch = 16, 
              col = rgb(0.1,0.1,0.1,
                        alpha = 0.1)
-    )
+)
 ```
 
 
