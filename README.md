@@ -2,7 +2,7 @@
 
 Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
-[accepted on Bioconductor](https://github.com/Bioconductor/Contributions/issues/931)
+[2019/01/14 accepted on Bioconductor](https://github.com/Bioconductor/Contributions/issues/931)
 
 ## 1. System requirements
 
