@@ -2,7 +2,10 @@
 
 Engineered Peptide Barcodes for In-Depth Analyses of Binding Protein Ensembles
 
-[2019/01/14 accepted on Bioconductor](https://github.com/Bioconductor/Contributions/issues/931)
+available for download in the 'Devel' version of Bioconductor using `BiocManager::install("NestLink")`. The package 'landing page' will be created at
+
+https://bioconductor.org/packages/NestLink
+
 
 ## 1. System requirements
 
