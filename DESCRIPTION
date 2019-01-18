@@ -1,7 +1,7 @@
 Package: NestLink
 Type: Package
 Title: NestLink an R data package to guide through Engineered Peptide Barcodes
-  for In-Depth Analyses of Binding Protein Ensembles
+  for In-Depth Analyzes of Binding Protein Ensembles
 Authors@R: c(person("Pascal", "Egloff",
     email = "p.egloff@imm.uzh.ch",
     role = c("aut"),
@@ -52,8 +52,8 @@ Description: Provides next-generation sequencing (NGS) and mass spectrometry
   NestLink. The NestLink approach is a protein binder selection and
   identification technology able to biophysically characterize thousands of
   library members at once without handling individual clones at any stage of the
-  process. Data were mainly acquired on the NGS and MS platforms at the
-  Functional Genomics Center Zurich core facility.
+  process. Data were acquired on NGS and MS platforms at the
+  Functional Genomics Center Zurich.
 License: GPL
 VignetteBuilder: knitr
 Suggests: BiocStyle (>= 2.2.0),

@@ -11,14 +11,14 @@ bibliography:
   - NestLink.bib
 abstract: |
     Mass spectrometry data are available via ProteomeXchange with identifier
-    [PXD009301](https://www.ebi.ac.uk/pride/archive/login). 
-    NGS datasets are available on the European Nucleotide Archive (ENA)
+    [PXD009301](https://www.ebi.ac.uk/pride/archive/projects/PXD009301)
+    NGS datasets are available at the European Nucleotide Archive (ENA)
     under accession number 
     [PRJEB25673](https://www.ebi.ac.uk/ena/data/search?query=PRJEB25673). 
-    The NGS and MS data were handled and
+    NGS and MS data were handled and
     annotated using the [B-Fabric](https://fgcz-bfabric.uzh.ch) @bfabric
     information management system and are available
-    for registered users under project identifiers 1644 and 1875.
+    for registered users under the project identifiers 1644 and 1875.
     The following content is descibed in more detail in @NestLink
     (under review  NMETH-A35040).
 vignette: |
@@ -30,7 +30,7 @@ vignette: |
 # Timeline Plots
 
 The package contains only a subset of the most important data generated over 
-a period of five years. To get an impression an overview of all annotated sample (S) and workunits (W) in the bfabric system, @bfabric, is graphed in the timeline plots.
+a period of five years. To get an impression an overview of all annotated sample (S) and workunits (W) in the [B-Fabric](https://fgcz-bfabric.uzh.ch) system, @bfabric, is graphed in the timeline plots.
 
 the NGS data p1644
 <img src='Figs/timeline_p1644.jpeg' width=800px>
@@ -44,7 +44,7 @@ the mass spec data p1875
 
 ## `NL42_100K.fastq.gz`
 
-Sample NGS data containing 100K merged MiSeq reads demonstrating the linkage
+Sample NGS data contains 100K merged MiSeq reads that demonstrate the linkage
 between nanobodies (NB) and flycodes (FC) in FASTQ.
 
 ```{r eval=FALSE}
@@ -56,8 +56,8 @@ save(NL42_100K, file="inst/extdata/NestLink_NL42_100K.RData")
 
 An optional part of the NestLink workflow is the usage of known nanobodies
 in the sequencing experiment to estimate sensitity and specificity levels. 
-This example file contains nucleotide sequences of nanobodies which should
-detectable in this experiment. In the later workflow these nanabodies are
+This example file contains nucleotide sequences of nanobodies that should be
+detectable in this experiment. In the later workflow, these nanabodies are
 highlighted and labeled as known NB.
 
 
@@ -109,7 +109,7 @@ Both files are the output of the previous NGS step generating the linkage betwee
 * https://fgcz-gstore.uzh.ch/projects/p1644/analysis_20170609_o3040/p1644o3482-5_S5.extendedFrags_uniqNB2FC.txt
 
 
-The files are used for demonstrating the detectability of the AA sequences.
+The files are used to demonstrate the detectability of the AA sequences.
 
 The wrapper functions are extended by the SSRC prediction and the parent ion mass (pim) determined by using `r CRANpkg('protViz')`.
 
@@ -131,7 +131,8 @@ kable(head(FC))
 
 ### Mass spec data
 
-the mass spec files below availbale through [ProteomeXchange PXD009301](https://www.ebi.ac.uk/pride/archive/login) 
+the mass spec files below are available through
+[ProteomeXchange PXD009301](https://www.ebi.ac.uk/pride/archive/projects/PXD009301).
 
 
 ### Compute the peptide spectrum matches
@@ -158,13 +159,15 @@ below and the Matrix Science's Mascot Server @pmid10612281 version 2.5.
 The results were exported as XML.
 The XML was parsed and exported as data.frame using `r CRANpkg('protViz')` @protViz function `protViz:::as.data.frame.mascot`.
 
-### Workflow available through bfabric
+### Workflow available through B-Fabric
 
-The above-described results and workflows are available for registered users @bfabric through https://bfabric.uzh.ch. However, for the usage of this package, it is not necessary to access bfabric.
+The above-described results and workflows are available for registered
+users in B-Fabric.
+However, it is not necessary to access B-Fabric in order to use this package.
 
-- Go through from http://fgcz-bfabric.uzh.ch
+- Go to from http://fgcz-bfabric.uzh.ch
 
-- search for [workunit id 160118](https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118)
+- Search for [workunit id 160118](https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-workunit.html?id=160118)
 
 - Download the [resource with id 444589](https://fgcz-bfabric.uzh.ch/bfabric/userlab/show-resource.html?id=444589)
 
@@ -175,7 +178,7 @@ The above-described results and workflows are available for registered users @bf
 
 ### make-data for NestLink
 
-The following code snippet has been executed to generated the data set shiped with the
+The following code snippet was executed to generate the data set shiped with the
 `r Biocpkg("NestLink")` package.
 
 Here only the metadata were extracted (no MS2).
@@ -272,8 +275,7 @@ dim(WU160118)
 
 # Session info
 
-Here is the output of `sessionInfo()` on the system on which this
-document was compiled:
+Here is the compiled output of `sessionInfo()`:
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
