@@ -15,7 +15,7 @@ bibentry(bibtype = "Article",
                     person("Christian", "Panse"),
                     person("Bernd", "Roschitzki,"),
                     person("Markus", "Seeger")),
-journal = "{bioRxiv}",
-year = "{2018}",
-doi = "{10.1101/287813}",
-publisher = "{Cold Spring Harbor Laboratory}")
+journal = "{Nature Methods}",
+year = "{2019}",
+doi = "{10.1038/s41592-019-0389-8}",
+publisher = "{Springer}")

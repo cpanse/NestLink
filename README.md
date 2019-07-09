@@ -85,4 +85,6 @@ browseVignettes('NestLink')
 
 - [bioRxiv 2018/03/23/287813](https://www.biorxiv.org/content/early/2018/03/23/287813)
 
+- [DOI:10.1038/s41592-019-0389-8](https://www.nature.com/articles/s41592-019-0389-8)
+
 
