@@ -32,7 +32,7 @@ nanobodyFlycodeLinking.as.fasta <- function(x, file = NULL, ...) {
     )
     
     if (!is.null(file)) {
-        cat(fasta, file, sep = '')
+        cat(fasta, file = file, sep = '')
         message(paste("FASTA written to", file))
     } else{
         return(fasta)

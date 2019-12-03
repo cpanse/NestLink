@@ -166,13 +166,13 @@ runNGSAnalysis <- function(file, param){
     ### Export Results:
     message(paste0('Export Result: ', basename(file)))
     
-    #if(!is.null(sampleDir)){
-    #    if (!file.exists(sampleDir)) {
-    #        dir.create(sampleDir, recursive = TRUE)
-    #    }
-    #    setwd(sampleDir)
-    #}
-    # sampleDir <- sub('.fastq.gz', '', basename(file))
+    if(!is.null(sampleDir)){
+        if (!file.exists(sampleDir)) {
+            dir.create(sampleDir, recursive = TRUE)
+        }
+        setwd(sampleDir)
+    }
+     sampleDir <- sub('.fastq.gz', '', basename(file))
     
    
     
@@ -200,14 +200,14 @@ runNGSAnalysis <- function(file, param){
     }
     
     
-    #bigTableFileName <- basename(sub('.fastq.gz', '_FC2NB.tsv', file))
-    #write.table(
-    #    bigTable,
-    #    bigTableFileName,
-    #    sep = '\t',
-    #    row.names = FALSE,
-    #    quote = FALSE
-    #)
+    bigTableFileName <- basename(sub('.fastq.gz', '_FC2NB.tsv', file))
+    write.table(
+        bigTable,
+        bigTableFileName,
+        sep = '\t',
+        row.names = FALSE,
+        quote = FALSE
+    )
     
     passMRBHF <- which(bigTable$relBestHitFreq >= param[['minRelBestHitFreq']])
     passCS <- which(bigTable$consensusScore >= param[['minConsensusScore']])
@@ -215,33 +215,33 @@ runNGSAnalysis <- function(file, param){
     
     stats <- c(stats, FC_consensusFiltering = length(keepFCs))
     
-    # FC_faFile = file.path(basename(sub('.fastq.gz', '_uniqFC.fasta', file)))
-    # writeXStringSet(mySeqAS_CS[['seqAS_FC']][keepFCs], file = FC_faFile)
+     FC_faFile = file.path(basename(sub('.fastq.gz', '_uniqFC.fasta', file)))
+     writeXStringSet(mySeqAS_CS[['seqAS_FC']][keepFCs], file = FC_faFile)
     
     stats <- c(stats, uniqNB = length(unique(bigTable[['NanoBody']])))
     stats <- data.frame(Category = names(stats), stats,
                         stringsAsFactors = FALSE)
     
-    # statsFileName <- basename(sub('.fastq.gz', '_stats.txt', file))
+     statsFileName <- basename(sub('.fastq.gz', '_stats.txt', file))
     
-    # write.table(
-    #    stats,
-    #    statsFileName,
-    #    sep = '\t',
-    #    quote = FALSE,
-    #    row.names = FALSE
-    #)
+     write.table(
+        stats,
+        statsFileName,
+        sep = '\t',
+        quote = FALSE,
+        row.names = FALSE
+    )
     
-    # top100_NBFile <- basename(sub('.fastq.gz', '_TopNB.txt', file))
+    top100_NBFile <- basename(sub('.fastq.gz', '_TopNB.txt', file))
     top100_NB <- .findTopNB(mySeqAS_CS[['seqAS_NB']], n = 100, knownNB)
     
-    # write.table(
-    #    top100_NB,
-    #    top100_NBFile,
-    #    sep = '\t',
-    #    quote = FALSE,
-    #    row.names = FALSE
-    #)
+     write.table(
+        top100_NB,
+        top100_NBFile,
+        sep = '\t',
+        quote = FALSE,
+        row.names = FALSE
+    )
     
     #BigTable: Nanobody2Flycode
     uniqNB <- unique(bigTable$NanoBody)
@@ -264,13 +264,13 @@ runNGSAnalysis <- function(file, param){
                                             decreasing = TRUE),]
     }
     
-    # write.table(
-    #    uniqNB_Summary,
-    #    basename(sub('.fastq.gz', '_uniqNB2FC.txt', file)),
-    #    sep = '\t',
-    #    row.names = FALSE,
-    #    quote = FALSE
-    #)
+     write.table(
+        uniqNB_Summary,
+        basename(sub('.fastq.gz', '_uniqNB2FC.txt', file)),
+        sep = '\t',
+        row.names = FALSE,
+        quote = FALSE
+    )
     
     uniqFC <- unique(bigTable$Flycode)
     uniqFC_Summary <-
@@ -294,13 +294,13 @@ runNGSAnalysis <- function(file, param){
     orderedNB <- order(uniqFC_Summary$NB_Name, decreasing = TRUE)
     uniqFC_Summary <- uniqFC_Summary[orderedNB, ]
     
-    #write.table(
-    #    uniqFC_Summary,
-    #    basename(sub('.fastq.gz', '_uniqFC2NB.txt', file)),
-    #    sep = '\t',
-    #    row.names = FALSE,
-    #    quote = FALSE
-    #)
+    write.table(
+        uniqFC_Summary,
+        basename(sub('.fastq.gz', '_uniqFC2NB.txt', file)),
+        sep = '\t',
+        row.names = FALSE,
+        quote = FALSE
+    )
     
     message('... done')
     class(uniqNB_Summary) <- c(class(uniqNB_Summary), "nanobodyFlycodeLinking")
