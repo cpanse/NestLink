@@ -17,15 +17,16 @@
 #' load(f)
 #' summary(nanobodyFlycodeLinkage.sample)
 #' nanobodyFlycodeLinking.as.fasta(nanobodyFlycodeLinkage.sample)
-nanobodyFlycodeLinking.as.fasta <- function(x, file = NULL, ...) {
+nanobodyFlycodeLinking.as.fasta <- function(x, file = NULL, name = NULL, ...) {
     if (!is.nanobodyFlycodeLinking(x)) {
         warning("object is not of class nanobodyFlycodeLinking")
     }
     idx <- seq(1, nrow(x))
     
     fasta <- sprintf(
-        ">NB%04d FC%d %s\n%s\n",
+        ">NB%04d_%s FC%d %s\n%s\n",
         idx,
+        name,
         x$FlycodeCount[idx],
         x$NB[idx],
         gsub(",", "", x$AssociatedFlycodes[idx])
