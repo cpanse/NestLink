@@ -209,6 +209,11 @@ runNGSAnalysis <- function(file, param){
         quote = FALSE
     )
     
+    
+    ##Remove FC where FC count > NB count:
+    bigTable <- bigTable[which(bigTable$NB_Count >= bigTable$FC_Count),]
+    stats <- c(stats, filter_FC_vs_NB_count = length(unique(bigTable[['Flycode']])))
+    
     passMRBHF <- which(bigTable$relBestHitFreq >= param[['minRelBestHitFreq']])
     passCS <- which(bigTable$consensusScore >= param[['minConsensusScore']])
     keepFCs <- rownames(bigTable)[intersect(passMRBHF, passCS)]
