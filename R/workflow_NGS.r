@@ -200,6 +200,19 @@ runNGSAnalysis <- function(file, param){
     }
     
     
+    ##Remove FC where FC count > NB count:
+    bigTable <- bigTable[which(bigTable$NB_Count >= bigTable$FC_Count),]
+    stats <- c(stats, filter_FC_vs_NB_count = length(unique(bigTable[['Flycode']])))
+    
+    
+    passMRBHF <- which(bigTable$relBestHitFreq >= param[['minRelBestHitFreq']])
+    passCS <- which(bigTable$consensusScore >= param[['minConsensusScore']])
+    keepFCs <- rownames(bigTable)[intersect(passMRBHF, passCS)]
+    
+    bigTable <- bigTable[keepFCs,]
+    
+    stats <- c(stats, FC_consensusFiltering = length(keepFCs))
+    
     bigTableFileName <- basename(sub('.fastq.gz', '_FC2NB.tsv', file))
     write.table(
         bigTable,
@@ -208,17 +221,6 @@ runNGSAnalysis <- function(file, param){
         row.names = FALSE,
         quote = FALSE
     )
-    
-    
-    ##Remove FC where FC count > NB count:
-    bigTable <- bigTable[which(bigTable$NB_Count >= bigTable$FC_Count),]
-    stats <- c(stats, filter_FC_vs_NB_count = length(unique(bigTable[['Flycode']])))
-    
-    passMRBHF <- which(bigTable$relBestHitFreq >= param[['minRelBestHitFreq']])
-    passCS <- which(bigTable$consensusScore >= param[['minConsensusScore']])
-    keepFCs <- rownames(bigTable)[intersect(passMRBHF, passCS)]
-    
-    stats <- c(stats, FC_consensusFiltering = length(keepFCs))
     
      FC_faFile = file.path(basename(sub('.fastq.gz', '_uniqFC.fasta', file)))
      writeXStringSet(mySeqAS_CS[['seqAS_FC']][keepFCs], file = FC_faFile)
